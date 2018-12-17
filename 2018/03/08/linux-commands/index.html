@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="文件/目录ls12345678# -1 :每个文件展示一行  -l :展示全部信息(权限, 时间等, 首字母为文件类型: -:普通文件 d:文件夹 s:socket文件 l:链接文件)  ls -t    # 按更新时间排序, 最新的在前ls -tr    # 按更新时间排序, 最旧的在前, -r:倒序ls -h    # 使用可读单位(K, M, G)显示文件大小ls -d /dir    #">
+<meta name="keywords" content="linux,命令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux常用命令">
+<meta property="og:url" content="http://codertang.com/2018/03/08/linux-commands/index.html">
+<meta property="og:site_name" content="Tonny&#39;s Blog">
+<meta property="og:description" content="文件/目录ls12345678# -1 :每个文件展示一行  -l :展示全部信息(权限, 时间等, 首字母为文件类型: -:普通文件 d:文件夹 s:socket文件 l:链接文件)  ls -t    # 按更新时间排序, 最新的在前ls -tr    # 按更新时间排序, 最旧的在前, -r:倒序ls -h    # 使用可读单位(K, M, G)显示文件大小ls -d /dir    #">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-09T06:17:55.156Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux常用命令">
+<meta name="twitter:description" content="文件/目录ls12345678# -1 :每个文件展示一行  -l :展示全部信息(权限, 时间等, 首字母为文件类型: -:普通文件 d:文件夹 s:socket文件 l:链接文件)  ls -t    # 按更新时间排序, 最新的在前ls -tr    # 按更新时间排序, 最旧的在前, -r:倒序ls -h    # 使用可读单位(K, M, G)显示文件大小ls -d /dir    #">
+
+
+
+
+
+
+  <link rel="canonical" href="http://codertang.com/2018/03/08/linux-commands/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Linux常用命令 | Tonny's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tonny's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">莫等闲, 白了少年头, 空悲切</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://codertang.com/2018/03/08/linux-commands/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tonny Yi">
+      <meta itemprop="description" content="Coding, Life, Zen">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tonny's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux常用命令
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-03-08 15:09:41" itemprop="dateCreated datePublished" datetime="2018-03-08T15:09:41+08:00">2018-03-08</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-09 14:17:55" itemprop="dateModified" datetime="2018-11-09T14:17:55+08:00">2018-11-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/linux/command/" itemprop="url" rel="index"><span itemprop="name">command</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="文件-目录"><a href="#文件-目录" class="headerlink" title="文件/目录"></a>文件/目录</h2><h3 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -1 :每个文件展示一行  -l :展示全部信息(权限, 时间等, 首字母为文件类型: -:普通文件 d:文件夹 s:socket文件 l:链接文件)  </span></span><br><span class="line">ls -t    <span class="comment"># 按更新时间排序, 最新的在前</span></span><br><span class="line">ls -tr    <span class="comment"># 按更新时间排序, 最旧的在前, -r:倒序</span></span><br><span class="line">ls -h    <span class="comment"># 使用可读单位(K, M, G)显示文件大小</span></span><br><span class="line">ls -d /dir    <span class="comment"># 只显示目录信息, 不显示目录内文件信息</span></span><br><span class="line">ls -a    <span class="comment"># 显示所有文件, 包括 . 和 ..</span></span><br><span class="line">ls -A    <span class="comment"># 显示所有文件, 不包括 . 和 ..</span></span><br><span class="line">ls -R    <span class="comment"># 递归展示所有文件, 及子目录内所有文件</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="mkdir"><a href="#mkdir" class="headerlink" title="mkdir"></a>mkdir</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir dir   <span class="comment"># 创建目录</span></span><br><span class="line">mkdir -p path/to/dir       <span class="comment"># 递归创建多个目录</span></span><br><span class="line">mkdir -m 777 dir    <span class="comment"># 创建权限为777的目录</span></span><br><span class="line">mkdir -p dir, dir2, path/to/dir3    <span class="comment"># 创建多个目录</span></span><br></pre></td></tr></table></figure>
+<h3 id="rm"><a href="#rm" class="headerlink" title="rm"></a>rm</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rm file      <span class="comment"># 删除前需要确认</span></span><br><span class="line">rm -f file    <span class="comment"># 强行删除, 系统不再提示</span></span><br><span class="line">rm -i file*     <span class="comment"># 删除多个文件, 逐个确认</span></span><br><span class="line">rm -r dir      <span class="comment"># 递归删除文件夹下所有文件, 并删除该文件夹</span></span><br><span class="line">rm -rf dir     <span class="comment"># 毁天灭地</span></span><br></pre></td></tr></table></figure>
+<h3 id="cp"><a href="#cp" class="headerlink" title="cp"></a>cp</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cp file1 path/          <span class="comment"># 复制到目录, 保持文件名</span></span><br><span class="line">cp file1 path/file2     <span class="comment"># 复制并重命名</span></span><br><span class="line">cp -r path/dir1 path/to/dir2    <span class="comment"># 递归复制一个目录</span></span><br><span class="line">cp -i file1 file2    <span class="comment"># 重命名文件为file2, 如果file2已存在则提示是否覆盖</span></span><br><span class="line">cp -a dir1 dir2     <span class="comment"># 如果dir2已存在, 则将dir1复制到dir2目录里, 否则dir1并重命名为dir2</span></span><br><span class="line">cp -b file1 file2    <span class="comment"># file2已存在时, 会先备份, 再复制</span></span><br></pre></td></tr></table></figure>
+<h3 id="mv"><a href="#mv" class="headerlink" title="mv"></a>mv</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mv -i file1 file2   <span class="comment"># 如果file2已存在则提示</span></span><br><span class="line">mv -f file1 file2   <span class="comment"># 如果file2已存在直接覆盖, 不提示</span></span><br><span class="line">mv -b file1 file2   <span class="comment"># 如果file2已存在, 则覆盖, 但会先备份</span></span><br><span class="line">mv file1 file2 dir  <span class="comment"># 移动多个文件到dir</span></span><br></pre></td></tr></table></figure>
+<h3 id="chomd"><a href="#chomd" class="headerlink" title="chomd"></a>chomd</h3><p><code>ls -al</code>输出类似<code>-rw-r--r-- 1 root root 302108 11-13 06:03 xx.log</code>的内容. 分三部分: 文件所属人的权限<code>u</code>, 文件所属组的权限<code>g</code>, 其他用户的权限<code>o</code>.</p>
+<p>权限范围: </p>
+<ul>
+<li><strong>u</strong> : 目录或文件的当前用户</li>
+<li><strong>g</strong> : 目录或文件的当前群组</li>
+<li><strong>o</strong> : 除了目录或文件的当前用户和群组之外的用户或者群组</li>
+<li><strong>a</strong> : 所有的用户及群组</li>
+</ul>
+<p>权限代号:</p>
+<ul>
+<li><strong>r</strong> : 读权限, 用数字4表示</li>
+<li><strong>w</strong> : 写权限, 用数字2表示</li>
+<li><strong>x</strong> : 执行权限, 用数字1表示</li>
+<li><strong>-</strong> : 删除权限, 用数字0表示</li>
+<li><strong>s</strong> : 特殊权限</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">chmod a+x file      <span class="comment"># 写法1, 所有人加执行权限</span></span><br><span class="line">chmod ug+x,o-x file     <span class="comment"># 所有人及所在组加执行权限, 其他去除执行权限</span></span><br><span class="line">chmod o=r file          <span class="comment"># 其他用户只有读取权限</span></span><br><span class="line">chmod u=rwx,g=rx,o=x file   <span class="comment"># 指定每个范围的权限</span></span><br><span class="line">chmod 755 file      <span class="comment"># 写法2</span></span><br><span class="line">chmod -R u+x dir    <span class="comment"># 递归修改</span></span><br><span class="line">chmod =r file   <span class="comment"># 为所有用户分配权限</span></span><br></pre></td></tr></table></figure>
+<h3 id="chown"><a href="#chown" class="headerlink" title="chown"></a>chown</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">chown root file     <span class="comment"># 修改文件所属人</span></span><br><span class="line">chown redis:redis file      <span class="comment"># 修改文件所属人及组</span></span><br><span class="line">chown root: file    <span class="comment"># 修改文件所属人为root, 组改为root所在组</span></span><br><span class="line">chown :mail file    <span class="comment"># 仅修改组</span></span><br><span class="line">chown -R root dir   <span class="comment"># 递归修改所属人</span></span><br></pre></td></tr></table></figure>
+<h3 id="find"><a href="#find" class="headerlink" title="find"></a>find</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">find -name <span class="string">"Hello.java"</span>   <span class="comment"># 按名称在当前目录遍历查找</span></span><br><span class="line">find / -name <span class="string">"Hello.java"</span>    <span class="comment"># 遍历查找文件</span></span><br><span class="line">find / -iname <span class="string">"Hello.java"</span>   <span class="comment"># 不区分文件名大小写查找</span></span><br><span class="line">find . -regex <span class="string">"\./\w+\.log$"</span>   <span class="comment"># 正则查找</span></span><br><span class="line">find . -iregex <span class="string">"\./\w+\.log$"</span>   <span class="comment"># 不区分大小, 正则查找</span></span><br><span class="line">find / -maxdepth 2 -name <span class="string">"Hello.java"</span>  <span class="comment"># 限制遍历深度, 2: 当前目录算1级 + 一级子目录</span></span><br><span class="line">find / -mindepth 2 -maxdepth 4 -name <span class="string">"Hello.java"</span>  <span class="comment"># 限制遍历层级范围</span></span><br><span class="line">find -iname <span class="string">"Hello.java"</span> -<span class="built_in">exec</span> md5sum &#123;&#125; \;  <span class="comment"># 对查找到的文件执行命令, &#123;&#125;为文件名占位符</span></span><br><span class="line">find -not -iname <span class="string">"Hello.java"</span>  <span class="comment"># 查找名称不是"Hello.java"的文件</span></span><br><span class="line">find . -perm 755 -<span class="built_in">type</span> f -<span class="built_in">exec</span> ls -l &#123;&#125; \;   <span class="comment"># 按文件权限查找 type: b:块设备文件, d:目录 c:字符设备文件 p:管道文件 l:符号链接文件 f:普通文件 s:socket文件</span></span><br><span class="line">find . -empty   <span class="comment"># 查找空文件, 即文件大小为0</span></span><br><span class="line">find . -<span class="built_in">type</span> f -<span class="built_in">exec</span> ls -s &#123;&#125; \; | sort -n -r | head -5    <span class="comment"># 查找最大的前5个文件</span></span><br><span class="line">find . -not -empty -<span class="built_in">type</span> f -<span class="built_in">exec</span> ls -s &#123;&#125; \; | sort -n | head -5   <span class="comment"># 查找前5个最小的非空文件</span></span><br><span class="line">find -newer file1   <span class="comment"># 查找比file1更新的文件</span></span><br><span class="line">find . -size 100M   <span class="comment"># 查找大小为100M的文件</span></span><br><span class="line">find . -size +100k -size -1M    <span class="comment"># 查找大小在100k 到 1M的文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># atime:access time, 被读取或执行的时间  ctime:change time: 文件状态改变时间  mtime: modify time, 文件内容改变时间  通过stat命令查看这些时间</span></span><br><span class="line">find . -mtime 2   <span class="comment"># 往前3天内(2*24 - 3*24)前被修改的文件</span></span><br><span class="line">find . -mtime -2  <span class="comment"># 从2天前开始</span></span><br><span class="line">find . -mtime +2  <span class="comment"># 2天之前一直往前</span></span><br><span class="line">find . -mmin 2   <span class="comment"># 按分钟查找</span></span><br><span class="line"><span class="comment"># -mtime n : 计算方式:(current_time - file_time) / 86400</span></span><br></pre></td></tr></table></figure>
+<h3 id="locate"><a href="#locate" class="headerlink" title="locate"></a>locate</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">locate <span class="built_in">pwd</span>      <span class="comment"># 类似find -name, 但该命令较快, 因为它是从数据库(/var/lib/locatedb)里查询, 可以使用updatedb命令更新数据</span></span><br><span class="line">locate ~/m      <span class="comment"># 查找以m开头的文件</span></span><br><span class="line">locate -i ~/m   <span class="comment"># 忽略大小写</span></span><br></pre></td></tr></table></figure>
+<h3 id="which"><a href="#which" class="headerlink" title="which"></a>which</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">which</span> grep      <span class="comment"># 在PATH变量指定的路径中, 查询某个命令的位置, 并且返回第一个搜索结果</span></span><br></pre></td></tr></table></figure>
+<h3 id="whereis"><a href="#whereis" class="headerlink" title="whereis"></a>whereis</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 只能搜索程序名, 而且只搜索二进制(-b), man文件(-m), 和源码(-s)</span></span><br><span class="line">whereis grep</span><br></pre></td></tr></table></figure>
+<h3 id="type"><a href="#type" class="headerlink" title="type"></a>type</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 区分某个命令是否是shell自带的</span></span><br><span class="line"><span class="built_in">type</span> <span class="built_in">cd</span>     <span class="comment"># cd is a shell builtin</span></span><br><span class="line"><span class="built_in">type</span> grep   <span class="comment"># grep is /bin/grep</span></span><br><span class="line"><span class="built_in">type</span> -p grep    <span class="comment"># 加 -p 等同于which</span></span><br></pre></td></tr></table></figure>
+<h3 id="sort"><a href="#sort" class="headerlink" title="sort"></a>sort</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -f 忽略大小写, -C检查文件是否已排好序，如果乱序，不输出内容，仅返回1</span></span><br><span class="line">sort file   <span class="comment"># 文件中每行按首字母排序后打印</span></span><br><span class="line">sort -r file  <span class="comment"># 逆序</span></span><br><span class="line">ls -l . | sort -nk2   <span class="comment"># 按第2列排序, 默认ascii排序(会出现10 &lt; 2), 基于数字值排序时必须加n</span></span><br><span class="line">sort -nk2 -t : file   <span class="comment"># 按数字排序第2列, 使用:作为分隔符</span></span><br><span class="line">sort -u file   <span class="comment"># 不输出重复行</span></span><br><span class="line">sort file -o file   <span class="comment"># 排序后写入原文件</span></span><br><span class="line">sort -n -t : -k 3nr -k 2 file   <span class="comment"># 以:分隔列, 先按第3列倒叙排, 相同时再按第2列排序</span></span><br><span class="line">sort -n -k 2.2,3.1 file    <span class="comment"># 以第2列的第3个字符到第3列的第1个字符排序</span></span><br></pre></td></tr></table></figure>
+<h2 id="文件内容"><a href="#文件内容" class="headerlink" title="文件内容"></a>文件内容</h2><h3 id="cat"><a href="#cat" class="headerlink" title="cat"></a>cat</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat file1 file2    <span class="comment"># 顺序打印多个文件内容</span></span><br><span class="line">cat -n file        <span class="comment"># 每行前加行号</span></span><br><span class="line">cat -b file        <span class="comment"># 空白行不加行号</span></span><br><span class="line">cat file1 &gt; file2  <span class="comment"># 将file1的内容输入到file2, file2原有内容被清空</span></span><br><span class="line">cat file2 &gt;&gt; file2  <span class="comment"># file1文件追加到file2</span></span><br></pre></td></tr></table></figure>
+<h3 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -i :不区分大小写;  -4 :前后4行;  -n :输出行号</span></span><br><span class="line">grep <span class="string">"the"</span> file</span><br><span class="line">grep <span class="string">"the"</span> file_*  <span class="comment"># 查找所有file_开头的文件</span></span><br><span class="line">grep -i <span class="string">"the"</span> file  <span class="comment"># 不区分大小写查找</span></span><br><span class="line">grep <span class="string">"th.*"</span> file  <span class="comment"># 正则查找, 推荐用egrep 或 -e</span></span><br><span class="line">egrep <span class="string">"th.&#123;2&#125;"</span> file </span><br><span class="line">grep -v -e <span class="string">"^th"</span> -e <span class="string">"se$"</span> -e <span class="string">"at"</span>  <span class="comment"># 除了th开头, se结尾, 包含at 的其他行</span></span><br><span class="line">grep -w <span class="string">"is"</span> file  <span class="comment"># 完整匹配, 不会匹配上this/his, 只查找is</span></span><br><span class="line"></span><br><span class="line">grep -A 3 -i <span class="string">"the"</span> file  <span class="comment"># 输出匹配到的行, 及之后的3行</span></span><br><span class="line">grep -B 3 -i <span class="string">"the"</span> file  <span class="comment"># 输出匹配到的行, 及之前的3行</span></span><br><span class="line">grep -3 -i <span class="string">"the"</span> file  <span class="comment"># 输出匹配到的行, 及前后的3行, 可以写 -3i</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 高亮匹配到的字符</span></span><br><span class="line"><span class="built_in">export</span> GREP_OPTIONS=<span class="string">'--color=auto'</span> GREP_COLOR=<span class="string">'1;31'</span></span><br><span class="line">grep -w <span class="string">"is"</span> file</span><br><span class="line"></span><br><span class="line">grep -r <span class="string">'is'</span> *   <span class="comment"># 遍历查询当前目录及子目录中的所有文件</span></span><br><span class="line">grep -v <span class="string">"is"</span> file  <span class="comment"># 查找不包含is的行</span></span><br><span class="line">grep -c <span class="string">"is"</span> file  <span class="comment"># 统计匹配到的行数, 再加-v统计不包含的行数</span></span><br><span class="line">grep -l <span class="string">"is"</span> *.conf  <span class="comment"># 打印内容匹配上的行所在的文件名</span></span><br><span class="line">grep -o <span class="string">"is.*good"</span>   <span class="comment"># 只打印匹配上的字符串, 而不是打印整行内容</span></span><br></pre></td></tr></table></figure>
+<h3 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -c :创建压缩文件;  -x :解压压缩文件; -t :查看压缩文件</span></span><br><span class="line"><span class="comment"># -v :verbose  -f :file</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建压缩文件</span></span><br><span class="line">tar cvf xxx.tar dirname/</span><br><span class="line">tar cvf xxx.tar file1 file2</span><br><span class="line">tar cvzf xxx.tar.gz dirname/   <span class="comment"># gzip压缩</span></span><br><span class="line">tar cvjf xxx.tar.bz2 dirname/  <span class="comment"># bzip2压缩</span></span><br><span class="line">tar cavf xxx.tar.yy file  <span class="comment"># 根据文件后缀yy自动选择压缩程序</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar xvf xxx.tar </span><br><span class="line">tar xvzf xxx.tar.gz</span><br><span class="line">tar xvjf xxx.tar.bz2</span><br><span class="line">tar xavf xxx.tar.yy   <span class="comment"># 根据文件后缀yy自动选择压缩程序</span></span><br><span class="line">tar xvf xxx.tar /path/to/file  <span class="comment">#从压缩文件中解压出file文件</span></span><br><span class="line">tar xvf xxx.tar /path/to/dir1/ /path/to/dir2/  <span class="comment">#从压缩文件中解压出dir1, dir2两个目录</span></span><br><span class="line">tar xvf xxx.tar --wildcards <span class="string">"*.txt"</span>  <span class="comment"># 只解压出压缩文件中的txt文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 往tar文件中添加文件, 不可以往gz/bz2文件中添加</span></span><br><span class="line">tar rvf xxx.tar newfile</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看压缩文件内的文件</span></span><br><span class="line">tar tvf xxx.tar</span><br><span class="line">tar tvzf xxx.tar.gz</span><br><span class="line">tar tvjf xxx.tar.bz2</span><br></pre></td></tr></table></figure>
+<h3 id="tail-head"><a href="#tail-head" class="headerlink" title="tail/head"></a>tail/head</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">head file       <span class="comment"># 默认展示前10行</span></span><br><span class="line">head -5 file    <span class="comment"># 前5行</span></span><br><span class="line">head -n 5 file      <span class="comment"># 前5行</span></span><br><span class="line">head -c 5 file      <span class="comment"># 前5个字符</span></span><br><span class="line">head -n -5 file     <span class="comment"># 除了最后5行的其他行</span></span><br><span class="line">head -n 20 file | tail -n 10    <span class="comment"># 查看前20行中的后10行</span></span><br></pre></td></tr></table></figure>
+<h3 id="less-more"><a href="#less-more" class="headerlink" title="less/more"></a>less/more</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># more只能往后看, less可以看后翻页</span></span><br><span class="line"><span class="comment"># ctrl + F :前移1屏   ctrl + B :后移1屏   ctrl + D :前移半屏    ctrl + U :后移半屏</span></span><br><span class="line"><span class="comment"># j :前移1行  k :后移1行   G :移动到最后1行  g :移动到首行  q :退出</span></span><br><span class="line"><span class="built_in">history</span> | less</span><br><span class="line">less -N file    <span class="comment"># 加行号</span></span><br></pre></td></tr></table></figure>
+<h3 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h3><p>sed是一种在线编辑器, 每次处理一行内容. 处理时, 把当前行存储在临时缓冲区中, 称为”模式空间”(pattern space), 接着sed命令处理缓冲区中的内容. 处理完成后, 将缓冲区内容输出到屏幕. 然后接着处理下一行, 直至文件结束.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># a:新增  c:替换  d:删除  i:插入  p:打印  s:取代</span></span><br><span class="line">nl file | sed <span class="string">'2,5d'</span>        <span class="comment"># 删除2,5行</span></span><br><span class="line">nl file | sed <span class="string">'2,$d'</span>        <span class="comment"># 从第2行删除到最后</span></span><br><span class="line">nl file | sed <span class="string">'2a test'</span>     <span class="comment"># 在第2行后加上一行, 内容是test</span></span><br><span class="line">nl file | sed <span class="string">'2i test'</span>     <span class="comment"># 在第2行前加一行, 内容是test</span></span><br><span class="line">nl file | sed <span class="string">'2,4c Hello World'</span>    <span class="comment"># 2到4行替换为Hello World, 就一行</span></span><br><span class="line">sed -n <span class="string">'2,5p'</span> file      <span class="comment"># 显示2 - 5行内容</span></span><br><span class="line">nl file | sed <span class="string">'/root/d'</span>     <span class="comment"># 删除包含root的行</span></span><br><span class="line">nl file | sed <span class="string">'s/^.*test/hello/g'</span>   <span class="comment"># sed 's/待替换字符/替换字符/g'</span></span><br><span class="line">sed -i <span class="string">'s/\.$/\!/g'</span> file    <span class="comment"># 直接修改文件内容, 将行末.替换为!</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="系统信息"><a href="#系统信息" class="headerlink" title="系统信息"></a>系统信息</h2><h3 id="uname"><a href="#uname" class="headerlink" title="uname"></a>uname</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uname -a    <span class="comment"># Linux host.localdomain 4.10.5-1.el6.elrepo.x86_64 #1 SMP Wed Mar 22 14:55:33 EDT 2017 x86_64 x86_64 x86_64 GNU/Linux</span></span><br></pre></td></tr></table></figure>
+<h3 id="passwd"><a href="#passwd" class="headerlink" title="passwd"></a>passwd</h3><p>存放用户信息:</p>
+<blockquote>
+<p>/etc/passwd<br>/etc/shadow</p>
+</blockquote>
+<p>存放组信息:</p>
+<blockquote>
+<p>/etc/group<br>/etc/gshadow</p>
+</blockquote>
+<p>用户文件信息组成:</p>
+<blockquote>
+<p>例: jack:X:503:504:::/home/jack/:/bin/bash<br>jack  //用户名<br>X     //口令,密码<br>503   //用户id, 0代表root, 普通用户从500开始<br>504   //所在组<br>:  //描述<br>/home/jack/        //用户的家目录<br>/bin/bash     // 用户默认shell</p>
+</blockquote>
+<p>组文件信息组成:</p>
+<blockquote>
+<p>例: jack:$!$:???:13801:0:99999:7:<em>:</em>:<br>jack          // 组名<br>$!$           // 被加密的口令<br>13801         // 创建日期与今天相隔的天数<br>0             // 口令的最短位数<br>99999      // 用户口令<br>7          // 到7天时提醒<br>*          // 禁用天数<br>*          // 过期天数</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">passwd  <span class="comment"># 命令行修改密码, 先输入旧的, 再输入新的</span></span><br><span class="line">passwd USERNAME    <span class="comment"># root用户可以修改其他用户的密码</span></span><br><span class="line">passwd -d USERNAME   <span class="comment"># root用户可以删除别的用户的密码, 删除后该用户可以不输入密码进入系统</span></span><br><span class="line">passwd -S USERNAME   <span class="comment"># 查看用户密码信息, 看不到密码内容</span></span><br></pre></td></tr></table></figure>
+<h3 id="top"><a href="#top" class="headerlink" title="top"></a>top</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@host ~]# top</span><br><span class="line">top - 16:41:15 up 58 days,  4:44,  1 user,  load average: 0.18, 0.23, 0.22</span><br><span class="line">Tasks: 137 total,   1 running, 136 sleeping,   0 stopped,   0 zombie</span><br><span class="line">Cpu(s):  1.3%us,  0.6%sy,  0.0%ni, 97.5%id,  0.4%wa,  0.0%hi,  0.0%si,  0.2%st</span><br><span class="line">Mem:   3918972k total,  3714896k used,   204076k free,     9192k buffers</span><br><span class="line">Swap:  2096440k total,    59020k used,  2037420k free,   194376k cached</span><br><span class="line"></span><br><span class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</span><br><span class="line"> 4667 sankai   20   0 2608m  30m 4608 S  4.0  0.8   1069:43 sg_agent</span><br><span class="line">30349 nobody    20   0 7251m 3.0g  12m S  4.0 80.1 114:47.91 java</span><br><span class="line"> 4617 sankai   20   0  308m 6644 2712 S  2.0  0.2  81:07.54 cplugin</span><br><span class="line">    1 root      20   0 51236  27m  536 S  0.0  0.7   0:03.28 init</span><br></pre></td></tr></table></figure>
+<p>前5行为信息统计区: </p>
+<ol>
+<li><strong>16:41:15</strong> - 系统当前时间;  <strong>up 58 days,  4:44</strong> - 运行时长, 期间没有重启过; <strong>1user</strong> - 当前有1个用户登录; <strong>load average: 0.18, 0.23, 0.22</strong> - 系统在过去<em>1</em>分钟, <em>5</em>分钟, <em>15</em>分钟的负载情况</li>
+<li>系统当前有137个进程, 1个在运行, 136个在休眠, 0个停止, 0个僵尸态</li>
+<li><em>1.3%us</em> - 用户空间占用CPU的百分比; <em>0.6%sy</em> - 内核空间占用CPU的百分比; <em>0.0%ni</em> - 改变过优先级的进程占用CPU的百分比; <em>97.5%id</em> - 空闲CPU百分比;  <em>0.4%wa</em> - IO等待占用CPU百分比; <em>0.0%hi</em> - 硬中断(Hardware Interrunpt)占用CPU百分比; <em>0.2%st</em> - 软中断占用CPU百分比</li>
+<li><em>3918972k total</em> - 物理内存总容量(4G); <em>3714896k used</em> - 使用中的内存容量; <em>204076k free</em> - 空闲的内存容量; <em>9192k buffers</em> - 缓存的内存容量</li>
+<li><em>2096440k total</em> - 交换区总容量(2G); <em>59020k used</em> - 使用的交换区容量; <em>2037420k free</em> - 空闲的交换区容量; <em>194376k cached</em> - 缓冲的交换区容量</li>
+<li>空行</li>
+<li>进程状态<ol>
+<li>PID - 进程id</li>
+<li>USER - 进程所有者</li>
+<li>PR - 进程优先级</li>
+<li>NI - nice值, 负值表示高优先级, 正值表示低优先级</li>
+<li>VIRT - 进程使用的虚拟内存总量, 单位KB, VIRT=SWAP+RES</li>
+<li>RES - 进程使用的未被换出的物理内存大小, KB. RES=CODE+DATA</li>
+<li>SHR - 共享内存大小, KB.</li>
+<li>S - 进程状态</li>
+<li>%CPU - 上次更新到现在的CPU时间占用百分比</li>
+<li>%MEN - 进程使用的物理内存百分比</li>
+<li>TIME+ - 进程使用的CPU时间总计, 单位: 1/100秒</li>
+<li>COMMAND - 进程使用的命令</li>
+</ol>
+</li>
+</ol>
+<blockquote>
+<p>load average : 处理进程占CPU能力的百分比, 每隔5秒钟检查一次. 如果CPU每分钟最多处理100个进程，那么系统负荷0.2，意味着CPU在这1分钟里只处理了20个进程. 超过1说明有进程在排队等待CPU处理. 单CPU时负载大于0.7就需要注意了. 达到5时系统基本死机状态.<br><code>cat /proc/cpuinfo</code> 命令可查看CPU信息, <code>grep -c &#39;model name&#39; /proc/cpuinfo</code> 查看cpu核心数. <strong>负载值不要超过核心数</strong><br>应该关注15分钟的负载值, 1分钟的说明只是暂时现象<br>第四行中使用中的内存总量（used）指的是现在系统内核控制的内存数，空闲内存总量（free）是内核还未纳入其管控范围的数量。纳入内核管理的内存不见得都在使用中，还包括过去使用过的现在可以被重复利用的内存，内核并不把这些可被重新使用的内存交还到free中去，因此在linux上free内存会越来越少，但不用为此担心。<br>如果出于习惯去计算可用内存数，这里有个近似的计算公式：第四行的free + 第四行的buffers + 第五行的cached，按这个公式此台服务器的可用内存：18537836k +169884k +3612636k = 22GB左右。<br>对于内存监控，在top里我们要时刻监控第五行swap交换分区的used，如果这个数值在不断的变化，说明内核在不断进行内存和swap的数据交换，这是真正的内存不够用了。</p>
+</blockquote>
+<h4 id="查看线程"><a href="#查看线程" class="headerlink" title="查看线程"></a>查看线程</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -H -p</span><br></pre></td></tr></table></figure>
+<h3 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># linux进程状态: 运行(R), 可中断的睡眠状态(S), 不可中断的睡眠状态(D), 僵尸(Z), 停止(T), 退出,即将被销毁(X)</span></span><br><span class="line"><span class="comment"># 输出列含义: PID: 进程id  %CPU:使用CPU资源占比  %MEM:所占内存百分比  VSZ:用掉的虚拟内容(KB)  RSS:占用的固定的内存(KB)  TTY:在哪个终端上运作  STAT:当前状态 TIME:用掉的CPU时间  CMD:使用的命令</span></span><br><span class="line">ps -aux     <span class="comment"># 显示所有运行的进程</span></span><br><span class="line">ps auxww    <span class="comment"># 包含完整的命令路径</span></span><br><span class="line">ps --user $(id -u) f       <span class="comment"># 树状展示当前用户的进程</span></span><br><span class="line">ps -o ppid= -p pid      <span class="comment"># 展示摸个进程的父进程id</span></span><br><span class="line">ps -ef</span><br><span class="line">ps -u root  <span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<h3 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a>ifconfig</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig etho0 192.168.1.110    <span class="comment"># 配置IP地址</span></span><br></pre></td></tr></table></figure>
+<h3 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -nau | grep 3306    </span><br><span class="line">lsof -i:8080    <span class="comment"># mac上使用</span></span><br></pre></td></tr></table></figure>
+<h3 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ping www.baidu.com</span><br><span class="line">ping -c 10 192.168.1.101    <span class="comment"># 指定次数</span></span><br><span class="line">ping -c 10 -i 0.5 192.168.1.101     <span class="comment"># 指定次数和间隔(秒)</span></span><br><span class="line">ping -i 3 -s 1024 -t 255 192.168.1.101  <span class="comment"># -s 发送包大小为1024字节 -t TTL为255</span></span><br></pre></td></tr></table></figure>
+<h3 id="free"><a href="#free" class="headerlink" title="free"></a>free</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -b -k -m -g : 以byte, KB, MB, GB为单位</span></span><br><span class="line">free    </span><br><span class="line"><span class="comment">#              total       used       free     shared    buffers      cached</span></span><br><span class="line"><span class="comment"># Mem:        516372     293056     223316        152      75256     160428</span></span><br><span class="line"><span class="comment"># -/+ buffers/cache:      57372     459000</span></span><br><span class="line"><span class="comment"># Swap:       135164          0     135164</span></span><br><span class="line"><span class="comment"># total :总计物理内存,  used :已使用  free:可使用  shared :多个进程共享的  buffers/cached :磁盘缓存的大小</span></span><br><span class="line"><span class="comment"># swap :交换分区, 即虚拟缓存</span></span><br><span class="line">free -s 10  <span class="comment"># 每10秒刷新一次</span></span><br></pre></td></tr></table></figure>
+<h3 id="df"><a href="#df" class="headerlink" title="df"></a>df</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">df      </span><br><span class="line"><span class="comment"># Filesystem      Size  Used Avail Use% Mounted on</span></span><br><span class="line"><span class="comment"># /dev/sda2        11G  1.2G  8.8G  12% /</span></span><br><span class="line"><span class="comment"># 第一列代表文件系统对应的设备文件的路径名, 一般是分区, 第二列表示分区包含的数据块(1024字节)数目, 第3, 4列表示已用 和 可用的数据块数目. 第3, 4列加一起不等于第二列是因为每个分区保留了少量空间给管理员使用. 最后一列是挂载点.</span></span><br><span class="line">df -t ext3      <span class="comment"># 指定类型的磁盘</span></span><br><span class="line">df -T       <span class="comment"># 列出文件系统的类型</span></span><br><span class="line">df -h   <span class="comment"># 单位可读(M, G)</span></span><br></pre></td></tr></table></figure>
+<h3 id="mount"><a href="#mount" class="headerlink" title="mount"></a>mount</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="yum"><a href="#yum" class="headerlink" title="yum"></a>yum</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="rpm"><a href="#rpm" class="headerlink" title="rpm"></a>rpm</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="date"><a href="#date" class="headerlink" title="date"></a>date</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">date</span><br><span class="line">date -s 20180308        <span class="comment"># 设置系统日期, 时间部分全为0, 只有root有权限</span></span><br><span class="line">date -s 01:23:30        <span class="comment"># 设置时间, 日期部分不变</span></span><br><span class="line">date -s <span class="string">"20180308 01:23:30"</span>     <span class="comment"># 设置系统时间</span></span><br><span class="line">date -s <span class="string">"01:23:30 2018-03-08"</span>   <span class="comment"># 也可以这样设置</span></span><br><span class="line">date +%Y%m%d    <span class="comment"># 显示当前年月日</span></span><br><span class="line">date +%Y%m%d --date=<span class="string">'+1 day'</span>   <span class="comment"># 显示昨天的年月日</span></span><br><span class="line">date +%Y%m%d --date=<span class="string">"+1 month"</span>  <span class="comment"># 显示下一月的日期</span></span><br><span class="line">date <span class="string">'+%d'</span>      <span class="comment"># 2018-03-10</span></span><br><span class="line">date <span class="string">'+%T'</span>      <span class="comment"># 03:30:21</span></span><br><span class="line">date -d <span class="string">'2 weeks'</span>   <span class="comment"># 2周后</span></span><br><span class="line">date -d <span class="string">'-100 days'</span>     <span class="comment"># 100天后</span></span><br><span class="line">date -d <span class="string">'next monday'</span>   <span class="comment"># 下个周一</span></span><br><span class="line">date -d last-month +%Y%m    <span class="comment"># 上个月</span></span><br></pre></td></tr></table></figure>
+<h3 id="export"><a href="#export" class="headerlink" title="export"></a>export</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> -p   <span class="comment"># 列出当前的环境变量值</span></span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="xargs"><a href="#xargs" class="headerlink" title="xargs"></a>xargs</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">cat file.txt | xargs    <span class="comment"># 所有内容单行输出</span></span><br><span class="line">cat file.txt | xargs -n3    <span class="comment"># 每3列一行输出</span></span><br><span class="line">cat file.txt | xargs -n3 -d:    <span class="comment"># 指定列分隔符为:</span></span><br><span class="line">find . -name <span class="string">'.class'</span> | xargs rm -v   <span class="comment"># 删除所有claas文件</span></span><br><span class="line">find . -name <span class="string">'.class'</span> | xargs -p -n 1 rm -v   <span class="comment"># 删除所有claas文件, 每次删除需要确认</span></span><br><span class="line">find . -name <span class="string">'.class'</span> | xargs -i rm -v &#123;&#125;   <span class="comment"># -i 需要使用文件名替换&#123;&#125;, 使用小i默认占位符为&#123;&#125;</span></span><br><span class="line"><span class="comment"># 因为有些命令的变量在中间, 比如mv file /dir, 其中xx.tar变量, 而xargs默认是把变量放最后. 因此需要写成 ls *.tar | xargs -i mv &#123;&#125; /dir</span></span><br><span class="line">find . -name <span class="string">'*.class'</span> | xargs -0 -I [] rm -f []   <span class="comment"># 自定义占位符为[], 使用文件名替换[], rm多次, 直接rm多个文件时, 可能会有错误. -0指使用\0作为占位符.</span></span><br><span class="line">find . -<span class="built_in">type</span> f <span class="string">"*.java"</span> -print0 | xargs -0 wc -l   <span class="comment"># 统计文件行数</span></span><br><span class="line"><span class="comment"># 如果文件名包含空格, xargs默认按空格分隔(file 1.log -&gt; file 和 1.log), 此时后续命令会出错. 所以 print0会输出\0, 而在配合 -0 以\0为分隔符, 操作文件就没问题了</span></span><br><span class="line">find . -maxdepth 1 ! -name <span class="string">"."</span> -print0 | xargs -0 du -b | sort -nr | head -10 | nl   <span class="comment"># 找到文件大小前10的, 文件名不为'.'的文件, nl可以为输出列加上编号</span></span><br><span class="line"><span class="comment"># find后执行xargs提示xargs: argument line too long解决方法</span></span><br><span class="line">find . -<span class="built_in">type</span> f -atime +0 -print0 | xargs -0 -l1 -t rm -f    <span class="comment"># -1l是一次处理一个, -t是处理前打印命令</span></span><br></pre></td></tr></table></figure>
+<h3 id="wget"><a href="#wget" class="headerlink" title="wget"></a>wget</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">wget www.xxx.com/test.html   <span class="comment"># 获取网页内容并保存到test.html文件</span></span><br><span class="line">wget -O file www.xx.com     <span class="comment"># 保存到指定文件</span></span><br><span class="line">wget -a file www.yy.com     <span class="comment"># 追加到文件</span></span><br><span class="line">wget -o <span class="built_in">log</span> www.xx.com      <span class="comment"># 下载记录保存到log文件</span></span><br><span class="line">wget -i urls.txt    <span class="comment"># 从文件读取链接, 下载</span></span><br><span class="line">wget -t 40 www.xx.com       <span class="comment"># 最多重试40次(默认20)</span></span><br><span class="line">wget -S www.xx.com/sdf      <span class="comment"># 测试链接是否正确</span></span><br><span class="line">wget -b www.xx.com       <span class="comment"># 后台下载</span></span><br><span class="line">wget - c www.xx.com     <span class="comment"># 断点续传</span></span><br><span class="line">wget --<span class="built_in">limit</span>-rate=300K      <span class="comment"># 限速下载</span></span><br><span class="line">wget --reject=gif www.xx.com    <span class="comment"># 不下载gif文件</span></span><br><span class="line">wget -r -A pdf www.xx.com   <span class="comment"># 只下载pdf文件</span></span><br></pre></td></tr></table></figure>
+<h3 id="curl"><a href="#curl" class="headerlink" title="curl"></a>curl</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">curl www.xx.com     <span class="comment"># 打印html内容</span></span><br><span class="line">curl -i www.xx.com  <span class="comment"># 打印内容和响应头</span></span><br><span class="line">curl -I www.xx.com      <span class="comment"># 只显示响应头信息</span></span><br><span class="line">curl -v www.xx.com      <span class="comment"># 显示http通信完整过程, 包括端口和头信息</span></span><br><span class="line">curl --trace output.txt www.xxx.com     <span class="comment"># 更详细的信息</span></span><br><span class="line">curl --refere www.yy.com www.xx.com     <span class="comment"># 设置来源</span></span><br><span class="line">curl -L www.xx.com  <span class="comment"># 自动跳转, 遇到301响应时</span></span><br><span class="line"></span><br><span class="line">curl -O www.xx.com      <span class="comment"># 以服务器上的名称保存</span></span><br><span class="line">curl www.xx.com -o file     <span class="comment"># 下载链接内容到指定文件</span></span><br><span class="line">curl -O www.xx.com/pic[1-5].jpg     <span class="comment"># 循环下载(pic1.jpg...pic5.jpg)</span></span><br><span class="line">curl -o <span class="comment">#1_#2.jpg ww.xxcom/&#123;user,goods&#125;/pic[1-5].jpg    # 循环下载并重命名</span></span><br><span class="line">curl -<span class="comment"># -O www.xx.com/pic.jpg       # 显示下载进度条</span></span><br><span class="line">curl -C -O www.xx.com/pic.jpg       <span class="comment"># 断点续传</span></span><br><span class="line"><span class="comment"># 分块下载</span></span><br><span class="line">curl -r 0-100 -o pic_part1.jpg www.xx.com/pic.jpg</span><br><span class="line">curl -r 100-200 -o pic_part2.jpg www.xx.com/pic.jpg</span><br><span class="line">curl -r 200- -o pic_part3.jpg www.xx.com/pic.jpg</span><br><span class="line">cat pic_part* &gt; pic.jpg</span><br><span class="line"></span><br><span class="line">curl -d <span class="string">'name=bob'</span> www.xx.com/form  <span class="comment"># post提交表单</span></span><br><span class="line">curl -X POST --data <span class="string">"key=value"</span> www.xx.com  <span class="comment"># post发送参数</span></span><br><span class="line">curl -X POST --date-urlencode <span class="string">"key=value"</span> www.xx.com        <span class="comment"># curl帮忙转码</span></span><br><span class="line">curl -H <span class="string">'My-Header: 123'</span> -X PUT www.xx.com      <span class="comment"># 增加请求头, 指定方法, 等于--header</span></span><br><span class="line">curl -d <span class="string">'&#123;"name":"bob"&#125;'</span> -H <span class="string">'Content-Type: application/json'</span> wwx.xx.com     <span class="comment"># 发送json请求</span></span><br><span class="line">curl --form upload=@localFilename --form press=OK www.xx.com    <span class="comment"># 文件上传</span></span><br><span class="line">curl -o /dev/null -s -w %&#123;http_code&#125; www.linux.com  <span class="comment"># 测试网页响应code</span></span><br><span class="line"></span><br><span class="line">curl --cookie <span class="string">"name=xxx"</span> www.xx.com     <span class="comment"># 设置cookie</span></span><br><span class="line">curl -c cookie.txt www.xx.com      <span class="comment"># 保存cookie信息到文件</span></span><br><span class="line">curl -b cookie.txt www.xx.com       <span class="comment"># 带上cookie访问</span></span><br><span class="line">curl -D header.txt www.xx.com       <span class="comment"># 保存响应头到文件</span></span><br><span class="line">curl -A <span class="string">"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.0)"</span> http://www.linux.com       <span class="comment"># 指定UA</span></span><br><span class="line"><span class="comment"># mac-chrome : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36</span></span><br></pre></td></tr></table></figure>
+<h3 id="a-sh-gt-xx-log-2-gt-amp-1"><a href="#a-sh-gt-xx-log-2-gt-amp-1" class="headerlink" title="a.sh &gt; xx.log 2&gt;&amp;1"></a>a.sh &gt; xx.log 2&gt;&amp;1</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="built_in">log</span> &gt; /dev/null 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<p>> :代表重定向到哪里，例如：echo “123” &gt; /home/123.txt<br>1 :表示stdout标准输出，系统默认值是1，所以”&gt;/dev/null”等同于”1&gt;/dev/null”<br>2 :表示stderr标准错误<br>&amp; :表示等同于的意思，2&gt;&amp;1，表示2的输出重定向等同于1</p>
+<p>1 &gt; /dev/null 2&gt;&amp;1 语句含义：</p>
+<p>1 &gt; /dev/null ： 首先表示标准输出重定向到空设备文件，也就是不输出任何信息到终端，说白了就是不显示任何信息。<br>2&gt;&amp;1 ：接着，标准错误输出重定向（等同于）标准输出，因为之前标准输出已经重定向到了空设备文件，所以标准错误输出也重定向到空设备文件。</p>
+<p>在shell中, 每个进程都和三个系统文件相关联: 标准输入stdin, 标准输出stdout 和 标准错误stderr, 三个系统文件的文件描述符分别为0, 1, 2. 所以这里 2&gt;&amp;1 的意思就是将标准错误也输出到标准输出当中</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Tonny Yi</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://codertang.com/2018/03/08/linux-commands/" title="Linux常用命令">http://codertang.com/2018/03/08/linux-commands/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="external nofollow" target="_blank">CC BY-NC 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/命令/" rel="tag"># 命令</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/01/spring-startup/" rel="next" title="Spring启动过程分析">
+                <i class="fa fa-chevron-left"></i> Spring启动过程分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/30/maven/" rel="prev" title="maven">
+                maven <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Tonny Yi">
+            
+              <p class="site-author-name" itemprop="name">Tonny Yi</p>
+              <p class="site-description motion-element" itemprop="description">Coding, Life, Zen</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tonnyyi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:tonnyemails@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件-目录"><span class="nav-number">1.</span> <span class="nav-text">文件/目录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ls"><span class="nav-number">1.1.</span> <span class="nav-text">ls</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mkdir"><span class="nav-number">1.2.</span> <span class="nav-text">mkdir</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rm"><span class="nav-number">1.3.</span> <span class="nav-text">rm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cp"><span class="nav-number">1.4.</span> <span class="nav-text">cp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mv"><span class="nav-number">1.5.</span> <span class="nav-text">mv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chomd"><span class="nav-number">1.6.</span> <span class="nav-text">chomd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chown"><span class="nav-number">1.7.</span> <span class="nav-text">chown</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find"><span class="nav-number">1.8.</span> <span class="nav-text">find</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#locate"><span class="nav-number">1.9.</span> <span class="nav-text">locate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#which"><span class="nav-number">1.10.</span> <span class="nav-text">which</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#whereis"><span class="nav-number">1.11.</span> <span class="nav-text">whereis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type"><span class="nav-number">1.12.</span> <span class="nav-text">type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sort"><span class="nav-number">1.13.</span> <span class="nav-text">sort</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件内容"><span class="nav-number">2.</span> <span class="nav-text">文件内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cat"><span class="nav-number">2.1.</span> <span class="nav-text">cat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grep"><span class="nav-number">2.2.</span> <span class="nav-text">grep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar"><span class="nav-number">2.3.</span> <span class="nav-text">tar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tail-head"><span class="nav-number">2.4.</span> <span class="nav-text">tail/head</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#less-more"><span class="nav-number">2.5.</span> <span class="nav-text">less/more</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sed"><span class="nav-number">2.6.</span> <span class="nav-text">sed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#awk"><span class="nav-number">2.7.</span> <span class="nav-text">awk</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统信息"><span class="nav-number">3.</span> <span class="nav-text">系统信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#uname"><span class="nav-number">3.1.</span> <span class="nav-text">uname</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#passwd"><span class="nav-number">3.2.</span> <span class="nav-text">passwd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#top"><span class="nav-number">3.3.</span> <span class="nav-text">top</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看线程"><span class="nav-number">3.3.1.</span> <span class="nav-text">查看线程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ps"><span class="nav-number">3.4.</span> <span class="nav-text">ps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ifconfig"><span class="nav-number">3.5.</span> <span class="nav-text">ifconfig</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#netstat"><span class="nav-number">3.6.</span> <span class="nav-text">netstat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ping"><span class="nav-number">3.7.</span> <span class="nav-text">ping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#free"><span class="nav-number">3.8.</span> <span class="nav-text">free</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#df"><span class="nav-number">3.9.</span> <span class="nav-text">df</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mount"><span class="nav-number">3.10.</span> <span class="nav-text">mount</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yum"><span class="nav-number">3.11.</span> <span class="nav-text">yum</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpm"><span class="nav-number">3.12.</span> <span class="nav-text">rpm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#date"><span class="nav-number">3.13.</span> <span class="nav-text">date</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#export"><span class="nav-number">3.14.</span> <span class="nav-text">export</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#xargs"><span class="nav-number">4.1.</span> <span class="nav-text">xargs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wget"><span class="nav-number">4.2.</span> <span class="nav-text">wget</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#curl"><span class="nav-number">4.3.</span> <span class="nav-text">curl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-sh-gt-xx-log-2-gt-amp-1"><span class="nav-number">4.4.</span> <span class="nav-text">a.sh &gt; xx.log 2&gt;&amp;1</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tonny Yi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>

@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="物理服务器型号: Dell R720  服务器命令 dmidecode | grep &amp;quot;Product Name&amp;quot;: 查看服务器型号(使用root执行)   123[root@cluster143 mcc]# dmidecode | grep &amp;quot;Product Name&amp;quot;Product Name: PowerEdge R720Product Name: 0">
+<meta name="keywords" content="Linux,command">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统及硬件信息查看">
+<meta property="og:url" content="http://codertang.com/2016/09/02/linux-info/index.html">
+<meta property="og:site_name" content="Tonny&#39;s Blog">
+<meta property="og:description" content="物理服务器型号: Dell R720  服务器命令 dmidecode | grep &amp;quot;Product Name&amp;quot;: 查看服务器型号(使用root执行)   123[root@cluster143 mcc]# dmidecode | grep &amp;quot;Product Name&amp;quot;Product Name: PowerEdge R720Product Name: 0">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-09T06:17:55.156Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux系统及硬件信息查看">
+<meta name="twitter:description" content="物理服务器型号: Dell R720  服务器命令 dmidecode | grep &amp;quot;Product Name&amp;quot;: 查看服务器型号(使用root执行)   123[root@cluster143 mcc]# dmidecode | grep &amp;quot;Product Name&amp;quot;Product Name: PowerEdge R720Product Name: 0">
+
+
+
+
+
+
+  <link rel="canonical" href="http://codertang.com/2016/09/02/linux-info/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Linux系统及硬件信息查看 | Tonny's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tonny's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">莫等闲, 白了少年头, 空悲切</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://codertang.com/2016/09/02/linux-info/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tonny Yi">
+      <meta itemprop="description" content="Coding, Life, Zen">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tonny's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux系统及硬件信息查看
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-09-02 15:34:31" itemprop="dateCreated datePublished" datetime="2016-09-02T15:34:31+08:00">2016-09-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-09 14:17:55" itemprop="dateModified" datetime="2018-11-09T14:17:55+08:00">2018-11-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Linux/Hardware/" itemprop="url" rel="index"><span itemprop="name">Hardware</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>物理服务器型号: <strong>Dell R720</strong></p>
+</blockquote>
+<h3 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h3><h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><ul>
+<li><p><code>dmidecode | grep &quot;Product Name&quot;</code>: 查看服务器型号(使用root执行)</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@cluster143 mcc]# dmidecode | grep &quot;Product Name&quot;</span><br><span class="line">Product Name: PowerEdge R720</span><br><span class="line">Product Name: 068CDY</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<a id="more"></a>
+<h3 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h3><h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><ul>
+<li><strong>物理CPU</strong>: 实际插槽上的CPU个数, 可以通过查看<code>cat /proc/cpuinfo</code>中不重复的<em>physical id</em>个数确定</li>
+<li><strong>逻辑CPU</strong>: 一颗CPU可能有多个核, 如果CPU支持Intel的超线程(HT)则核又多出一倍, 所以<code>逻辑CPU个数</code> = <code>物理CPU个数</code> * <code>单颗CPU的核数 [* 2 (如果CPU支持并开启HT)]</code><br>使用<code>top</code>命令看到的就是逻辑cpu个数</li>
+</ul>
+<h4 id="命令-1"><a href="#命令-1" class="headerlink" title="命令"></a>命令</h4><ul>
+<li><p><code>lscpu</code>: 查看cpu统计信息</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[mcc@localhost ~]$ lscpu</span><br><span class="line">Architecture:          x86_64                       <span class="comment"># CPU架构</span></span><br><span class="line">CPU op-mode(s):        32-bit, 64-bit</span><br><span class="line">Byte Order:            Little Endian                <span class="comment"># 小端</span></span><br><span class="line">CPU(s):                32                           <span class="comment"># 逻辑CPU个数</span></span><br><span class="line">On-line CPU(s) list:   0-31</span><br><span class="line">Thread(s) per core:    2                            <span class="comment"># 每个cpu核能支持2个线程，即支持超线程</span></span><br><span class="line">Core(s) per socket:    8                            <span class="comment"># 每个cpu有8个核</span></span><br><span class="line">座：                 2                               <span class="comment"># 共2个物理CPU</span></span><br><span class="line">NUMA 节点：         2</span><br><span class="line">厂商 ID：           GenuineIntel                     <span class="comment"># CPU产商为Intel</span></span><br><span class="line">CPU 系列：          6</span><br><span class="line">型号：              62</span><br><span class="line">型号名称：        Intel(R) Xeon(R) CPU E5-2640 v2 @ 2.00GHz</span><br><span class="line">步进：              4</span><br><span class="line">CPU MHz：             1200.390</span><br><span class="line">BogoMIPS：            4004.86</span><br><span class="line">虚拟化：           VT-x                             <span class="comment"># 支持CPU虚拟化技术</span></span><br><span class="line">L1d 缓存：          32K</span><br><span class="line">L1i 缓存：          32K</span><br><span class="line">L2 缓存：           256K</span><br><span class="line">L3 缓存：           20480K</span><br><span class="line">NUMA 节点0 CPU：    0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30</span><br><span class="line">NUMA 节点1 CPU：    1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>cat /proc/cpuinfo</code></p>
+<ul>
+<li><p><code>cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c</code>: 查看物理cpu信息</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[mcc@localhost ~]$ cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c</span><br><span class="line"> 32  Intel(R) Xeon(R) CPU E5-2640 v2 @ 2.00GHz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>cat /proc/cpuinfo | grep &#39;physical id&#39; | uniq -c</code>: 查看物理CPU个数及每个物理CPU上的逻辑CPU个数</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mcc@localhost ~]$ cat /proc/cpuinfo | grep &apos;physical id&apos; | uniq -c</span><br><span class="line">  16 physical id	: 0</span><br><span class="line">  16 physical id	: 1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>cat /proc/cpuinfo |grep &quot;cores&quot;|uniq</code>: 查看每个CPU的核数, 如果<code>逻辑CPU个数</code> * <code>核数</code> = <code>2 * 逻辑CPU个数</code>则说明CPU支持并开启了超线程技术</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]# cat /proc/cpuinfo |grep &quot;cores&quot;|uniq</span><br><span class="line">cpu cores	: 8</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>getconf LONG_BIT</code>: 查看当前CPU运行模式是32位还是64位</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@cluster143 mcc]# getconf LONG_BIT</span><br><span class="line">64</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h3><h4 id="命令-2"><a href="#命令-2" class="headerlink" title="命令"></a>命令</h4><ul>
+<li><p><code>free -h</code>: 查看内存的概要使用信息</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]# free -h</span><br><span class="line">             total       used       free     shared    buffers     cached</span><br><span class="line">Mem:           62G        62G       654M       2.9G         0B        37G</span><br><span class="line">-/+ buffers/cache:        24G        38G</span><br><span class="line">Swap:          97G       560M        97G</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p><code>cat /proc/meminfo</code>: 查看内存详细使用信息</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]# cat /proc/meminfo</span><br><span class="line">MemTotal:       65760532 kB</span><br><span class="line">MemFree:          671632 kB</span><br><span class="line">MemAvailable:   41169156 kB</span><br><span class="line">Buffers:               0 kB</span><br><span class="line">Cached:         42351124 kB</span><br><span class="line">SwapCached:        48188 kB</span><br><span class="line">Active:         32159900 kB</span><br><span class="line">Inactive:       30565408 kB</span><br><span class="line">Active(anon):   21018736 kB</span><br><span class="line">Inactive(anon):  2415272 kB</span><br><span class="line">Active(file):   11141164 kB</span><br><span class="line">Inactive(file): 28150136 kB</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>dmidecode -t memory</code>: 查看内存硬件信息(需用<code>root</code>执行)</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]# dmidecode -t memory</span><br><span class="line"># dmidecode 2.12</span><br><span class="line">SMBIOS 2.7 present.</span><br><span class="line"></span><br><span class="line">Handle 0x1000, DMI type 16, 23 bytes</span><br><span class="line">Physical Memory Array</span><br><span class="line">	Location: System Board Or Motherboard</span><br><span class="line">	Use: System Memory</span><br><span class="line">	Error Correction Type: Multi-bit ECC</span><br><span class="line">	Maximum Capacity: 1536 GB</span><br><span class="line">	Error Information Handle: Not Provided</span><br><span class="line">	Number Of Devices: 24          # 24个内存插槽</span><br><span class="line"></span><br><span class="line">Handle 0x1100, DMI type 17, 34 bytes</span><br><span class="line">Memory Device</span><br><span class="line">	Array Handle: 0x1000</span><br><span class="line">	Error Information Handle: Not Provided</span><br><span class="line">	Total Width: 72 bits</span><br><span class="line">	Data Width: 64 bits</span><br><span class="line">	Size: 8192 MB              # 插着一条8192 MB内存</span><br><span class="line">	Form Factor: DIMM</span><br><span class="line">	Set: 1</span><br><span class="line">	Locator: DIMM_A1</span><br><span class="line">	Bank Locator: Not Specified</span><br><span class="line">	Type: DDR3                 # DDR3类型</span><br><span class="line">	Type Detail: Synchronous Registered (Buffered)</span><br><span class="line">	Speed: 1333 MHz</span><br><span class="line">	Manufacturer: 00CE04B300CE         # 生产商</span><br><span class="line">	Serial Number: 835D9</span><br><span class="line">	Asset Tag: 02104611</span><br><span class="line">	Part Number: M393B1K7</span><br><span class="line">	Rank: 2</span><br><span class="line">	Configured Clock Speed: 1333 MHz   # 内存频率</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="磁盘"><a href="#磁盘" class="headerlink" title="磁盘"></a>磁盘</h3><p><code>smartctl -a /dev/sda</code>: 查看硬盘型号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]# smartctl -a /dev/sda</span><br><span class="line">smartctl 6.2 2013-07-26 r3841 [x86_64-linux-3.10.0-123.el7.x86_64] (local build)</span><br><span class="line">Copyright (C) 2002-13, Bruce Allen, Christian Franke, www.smartmontools.org</span><br><span class="line">    </span><br><span class="line">=== START OF INFORMATION SECTION ===</span><br><span class="line">Vendor:               DELL</span><br><span class="line">Product:              PERC H310</span><br><span class="line">Revision:             2.12</span><br><span class="line">User Capacity:        999,653,638,144 bytes [999 GB]</span><br><span class="line">Logical block size:   512 bytes</span><br><span class="line">Logical Unit id:      0x6b083fe0c44c3e001bcc591f05b11119</span><br><span class="line">Serial number:        001911b1051f59cc1b003e4cc4e03f08</span><br><span class="line">Device type:          disk</span><br><span class="line">Local Time is:        Fri Sep  2 15:28:58 2016 CST</span><br><span class="line">SMART support is:     Unavailable - device lacks SMART capability.</span><br><span class="line">    </span><br><span class="line">=== START OF READ SMART DATA SECTION ===</span><br><span class="line">    </span><br><span class="line">Error Counter logging not supported</span><br><span class="line">    </span><br><span class="line">Device does not support Self Test logging</span><br></pre></td></tr></table></figure>
+<h4 id="命令-3"><a href="#命令-3" class="headerlink" title="命令"></a>命令</h4><ul>
+<li><p><code>lsblk</code>: 查看硬盘以及分区</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]# lsblk</span><br><span class="line">NAME            MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT</span><br><span class="line">sda               8:0    0   931G  0 disk</span><br><span class="line">├─sda1            8:1    0  1000M  0 part /boot</span><br><span class="line">└─sda2            8:2    0   930G  0 part</span><br><span class="line">  ├─centos-swap 253:0    0  97.7G  0 lvm  [SWAP]</span><br><span class="line">  └─centos-root 253:1    0 832.4G  0 lvm  /</span><br><span class="line">sr0              11:0    1  1024M  0 rom</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>fdisk -l</code>: 查看磁盘详细信息</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]# fdisk -l</span><br><span class="line"></span><br><span class="line">磁盘 /dev/sda：999.7 GB, 999653638144 字节，1952448512 个扇区</span><br><span class="line">Units = 扇区 of 1 * 512 = 512 bytes</span><br><span class="line">扇区大小(逻辑/物理)：512 字节 / 512 字节</span><br><span class="line">I/O 大小(最小/最佳)：512 字节 / 512 字节</span><br><span class="line">磁盘标签类型：dos</span><br><span class="line">磁盘标识符：0x000cc668</span><br><span class="line"></span><br><span class="line">   设备 Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sda1   *        2048     2050047     1024000   83  Linux</span><br><span class="line">/dev/sda2         2050048  1952448511   975199232   8e  Linux LVM</span><br><span class="line"></span><br><span class="line">磁盘 /dev/mapper/centos-swap：104.9 GB, 104857600000 字节，204800000 个扇区</span><br><span class="line">Units = 扇区 of 1 * 512 = 512 bytes</span><br><span class="line">扇区大小(逻辑/物理)：512 字节 / 512 字节</span><br><span class="line">I/O 大小(最小/最佳)：512 字节 / 512 字节</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">磁盘 /dev/mapper/centos-root：893.7 GB, 893743267840 字节，1745592320 个扇区</span><br><span class="line">Units = 扇区 of 1 * 512 = 512 bytes</span><br><span class="line">扇区大小(逻辑/物理)：512 字节 / 512 字节</span><br><span class="line">I/O 大小(最小/最佳)：512 字节 / 512 字节</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>df -h</code>: 查看各分区使用情况</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]# df -h</span><br><span class="line">文件系统                 容量  已用  可用 已用% 挂载点</span><br><span class="line">/dev/mapper/centos-root  832G  250G  583G   31% /</span><br><span class="line">devtmpfs                  32G     0   32G    0% /dev</span><br><span class="line">tmpfs                     32G   80K   32G    1% /dev/shm</span><br><span class="line">tmpfs                     32G  3.1G   29G   10% /run</span><br><span class="line">tmpfs                     32G     0   32G    0% /sys/fs/cgroup</span><br><span class="line">/dev/sda1                997M  126M  872M   13% /boot</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>du -sh &lt;目录名&gt;</code>: 查看指定命令的大小</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]# du -sh /tmp/</span><br><span class="line">2.3G	/tmp/</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="网卡"><a href="#网卡" class="headerlink" title="网卡"></a>网卡</h3><h4 id="命令-4"><a href="#命令-4" class="headerlink" title="命令"></a>命令</h4><ul>
+<li><p><code>lspci | grep -i &#39;eth&#39;</code> 或 <code>dmesg | grep -i eth</code>: 查看网卡硬件信息</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]# lspci | grep -i &apos;eth&apos;</span><br><span class="line">01:00.0 Ethernet controller: Broadcom Corporation NetXtreme BCM5720 Gigabit Ethernet PCIe</span><br><span class="line">01:00.1 Ethernet controller: Broadcom Corporation NetXtreme BCM5720 Gigabit Ethernet PCIe</span><br><span class="line">02:00.0 Ethernet controller: Broadcom Corporation NetXtreme BCM5720 Gigabit Ethernet PCIe</span><br><span class="line">02:00.1 Ethernet controller: Broadcom Corporation NetXtreme BCM5720 Gigabit Ethernet PCIe</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>ifconfig -a</code>: 查看所有网络接口, <code>em1-4</code>使用重命名过的, 通过<code>dmesg | grep -i eth</code>可用看出来</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]# ifconfig -a</span><br><span class="line">bond0: flags=5187&lt;UP,BROADCAST,RUNNING,MASTER,MULTICAST&gt;  mtu 1500</span><br><span class="line">...</span><br><span class="line">em1: flags=6211&lt;UP,BROADCAST,RUNNING,SLAVE,MULTICAST&gt;  mtu 1500</span><br><span class="line">...</span><br><span class="line">em2: flags=6211&lt;UP,BROADCAST,RUNNING,SLAVE,MULTICAST&gt;  mtu 1500</span><br><span class="line">...</span><br><span class="line">em3: flags=6211&lt;UP,BROADCAST,RUNNING,SLAVE,MULTICAST&gt;  mtu 1500</span><br><span class="line">...</span><br><span class="line">em4: flags=6211&lt;UP,BROADCAST,RUNNING,SLAVE,MULTICAST&gt;  mtu 1500</span><br><span class="line">...</span><br><span class="line">lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>ethtool &lt;网络接口&gt;</code>: 查看网络接口的详细信息</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">[root@cluster143 mcc]# ethtool em1</span><br><span class="line">Settings for em1:</span><br><span class="line">	Supported ports: [ TP ]</span><br><span class="line">	Supported link modes:   10baseT/Half 10baseT/Full</span><br><span class="line">	                        100baseT/Half 100baseT/Full</span><br><span class="line">	                        1000baseT/Half 1000baseT/Full  # 支持千兆半双工，全双工模式</span><br><span class="line">	Supported pause frame use: No</span><br><span class="line">	Supports auto-negotiation: Yes         # 支持自适应模式，一般都支持</span><br><span class="line">	Advertised link modes:  10baseT/Half 10baseT/Full</span><br><span class="line">	                        100baseT/Half 100baseT/Full</span><br><span class="line">	                        1000baseT/Half 1000baseT/Full</span><br><span class="line">	Advertised pause frame use: Symmetric</span><br><span class="line">	Advertised auto-negotiation: Yes       # 默认使用自适应模式</span><br><span class="line">	Link partner advertised link modes:  10baseT/Half 10baseT/Full</span><br><span class="line">	                                     100baseT/Half 100baseT/Full</span><br><span class="line">	                                     1000baseT/Full</span><br><span class="line">	Link partner advertised pause frame use: No</span><br><span class="line">	Link partner advertised auto-negotiation: Yes</span><br><span class="line">	Speed: 1000Mb/s            # 现在网卡的速度是1000Mb</span><br><span class="line">	Duplex: Full               # 全双工</span><br><span class="line">	Port: Twisted Pair</span><br><span class="line">	PHYAD: 1</span><br><span class="line">	Transceiver: internal</span><br><span class="line">	Auto-negotiation: on</span><br><span class="line">	MDI-X: off</span><br><span class="line">	Supports Wake-on: g</span><br><span class="line">	Wake-on: d</span><br><span class="line">	Current message level: 0x000000ff (255)</span><br><span class="line">			       drv probe link timer ifdown ifup rx_err tx_err</span><br><span class="line">	Link detected: yes         # 表示有网线连接，和路由是通的</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h2><ul>
+<li><p><code>uname -a</code>: 查询系统内核</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@cluster143 mcc]# uname -a</span><br><span class="line">Linux cluster143 3.10.0-123.el7.x86_64 #1 SMP Mon Jun 30 12:09:22 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>ls /etc | grep release</code>: 查看发行文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@cluster143 mcc]# ls /etc|grep release</span><br><span class="line">centos-release</span><br><span class="line">os-release</span><br><span class="line">redhat-release</span><br><span class="line">system-release</span><br><span class="line">system-release-cpe</span><br></pre></td></tr></table></figure>
+<p>  查看内容</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@cluster143 mcc]# cat /etc/centos-release</span><br><span class="line">CentOS Linux release 7.0.1406 (Core)</span><br></pre></td></tr></table></figure>
+<p>  所以当前系统为<code>CentOS 7.0.1406</code>, 内核版本为<code>3.10.0-123.el7.x86_64</code></p>
+</li>
+</ul>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><pre><code class="bash"><span class="comment"># 硬件</span>
+dmidecode |grep -A16 <span class="string">"System Information$"</span>      <span class="comment"># 查看主板型号</span>
+dmidecode |grep -A16 <span class="string">"Memory Device$"</span>           <span class="comment"># 查看内存型号</span>
+
+<span class="comment"># 系统</span>
+hostname               <span class="comment"># 查看计算机名</span>
+lspci -tv              <span class="comment"># 列出所有PCI设备</span>
+lsusb -tv              <span class="comment"># 列出所有USB设备</span>
+lsmod                  <span class="comment"># 列出加载的内核模块</span>
+env                    <span class="comment"># 查看环境变量</span>
+
+<span class="comment"># 服务</span>
+chkconfig --list       <span class="comment"># 列出所有系统服务</span>
+
+<span class="comment"># 用户</span>
+w                      <span class="comment"># 查看活动用户</span>
+id &lt;用户名&gt;             <span class="comment"># 查看指定用户信息</span>
+last                   <span class="comment"># 查看用户登录日志</span>
+cut -d: -f1 /etc/passwd   <span class="comment"># 查看系统所有用户</span>
+cut -d: -f1 /etc/group    <span class="comment"># 查看系统所有组</span>
+crontab -l             <span class="comment"># 查看当前用户的计划任务</span>
+
+<span class="comment"># 进程</span>
+ps -ef                 <span class="comment"># 查看所有进程</span>
+top                    <span class="comment"># 实时显示进程状态</span>
+
+<span class="comment"># 网络</span>
+route -n               <span class="comment"># 查看路由表</span>
+iptables -L            <span class="comment"># 查看防火墙设置</span>
+netstat -lntp          <span class="comment"># 查看所有监听端口</span>
+netstat -antp          <span class="comment"># 查看所有已经建立的连接</span>
+netstat -s             <span class="comment"># 查看网络统计信息</span>
+
+</code></pre>
+<hr>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="http://blog.csdn.net/dba_waterbin/article/details/8644626" target="_blank" rel="noopener">Linux下区分物理CPU、逻辑CPU和CPU核数</a></li>
+<li><a href="http://www.51testing.com/html/38/225738-210333.html" target="_blank" rel="noopener">Linux查看CPU信息、机器型号等硬件信息</a></li>
+<li><a href="http://www.cnblogs.com/ggjucheng/archive/2013/01/14/2859613.html" target="_blank" rel="noopener">Linux 查看系统硬件信息(实例详解)</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Tonny Yi</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://codertang.com/2016/09/02/linux-info/" title="Linux系统及硬件信息查看">http://codertang.com/2016/09/02/linux-info/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="external nofollow" target="_blank">CC BY-NC 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/command/" rel="tag"># command</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/26/arraylist/" rel="next" title="Java源码 - Collection - ArrayList">
+                <i class="fa fa-chevron-left"></i> Java源码 - Collection - ArrayList
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/12/linkedlist/" rel="prev" title="Java源码 - Collection - LinkedList">
+                Java源码 - Collection - LinkedList <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Tonny Yi">
+            
+              <p class="site-author-name" itemprop="name">Tonny Yi</p>
+              <p class="site-description motion-element" itemprop="description">Coding, Life, Zen</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tonnyyi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:tonnyemails@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器"><span class="nav-number">1.</span> <span class="nav-text">服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令"><span class="nav-number">2.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU"><span class="nav-number">3.</span> <span class="nav-text">CPU</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概念"><span class="nav-number">3.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-1"><span class="nav-number">3.2.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存"><span class="nav-number">4.</span> <span class="nav-text">内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-2"><span class="nav-number">4.1.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘"><span class="nav-number">5.</span> <span class="nav-text">磁盘</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-3"><span class="nav-number">5.1.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网卡"><span class="nav-number">6.</span> <span class="nav-text">网卡</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-4"><span class="nav-number">6.1.</span> <span class="nav-text">命令</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统"><span class="nav-number"></span> <span class="nav-text">操作系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number"></span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">1.</span> <span class="nav-text">参考</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tonny Yi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>
