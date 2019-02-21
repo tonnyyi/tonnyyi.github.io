@@ -1,11 +1,14 @@
 ---
 title: shell
 tags:
-  - null
+  - shell
+  - linux
 categories:
-  - null
+  - linux
+  - shell
 date: 2019-01-10 08:36:03
 ---
+
 ## 变量
 变量声明方式: `变量名=变量值`, `=`左右不要有空格. 变量名命名规则:
 - 只能使用数字, 大小写字母, 下划线, 首字符不能为数字
