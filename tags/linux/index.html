@@ -141,7 +141,7 @@
   <meta name="description" content="Coding, Life, Zen">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Tonny&#39;s Blog">
-<meta property="og:url" content="http://codertang.com/tags/linux/index.html">
+<meta property="og:url" content="http://codertang.com/tags/Linux/index.html">
 <meta property="og:site_name" content="Tonny&#39;s Blog">
 <meta property="og:description" content="Coding, Life, Zen">
 <meta property="og:locale" content="zh-Hans">
@@ -154,7 +154,7 @@
 
 
 
-  <link rel="canonical" href="http://codertang.com/tags/linux/">
+  <link rel="canonical" href="http://codertang.com/tags/Linux/">
 
 
 
@@ -164,7 +164,7 @@
   };
 </script>
 
-  <title>标签: linux | Tonny's Blog</title>
+  <title>标签: Linux | Tonny's Blog</title>
   
 
 
@@ -339,7 +339,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h1>linux<small>标签</small>
+        <h1>Linux<small>标签</small>
         </h1>
       </div>
 
@@ -351,43 +351,17 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2018/12/17/perf/" itemprop="url">
+            <a class="post-title-link" href="/2016/09/02/linux-info/" itemprop="url">
               
-                <span itemprop="name">使用perf和火焰图分析系统性能</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-12-17T11:55:19+08:00" content="2018-12-17">
-          12-17
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/03/08/linux-commands/" itemprop="url">
-              
-                <span itemprop="name">Linux常用命令</span>
+                <span itemprop="name">Linux系统及硬件信息查看</span>
               
             </a>
         
       </h2>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-03-08T15:09:41+08:00" content="2018-03-08">
-          03-08
+        <time class="post-time" itemprop="dateCreated" datetime="2016-09-02T15:34:31+08:00" content="2016-09-02">
+          09-02
         </time>
       </div>
 
@@ -446,7 +420,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -515,7 +489,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">24</span>
+                      
+                    
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -600,7 +576,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">27</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -881,6 +863,32 @@
         }).toArray().join('\n')
         var ta = document.createElement('textarea')
         document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>
+nt.body.appendChild(ta)
         ta.style.position = 'absolute'
         ta.style.top = '0px'
         ta.style.left = '0px'
