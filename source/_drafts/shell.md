@@ -837,6 +837,9 @@ done
 for ((;;)); do
     command
 done
+
+# 遍历目录, 创建子文件夹, 适合直接在命令行执行
+dirs=($(ls /tmp/logs/ | grep ailegal)); for dir in ${dirs[@]}; do mkdir -p "/tmp/logs/${dir}/gc/"; done
 ```
 
 ### while
