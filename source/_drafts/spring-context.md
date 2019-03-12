@@ -8,6 +8,17 @@ categories:
 - Java
 - Spring
 ---
+> spring源码版本: 4.3.1-RELEASE
+
+接口继承结构
+![hierarchy](extends.png)
+
+实现类继承结构
+![hierarchy](impls.png)
+比较常用的是如下三个类:
+* `XmlWebApplicationContext` : 当`web.xml`中没有指定`contextClass`时, 使用该容器, 即这个是默认容器, 该容器时使用xml格式配置文件
+* `AnnotationConfigWebApplicationContext` : 基于注解的 spring 容器, 可以配合`WebApplicationInitializer`和`AbstractAnnotationConfigDispatcherServletInitializer`对容器进行配置
+* `AnnotationConfigServletWebServerApplicationContext` :
 
 ## 继承结构
 

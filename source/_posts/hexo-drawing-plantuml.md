@@ -514,6 +514,16 @@ end note
 你也可以使用 --> 绘制一个虚线箭头。
 
 另外，你还能用 <- 和 <--，这不影响绘图，但可以提高可读性。 注意：仅适用于时序图，对于其它示意图，规则是不同的。
+```
+{% plantuml %}
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: another authentication Response
+{% endplantuml %}
+```
+
 {% plantuml %}
 Alice -> Bob: Authentication Request
 Bob --> Alice: Authentication Response
@@ -532,6 +542,22 @@ Alice <-- Bob: another authentication Response
 * entity
 * database
 
+```
+{% plantuml %}
+actor Foo1
+boundary Foo2
+⌃ Foo3
+entity Foo4
+database Foo5
+collections Foo6
+Foo1 -> Foo2 : To boundary
+Foo1 -> Foo3 : To ⌃
+Foo1 -> Foo4 : To entity
+Foo1 -> Foo5 : To database
+Foo1 -> Foo6 : To collections
+{% endplantuml %}
+```
+
 {% plantuml %}
 actor Foo1
 boundary Foo2
@@ -547,6 +573,13 @@ Foo1 -> Foo6 : To collections
 {% endplantuml %}
 
 您可以使用关键字 order自定义顺序来打印参与者
+```
+{% plantuml %}
+participant Last order 30
+participant Middle order 20
+participant First order 10
+{% endplantuml %}
+```
 
 {% plantuml %}
 participant Last order 30
@@ -562,6 +595,23 @@ participant First order 10
 * 虚线箭头：用 -- 替代 -
 * 箭头末尾加圈：->o
 * 双向箭头：<->
+
+```
+{% plantuml %}
+Bob ->x Alice
+Bob -> Alice
+Bob ->> Alice
+Bob -\ Alice
+Bob \\- Alice
+Bob //-- Alice
+
+Bob ->o Alice
+Bob o\\-- Alice
+
+Bob <-> Alice
+Bob <->o Alice
+{% endplantuml %}
+```
 
 {% plantuml %}
 Bob ->x Alice
@@ -579,6 +629,12 @@ Bob <->o Alice
 {% endplantuml %}
 
 你可以用以下记号修改箭头的颜色：
+```
+{% plantuml %}
+Bob -[#red]> Alice : hello
+Alice -[#0000FF]->Bob : ok
+{% endplantuml %}
+```
 
 {% plantuml %}
 Bob -[#red]> Alice : hello
@@ -587,6 +643,14 @@ Alice -[#0000FF]->Bob : ok
 
 ### 对消息序列编号
 关键字 autonumber 用于自动对消息编号。
+```
+{% plantuml %}
+autonumber
+Bob -> Alice : Authentication Request
+Bob <- Alice : Authentication Response
+{% endplantuml %}
+```
+
 {% plantuml %}
 autonumber
 Bob -> Alice : Authentication Request
@@ -594,6 +658,22 @@ Bob <- Alice : Authentication Response
 {% endplantuml %}
 
 语句 autonumber start 用于指定编号的初始值，而 autonumber startincrement 可以同时指定编号的初始值和每次增加的值。
+```
+{% plantuml %}
+autonumber
+Bob -> Alice : Authentication Request
+Bob <- Alice : Authentication Response
+
+autonumber 15
+Bob -> Alice : Another authentication Request
+Bob <- Alice : Another authentication Response
+
+autonumber 40 10
+Bob -> Alice : Yet another authentication Request
+Bob <- Alice : Yet another authentication Response
+{% endplantuml %}
+```
+
 {% plantuml %}
 autonumber
 Bob -> Alice : Authentication Request
@@ -609,6 +689,28 @@ Bob <- Alice : Yet another authentication Response
 {% endplantuml %}
 
 你还可以用语句 autonumber stop 和 autonumber resume incrementformat 来表示暂停或继续使用自动编号。
+```
+{% plantuml %}
+autonumber 10 10 "<b>[000]"
+Bob -> Alice : Authentication Request
+Bob <- Alice : Authentication Response
+
+autonumber stop
+Bob -> Alice : dummy
+
+autonumber resume "<font color=red><b>Message 0  "
+Bob -> Alice : Yet another authentication Request
+Bob <- Alice : Yet another authentication Response
+
+autonumber stop
+Bob -> Alice : dummy
+
+autonumber resume 1 "<font color=blue><b>Message 0  "
+Bob -> Alice : Yet another authentication Request
+Bob <- Alice : Yet another authentication Response
+{% endplantuml %}
+```
+
 {% plantuml %}
 autonumber 10 10 "<b>[000]"
 Bob -> Alice : Authentication Request
@@ -644,6 +746,33 @@ Bob <- Alice : Yet another authentication Response
 关键词 end 用来结束分组。
 
 注意，分组可以嵌套使用。
+```
+{% plantuml %}
+Alice -> Bob: Authentication Request
+
+⌥ successful case
+
+	Bob -> Alice: Authentication Accepted
+	
+else some kind of failure
+
+	Bob -> Alice: Authentication Failure
+	group My own label
+		Alice -> Log : Log attack start
+	    loop 1000 times
+	        Alice -> Bob: DNS Attack
+	    end
+		Alice -> Log : Log attack end
+	end
+	
+else Another type of failure
+
+   Bob -> Alice: Please repeat
+   
+end
+{% endplantuml %}
+```
+
 {% plantuml %}
 Alice -> Bob: Authentication Request
 
@@ -673,6 +802,23 @@ end
 我们可以通过在消息后面添加 note left 或者 note right 关键词来给消息添加注释。
 
 你也可以通过使用 end note 来添加多行注释
+```
+{% plantuml %}
+Alice->Bob : hello
+note left: this is a first note
+
+Bob->Alice : ok
+note right: this is another note
+
+Bob->Bob : I am thinking
+note left
+	a note
+	can also be defined
+	on several lines
+end note
+{% endplantuml %}
+```
+
 {% plantuml %}
 Alice->Bob : hello
 note left: this is a first note
@@ -693,6 +839,28 @@ end note
 还可以通过修改背景色来高亮显示注释。
 
 以及使用关键字end note来添加多行注释
+```
+{% plantuml %}
+participant Alice
+participant Bob
+note left of Alice #aqua
+	This is displayed 
+	left of Alice. 
+end note
+ 
+note right of Alice: This is displayed right of Alice.
+
+note over Alice: This is displayed over Alice.
+
+note over Alice, Bob #FFAAAA: This is displayed\n over Bob and Alice.
+
+note over Bob, Alice
+	This is yet another
+	example of
+	a long note.
+end note
+{% endplantuml %}
+```
 
 {% plantuml %}
 participant Alice
@@ -717,6 +885,20 @@ end note
 
 ### 分隔符
 你可以通过使用 == 关键词来将你的图表分割多个步骤。
+```
+{% plantuml %}
+== Initialization ==
+
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+
+== Repetition ==
+
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: another authentication Response
+{% endplantuml %}
+```
+
 {% plantuml %}
 == Initialization ==
 
@@ -731,6 +913,16 @@ Alice <-- Bob: another authentication Response
 
 ### 延迟
 你可以使用...来表示延迟，并且还可以给延迟添加注释。
+```
+{% plantuml %}
+Alice -> Bob: Authentication Request
+...
+Bob --> Alice: Authentication Response
+...5 minutes latter...
+Bob --> Alice: Bye !
+{% endplantuml %}
+```
+
 {% plantuml %}
 Alice -> Bob: Authentication Request
 ...
@@ -743,6 +935,19 @@ Bob --> Alice: Bye !
 你可以使用|||来增加空间。
 
 还可以使用数字指定增加的像素的数量。
+```
+{% plantuml %}
+Alice -> Bob: message 1
+Bob --> Alice: ok
+|||
+Alice -> Bob: message 2
+Bob --> Alice: ok
+||45||
+Alice -> Bob: message 3
+Bob --> Alice: ok
+{% endplantuml %}
+```
+
 {% plantuml %}
 Alice -> Bob: message 1
 Bob --> Alice: ok
@@ -759,6 +964,31 @@ Bob --> Alice: ok
 一旦参与者被激活，它的生命线就会显示出来。
 activate和deactivate适用于以上情形。
 destroy表示一个参与者的生命线的终结。
+```
+{% plantuml %}
+participant User
+
+[-> User: DoWork
+
+User -> A: DoWork
+activate A #FFBBBB
+
+A -> A: Internal call
+activate A #DarkSalmon
+
+A -> B: << createRequest >>
+activate B
+
+B --> A: RequestCreated
+deactivate B
+deactivate A
+A -> User: Done
+
+[<- User: Done
+deactivate A
+{% endplantuml %}
+```
+
 {% plantuml %}
 participant User
 
@@ -782,20 +1012,42 @@ A -> User: Done
 deactivate A
 {% endplantuml %}
 
-###移除脚注
+### 移除脚注
 使用hide footbox关键字移除脚注。
+```
 {% plantuml %}
 hide footbox
 title Footer removed
 
 Alice -> Bob: Authentication Request
 Bob --> Alice: Authentication Response
+{% endplantuml %}
+```
 
+{% plantuml %}
+hide footbox
+title Footer removed
+
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
 {% endplantuml %}
 
 ### 包裹参与者
 可以使用box和end box画一个盒子将参与者包裹起来。
 还可以在box关键字之后添加标题或者背景颜色。
+```
+{% plantuml %}
+box "Internal Service" #LightBlue
+	participant Bob
+	participant Alice
+end box
+participant Other
+
+Bob -> Alice : hello
+Alice -> Other : hello
+{% endplantuml %}
+```
+
 {% plantuml %}
 box "Internal Service" #LightBlue
 	participant Bob
@@ -807,8 +1059,17 @@ Bob -> Alice : hello
 Alice -> Other : hello
 {% endplantuml %}
 
-##流程图
+## 流程图
 这里只介绍新语法
+```
+{% plantuml %}
+start
+:Hello world;
+:This is on defined on
+several **lines**;
+end
+{% endplantuml %}
+```
 
 {% plantuml %}
 start
@@ -818,8 +1079,28 @@ several **lines**;
 end
 {% endplantuml %}
 
-###条件语句
+### 条件语句
 在图示中可以使用关键字if，then和else设置分支测试。标注文字则放在括号中。
+```
+{% plantuml %}
+start
+
+if (condition A) then (yes)
+  :gogogo;
+elseif (condition B) then (yes)
+  :Text 2;
+  stop
+elseif (condition C) then (yes)
+  :Text 3;
+else (no)
+  :process only
+  __sequence__ and __activity__ diagrams;
+endif
+
+stop
+{% endplantuml %}
+```
+
 {% plantuml %}
 start
 
@@ -838,8 +1119,21 @@ endif
 stop
 {% endplantuml %}
 
-###重复
+### 重复
 你可以使用关键字repeat和repeatwhile进行重复循环。
+```
+{% plantuml %}
+start
+
+repeat
+  :read data;
+  :generate diagrams;
+repeat while (more data?)
+
+stop
+{% endplantuml %}
+```
+
 {% plantuml %}
 start
 
@@ -851,8 +1145,21 @@ repeat while (more data?)
 stop
 {% endplantuml %}
 
-###while循环
+### while循环
 可以使用关键字while和end while进行while循环。
+```
+{% plantuml %}
+start
+
+while (data available?)
+  :read data;
+  :generate diagrams;
+endwhile
+
+stop
+{% endplantuml %}
+```
+
 {% plantuml %}
 start
 
@@ -864,8 +1171,25 @@ endwhile
 stop
 {% endplantuml %}
 
-###并行处理
+### 并行处理
 你可以使用关键字fork，fork again和end fork表示并行处理。
+```
+{% plantuml %}
+start
+
+if (multiprocessor?) then (yes)
+  fork
+	:Treatment 1;
+  fork again
+	:Treatment 2;
+  end fork
+else (monoproc)
+  :Treatment 1;
+  :Treatment 2;
+endif
+{% endplantuml %}
+```
+
 {% plantuml %}
 start
 
@@ -881,7 +1205,24 @@ else (monoproc)
 endif
 {% endplantuml %}
 
-###注释
+### 注释
+```
+{% plantuml %}
+start
+:foo1;
+floating note left: This is a note
+:foo2;
+note right
+  This note is on several
+  //lines// and can
+  contain <b>HTML</b>
+  ====
+  * Calling the method ""foo()"" is prohibited
+end note
+stop
+{% endplantuml %}
+```
+
 {% plantuml %}
 start
 :foo1;
@@ -897,9 +1238,28 @@ end note
 stop
 {% endplantuml %}
 
-###箭头
+### 箭头
 使用->标记，你可以给箭头添加文字或者修改箭头颜色。
 同时，你也可以选择点状 (dotted)，条状(dashed)，加粗或者是隐式箭头
+```
+{% plantuml %}
+:foo1;
+-> You can put text on arrows;
+if (test) then
+  -[#blue]->
+  :foo2;
+  -[#green,dashed]-> The text can
+  also be on several lines
+  and **very** long...;
+  :foo3;
+else
+  -[#black,dotted]->
+  :foo4;
+endif
+-[#gray,bold]->
+:foo5;
+{% endplantuml %}
+```
 
 {% plantuml %}
 :foo1;
@@ -921,6 +1281,22 @@ endif
 
 ### 组合
 通过定义分区(partition)，你可以把多个活动组合(group)在一起。
+```
+{% plantuml %}
+start
+partition Initialization {
+	:read config file;
+	:init internal variable;
+}
+partition Running {
+	:wait for user interaction;
+	:print information;
+}
+
+stop
+{% endplantuml %}
+```
+
 {% plantuml %}
 start
 partition Initialization {
@@ -935,7 +1311,23 @@ partition Running {
 stop
 {% endplantuml %}
 
-###泳道
+### 泳道
+```
+{% plantuml %}
+|Swimlane1|
+start
+:foo1;
+|#AntiqueWhite|Swimlane2|
+:foo2;
+:foo3;
+|Swimlane1|
+:foo4;
+|Swimlane2|
+:foo5;
+stop
+{% endplantuml %}
+```
+
 {% plantuml %}
 |Swimlane1|
 start
@@ -950,8 +1342,29 @@ start
 stop
 {% endplantuml %}
 
-###分离
+### 分离
 可以使用关键字detach移除箭头。
+```
+{% plantuml %}
+:start;
+ fork
+   :foo1;
+   :foo2;
+ fork again
+   :foo3;
+   detach
+ endfork
+ if (foo4) then
+   :foo5;
+   detach
+ endif
+ :foo6;
+ detach
+ :foo7;
+ stop
+{% endplantuml %}
+```
+
 {% plantuml %}
 :start;
  fork
@@ -973,6 +1386,43 @@ stop
 
 
 一个比较完整的例子
+```
+{% plantuml %}
+start
+:ClickServlet.handleRequest();
+:new page;
+if (Page.onSecurityCheck) then (true)
+  :Page.onInit();
+  if (isForward?) then (no)
+	:Process controls;
+	if (continue processing?) then (no)
+	  stop
+	endif
+	
+	if (isPost?) then (yes)
+	  :Page.onPost();
+	else (no)
+	  :Page.onGet();
+	endif
+	:Page.onRender();
+  endif
+else (false)
+endif
+
+if (do redirect?) then (yes)
+  :redirect process;
+else
+  if (do forward?) then (yes)
+	:Forward request;
+  else (no)
+	:Render page template;
+  endif
+endif
+
+stop
+{% endplantuml %}
+```
+
 {% plantuml %}
 start
 :ClickServlet.handleRequest();
