@@ -64,7 +64,7 @@ scope可选值有:
 - `import`: 2.0.9版本后可用, **对三种都不生效**, 在依赖类型为pom时使用, 将依赖的`dependencyManagement`部分合并到当前项目中
 
 ### 传递性依赖
-A -> B -> C, 只需要显示的依赖A, B, C自动引入
+A -> B -> C, 只需要显示的依赖A, B 和 C自动引入
 A 对于 B 是第一直接依赖, B 对于 C 是第二直接依赖, A 对于 C 是传递性依赖
 传递性依赖范围(scope)的确定:
 
@@ -113,7 +113,7 @@ mvn dependency:analyze
 ## [生命周期](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Lifecycle_Reference)
 > `mvn clean install` 到底干了什么, 怎么干的, 谁让他这么干的? 
 
-maven之前项目构建的生命周期就已存在(清理/编译/测试/部署等), maven对其进行了抽象, 生命周期的实际行为全都有插件来完成.  每个生命周期包含一定的阶段(phase), 阶段间是有顺序的, 后面的阶段依赖于前面的阶段(调用一个阶段时会先执行其前面的阶段). 但生命周期之间是独立, 不互相依赖, 所以你执行clean时, 不会执行default生命周期. 定义: `${M2_HOTM}/lib/maven-core-xx.jar/META-INF/plexus/components.xml`
+maven之前项目构建的生命周期就已存在(清理/编译/测试/部署等), maven对其进行了抽象, 生命周期的实际行为全都有插件来完成.  每个生命周期包含一定的阶段(phase), 阶段间是有顺序的, 后面的阶段依赖于前面的阶段(调用一个阶段时会先执行其前面的阶段). 但生命周期之间是独立, 不互相依赖, 所以你执行clean时, 不会执行default生命周期. 定义: `${M2_HOME}/lib/maven-core-xx.jar/META-INF/plexus/components.xml`
 ### clean生命 
 其目的是清理项目, 包含三个阶段: 
 - `pre-clean`: 执行清理前的工作
@@ -168,7 +168,7 @@ Maven核心只定义了抽象的生命周期, 具体的任务交由插件去完�
 **如果生命周期的阶段没有与任何插件的目标绑定, 则该阶段啥也会干**
 
 #### [内置绑定](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Built-in_Lifecycle_Bindings) 
-绑定关系定义(版本3以后才有): `${M2_HOTM}/lib/maven-core-xx.jar/META-INF/plexus/default-binding.xml`
+绑定关系定义(版本3以后才有): `${M2_HOME}/lib/maven-core-xx.jar/META-INF/plexus/default-binding.xml`
 
 **clean生命周期阶段与插件目标绑定关系**
 
@@ -319,11 +319,11 @@ Maven仓库
         - 其他公共库
         - 私服Nexus
 ```
-中央仓库的定义在超级POM中(M2_HOME/lib/maven-model-builder-xx.jar/org/apache/maven/model/pom-4.0.0.xml), 所有项目都会继承它.
+中央仓库的定义在超级POM中(`${M2_HOME}/lib/maven-model-builder-xx.jar/org/apache/maven/model/pom-4.0.0.xml`), 所有项目都会继承它.
 
 进入本地仓库方式:
 1. 从远程仓库拉取
-2. `mvn install`
+2. `mvn install:install-file -Dfile=./xxx -DgroupId=com.xxx -DartifactId=xxx -Dversion=xxx -Dpackaging=jar`
 
 远程仓库:
 ```xml
@@ -370,7 +370,7 @@ Maven仓库
 
 ### install
 1. install时1.0.0-SNAPSHOT/下生成maven-metadata-local.xml
-2. 从远程仓库拉取maven-metadata.xml, 命名为"maven-metadata-<RepositoryID>.xml"，并保存到本地仓库相应目录
+2. 从远程仓库拉取maven-metadata.xml, 命名为"maven-metadata-\<RepositoryID>.xml"，并保存到本地仓库相应目录
 3. 比较lastUpdated字段, 如果本地文件中的值较大, 则使用本地仓库中的jar, 否则下载远程仓库的`xxx-api-0.0.1-20180329.080444-1029.jar`到本地, 然后复制并重命名为`xxx-api-0.0.1-SNAPSHOT.jar`, 把原来的jar覆盖掉
 
 ## [超级pom](http://maven.apache.org/ref/3.0.4/maven-model-builder/super-pom.html)
@@ -425,13 +425,13 @@ maven3默认使用jdk1.5编译
 
 ### 聚合与继承
 通常一起使用
-> ** 聚合是为了快速方便的构建项目, 继承是为了消除重复配置. **
+> **聚合是为了快速方便的构建项目, 继承是为了消除重复配置.**
 > 对于聚合模块来说, 它知道有哪些被聚合的模块, 但那些被聚合的模块不知道该模块的存在.
 > 对于继承关系的父POM来说, 它不知道有哪些模块继承于它, 但那些子模块都必须知道自己的父POM是什么.
 
 聚合模块
- - packaging: pom
- - 一般位于顶层
+- packaging: pom
+- 一般位于顶层
 
 模块
 - 一般作为子目录
@@ -494,111 +494,60 @@ maven3默认使用jdk1.5编译
 ### [setting.xml](https://maven.apache.org/settings.html)
 ```xml
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
-    <localRepository>/Users/tonny/work/MavenRepository</localRepository>
-
+    <localRepository>/Users/tonnyyi/workspace/MavenRepository</localRepository>
+    
     <mirrors>
         <mirror>
-            <id>xxx-xxxxx</id>
-            <name>xxx-xxxxx mirror</name>
-            <url>http://pixel.xxxxx.com/repository/xxxx</url>
-            <mirrorOf>*</mirrorOf>
+            <id>nexus-aliyun</id>
+            <mirrorOf>central</mirrorOf>
+            <name>Nexus aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
         </mirror>
     </mirrors>
     <profiles>
-        <!-- 项目默认的编译级别为1.7 -->
+        <!-- 项目默认的编译级别为1.8 -->
         <profile>
-            <id>jdk-1.7</id>
+            <id>jdk-1.8</id>
             <activation>
-                <jdk>1.7</jdk>
+                <jdk>1.8</jdk>
             </activation>
             <properties>
-                <maven.compiler.source>1.7</maven.compiler.source>
-                <maven.compiler.target>1.7</maven.compiler.target>
-                <maven.compiler.compilerVersion>1.7</maven.compiler.compilerVersion>
+                <maven.compiler.source>1.8</maven.compiler.source>
+                <maven.compiler.target>1.8</maven.compiler.target>
+                <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
             </properties>
         </profile>
 
         <profile>
-            <id>xxx</id>
+            <id>aliyunRep</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
-                <jdk>1.6</jdk>
+                <jdk>1.8</jdk>
             </activation>
-            <properties>
-                <xxx.release.url>http://xxx/nexus/content/groups/public</xxx.release.url>
-                <xxx.snapshot.url>http:/xxx/nexus/content/groups/public-snapshots</xxx.snapshot.url>
-            </properties>
             <repositories>
                 <repository>
-                    <id>xxx-internal-releases</id>
-                    <name>internal repository for released artifacts</name>
-                    <url>http://xxx/nexus/content/groups/public</url>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
+                    <id>aliyunRep</id>
+                    <name>Aliyun Maven Respository</name>
+                    <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
                     <releases>
                         <enabled>true</enabled>
                     </releases>
-                </repository>
-                <repository>
-                    <id>xxx-internal-snapshots</id>
-                    <name>internal repository for snapshots artifacts</name>
-                    <url>http://xxx/nexus/content/groups/public-snapshots</url>
                     <snapshots>
-                        <enabled>true</enabled>
-                        <updatePolicy>daily</updatePolicy>
-                        <checksumPolicy>warn</checksumPolicy>
-                    </snapshots>
-                    <releases>
                         <enabled>false</enabled>
-                    </releases>
+                    </snapshots>
                 </repository>
             </repositories>
             <pluginRepositories>
                 <pluginRepository>
-                    <id>xxxxx-release</id>
-                    <name>xxxxx release repo for releases artifacts</name>
-                    <url>http://xxx/xxxxx-releases</url>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
+                    <id>aliyunRep</id>
+                    <name>Aliyun Maven Respository</name>
+                    <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
                     <releases>
                         <enabled>true</enabled>
                     </releases>
-                </pluginRepository>
-                <pluginRepository>
-                    <id>xxxxx-snapshot</id>
-                    <name>xxxxx snapshot repository for snapshots artifacts</name>
-                    <url>http://xxx/xxxxx-snapshots</url>
                     <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                    <releases>
                         <enabled>false</enabled>
-                    </releases>
+                    </snapshots>
                 </pluginRepository>
-                 <pluginRepository>
-                     <id>xxx-internal-snapshots</id>
-                     <name>xxx snapshot repository for snapshots artifacts</name>
-                     <url>http://xxx/nexus/content/groups/public-snapshots</url>
-                     <snapshots>
-                         <enabled>true</enabled>
-                     </snapshots>
-                     <releases>
-                         <enabled>false</enabled>
-                     </releases>
-                 </pluginRepository>
-                 <pluginRepository>
-                     <id>xxx-internal-releases</id>
-                     <name>xxx release repository for release artifacts</name>
-                     <url>http://xxx/nexus/content/groups/public</url>
-                     <snapshots>
-                         <enabled>false</enabled>
-                     </snapshots>
-                     <releases>
-                         <enabled>true</enabled>
-                     </releases>
-                 </pluginRepository>
             </pluginRepositories>
         </profile>
     </profiles>
@@ -606,7 +555,6 @@ maven3默认使用jdk1.5编译
     <pluginGroups>
         <pluginGroup>org.apache.maven.plugins</pluginGroup>
         <pluginGroup>org.unidal.maven.plugins</pluginGroup>
-        <pluginGroup>com.xxxxx.maven.plugins</pluginGroup>
         <pluginGroup>org.jvnet.hudson.tools</pluginGroup>
     </pluginGroups>
 
@@ -621,16 +569,10 @@ maven3默认使用jdk1.5编译
                 </httpConfiguration>
             </configuration>
         </server>
-        <!-- 认证信息, 必须写在setting.xml -->
-        <server>
-            <id>xxx-nexus-releases</id>
-            <username>deployment</username>
-            <password>deployment123</password>
-        </server>
     </servers>
     <activeProfiles>
-        <activeProfile>jdk-1.7</activeProfile>
-        <activeProfile>xxx</activeProfile>
+        <activeProfile>jdk-1.8</activeProfile>
+        <activeProfile>aliyunRep</activeProfile>
     </activeProfiles>
 </settings>
 ```
