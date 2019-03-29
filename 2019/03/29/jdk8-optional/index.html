@@ -142,25 +142,25 @@
 
 
 
-  <meta name="description" content="安装系统依赖12yum install -y openssl-devel gcc swig python-devel autoconf libtoolyum groupinstall &quot;Development Tools&quot; 安装谷歌BBR网络拥塞算法, 该脚本会自动升级内核123wget --no-check-certificate https://github.com/teddysun/acro">
-<meta name="keywords" content="shadowsocks">
+  <meta name="description" content="问题在调用一个方法后需要链式的获取某个字段, 比如: 123// 调用接口, 获取用户名ResponseDTO dto = xxxServcice.foo();String username = dto.getUser().getUserName(); 但是上面的方法可能会抛出空指针异常, 因此, 为了程序的健壮性, 我们一般在每一步的get前都需要进行非空判断: 12345678// 调用接口,">
+<meta name="keywords" content="jdk">
 <meta property="og:type" content="article">
-<meta property="og:title" content="shadowsocks">
-<meta property="og:url" content="http://codertang.com/2018/04/30/shadowsocks/index.html">
+<meta property="og:title" content="java8-optional">
+<meta property="og:url" content="http://codertang.com/2019/03/29/jdk8-optional/index.html">
 <meta property="og:site_name" content="Tonny&#39;s Blog">
-<meta property="og:description" content="安装系统依赖12yum install -y openssl-devel gcc swig python-devel autoconf libtoolyum groupinstall &quot;Development Tools&quot; 安装谷歌BBR网络拥塞算法, 该脚本会自动升级内核123wget --no-check-certificate https://github.com/teddysun/acro">
+<meta property="og:description" content="问题在调用一个方法后需要链式的获取某个字段, 比如: 123// 调用接口, 获取用户名ResponseDTO dto = xxxServcice.foo();String username = dto.getUser().getUserName(); 但是上面的方法可能会抛出空指针异常, 因此, 为了程序的健壮性, 我们一般在每一步的get前都需要进行非空判断: 12345678// 调用接口,">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-09T06:17:55.157Z">
+<meta property="og:updated_time" content="2019-03-29T07:21:22.872Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="shadowsocks">
-<meta name="twitter:description" content="安装系统依赖12yum install -y openssl-devel gcc swig python-devel autoconf libtoolyum groupinstall &quot;Development Tools&quot; 安装谷歌BBR网络拥塞算法, 该脚本会自动升级内核123wget --no-check-certificate https://github.com/teddysun/acro">
+<meta name="twitter:title" content="java8-optional">
+<meta name="twitter:description" content="问题在调用一个方法后需要链式的获取某个字段, 比如: 123// 调用接口, 获取用户名ResponseDTO dto = xxxServcice.foo();String username = dto.getUser().getUserName(); 但是上面的方法可能会抛出空指针异常, 因此, 为了程序的健壮性, 我们一般在每一步的get前都需要进行非空判断: 12345678// 调用接口,">
 
 
 
 
 
 
-  <link rel="canonical" href="http://codertang.com/2018/04/30/shadowsocks/">
+  <link rel="canonical" href="http://codertang.com/2019/03/29/jdk8-optional/">
 
 
 
@@ -170,7 +170,7 @@
   };
 </script>
 
-  <title>shadowsocks | Tonny's Blog</title>
+  <title>java8-optional | Tonny's Blog</title>
   
 
 
@@ -335,7 +335,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://codertang.com/2018/04/30/shadowsocks/">
+    <link itemprop="mainEntityOfPage" href="http://codertang.com/2019/03/29/jdk8-optional/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tonny Yi">
@@ -352,7 +352,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">shadowsocks
+          <h1 class="post-title" itemprop="name headline">java8-optional
               
             
           </h1>
@@ -377,24 +377,12 @@
                 
               
 
-              <time title="创建时间：2018-04-30 19:55:16" itemprop="dateCreated datePublished" datetime="2018-04-30T19:55:16+08:00">2018-04-30</time>
+              <time title="创建时间：2019-03-29 09:52:53 / 修改时间：15:21:22" itemprop="dateCreated datePublished" datetime="2019-03-29T09:52:53+08:00">2019-03-29</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-11-09 14:17:55" itemprop="dateModified" datetime="2018-11-09T14:17:55+08:00">2018-11-09</time>
               
             
           </span>
@@ -411,7 +399,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/shadowsocks/" itemprop="url" rel="index"><span itemprop="name">shadowsocks</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/jdk/" itemprop="url" rel="index"><span itemprop="name">jdk</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/jdk/source/" itemprop="url" rel="index"><span itemprop="name">source</span></a></span>
 
                 
                 
@@ -445,18 +440,35 @@
       
 
       
-        <h4 id="安装系统依赖"><a href="#安装系统依赖" class="headerlink" title="安装系统依赖"></a>安装系统依赖</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install -y openssl-devel gcc swig python-devel autoconf libtool</span><br><span class="line">yum groupinstall <span class="string">"Development Tools"</span></span><br></pre></td></tr></table></figure>
-<h4 id="安装谷歌BBR"><a href="#安装谷歌BBR" class="headerlink" title="安装谷歌BBR"></a>安装谷歌BBR</h4><p>网络拥塞算法, 该脚本会自动升级内核<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh</span><br><span class="line">chmod +x bbr.sh</span><br><span class="line">./bbr.sh</span><br></pre></td></tr></table></figure></p>
-<a id="more"></a>
-<h4 id="系统优化"><a href="#系统优化" class="headerlink" title="系统优化"></a>系统优化</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysctl.conf</span><br></pre></td></tr></table></figure>
-<p>内容如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"># Kernel sysctl configuration file for Red Hat Linux</span><br><span class="line">#</span><br><span class="line"># For binary values, 0 is disabled, 1 is enabled.  See sysctl(8) and</span><br><span class="line"># sysctl.conf(5) for more details.</span><br><span class="line">#</span><br><span class="line"># Use &apos;/sbin/sysctl -a&apos; to list all possible parameters.</span><br><span class="line"></span><br><span class="line"># Controls IP packet forwarding</span><br><span class="line"># net.ipv4.ip_forward = 0</span><br><span class="line"></span><br><span class="line"># Controls source route verification</span><br><span class="line">net.ipv4.conf.default.rp_filter = 1</span><br><span class="line"></span><br><span class="line"># Do not accept source routing</span><br><span class="line">net.ipv4.conf.default.accept_source_route = 0</span><br><span class="line"></span><br><span class="line"># Controls the System Request debugging functionality of the kernel</span><br><span class="line">kernel.sysrq = 0</span><br><span class="line"></span><br><span class="line"># Controls whether core dumps will append the PID to the core filename.</span><br><span class="line"># Useful for debugging multi-threaded applications.</span><br><span class="line">kernel.core_uses_pid = 1</span><br><span class="line"></span><br><span class="line"># Controls the use of TCP syncookies</span><br><span class="line">net.ipv4.tcp_syncookies = 1</span><br><span class="line"></span><br><span class="line"># Controls the default maxmimum size of a mesage queue</span><br><span class="line">kernel.msgmnb = 65536</span><br><span class="line"></span><br><span class="line"># Controls the maximum size of a message, in bytes</span><br><span class="line">kernel.msgmax = 65536</span><br><span class="line"></span><br><span class="line"># Controls the maximum shared segment size, in bytes</span><br><span class="line">kernel.shmmax = 68719476736</span><br><span class="line"></span><br><span class="line"># Controls the maximum number of shared memory segments, in pages</span><br><span class="line">kernel.shmall = 4294967296</span><br><span class="line"></span><br><span class="line"># Accept IPv6 advertisements when forwarding is enabled</span><br><span class="line">net.ipv6.conf.all.accept_ra = 2</span><br><span class="line">net.ipv6.conf.eth0.accept_ra = 2</span><br><span class="line"></span><br><span class="line">net.core.default_qdisc = fq</span><br><span class="line">net.ipv4.tcp_congestion_control = bbr</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># max open files</span><br><span class="line">fs.file-max = 1024000</span><br><span class="line"># max read buffer</span><br><span class="line">net.core.rmem_max = 67108864</span><br><span class="line"># max write buffer</span><br><span class="line">net.core.wmem_max = 67108864</span><br><span class="line"># default read buffer</span><br><span class="line">net.core.rmem_default = 65536</span><br><span class="line"># default write buffer</span><br><span class="line">net.core.wmem_default = 65536</span><br><span class="line"># max processor input queue</span><br><span class="line">net.core.netdev_max_backlog = 4096</span><br><span class="line"># max backlog</span><br><span class="line">net.core.somaxconn = 4096</span><br><span class="line"></span><br><span class="line"># reuse timewait sockets when safe</span><br><span class="line">net.ipv4.tcp_tw_reuse = 1</span><br><span class="line"># turn off fast timewait sockets recycling</span><br><span class="line"># net.ipv4.tcp_tw_recycle = 0</span><br><span class="line"># short FIN timeout</span><br><span class="line">net.ipv4.tcp_fin_timeout = 30</span><br><span class="line"># short keepalive time</span><br><span class="line">net.ipv4.tcp_keepalive_time = 1200</span><br><span class="line"># outbound port range</span><br><span class="line">net.ipv4.ip_local_port_range = 10000 65000</span><br><span class="line"># max SYN backlog</span><br><span class="line">net.ipv4.tcp_max_syn_backlog = 4096</span><br><span class="line"># max timewait sockets held by system simultaneously</span><br><span class="line">net.ipv4.tcp_max_tw_buckets = 5000</span><br><span class="line"># TCP receive buffer</span><br><span class="line">net.ipv4.tcp_rmem = 4096 87380 67108864</span><br><span class="line"># TCP write buffer</span><br><span class="line">net.ipv4.tcp_wmem = 4096 65536 67108864</span><br><span class="line"># turn on path MTU discovery</span><br><span class="line">net.ipv4.tcp_mtu_probing = 1</span><br><span class="line"></span><br><span class="line"># for high-latency network</span><br><span class="line"># forward ipv4</span><br><span class="line">net.ipv4.ip_forward = 1</span><br><span class="line"></span><br><span class="line"># turn on TCP Fast Open on both client and server side</span><br><span class="line">net.ipv4.tcp_fastopen = 3</span><br></pre></td></tr></table></figure>
-<p>保存生效<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl -p</span><br></pre></td></tr></table></figure></p>
-<p>打开防火墙端口<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">service iptables status</span><br><span class="line">iptables -I INPUT -p tcp --dport 443 -j ACCEPT</span><br><span class="line">ptables -I INPUT -p udp --dport 443 -j ACCEPT</span><br></pre></td></tr></table></figure></p>
-<h4 id="脚本一键安装"><a href="#脚本一键安装" class="headerlink" title="脚本一键安装"></a>脚本一键安装</h4><p><a href="https://teddysun.com/486.html" target="_blank" rel="noopener">https://teddysun.com/486.html</a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocksR.sh</span><br><span class="line">chmod +x shadowsocksR.sh</span><br><span class="line">./shadowsocksR.sh 2&gt;&amp;1 | tee shadowsocksR.log</span><br></pre></td></tr></table></figure></p>
-<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/shadowsocks.json</span><br></pre></td></tr></table></figure>
-<p>文件内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;server&quot;:&quot;0.0.0.0&quot;,</span><br><span class="line">    &quot;server_ipv6&quot;:&quot;[::]&quot;,</span><br><span class="line">    &quot;server_port&quot;:443,</span><br><span class="line">    &quot;local_address&quot;:&quot;127.0.0.1&quot;,</span><br><span class="line">    &quot;local_port&quot;:1080,</span><br><span class="line">    &quot;password&quot;:&quot;密码&quot;,</span><br><span class="line">    &quot;timeout&quot;:120,</span><br><span class="line">    &quot;method&quot;:&quot;aes-256-cfb&quot;, # 加密方法</span><br><span class="line">    &quot;obfs&quot;:&quot;http_simple&quot;,   # 混淆算法</span><br><span class="line">    &quot;protocol&quot;:&quot;auth_chain_a&quot;,  # 协议</span><br><span class="line">    &quot;obfs_param&quot;:&quot;&quot;,</span><br><span class="line">    &quot;redirect&quot;:&quot;&quot;,</span><br><span class="line">    &quot;dns_ipv6&quot;:false,</span><br><span class="line">    &quot;fast_open&quot;:true,</span><br><span class="line">    &quot;workers&quot;:1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="管理"><a href="#管理" class="headerlink" title="管理"></a>管理</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重启</span></span><br><span class="line">/usr/<span class="built_in">local</span>/shadowsocks/server.py -c /etc/shadowsocks.json -d restart</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看流量</span></span><br><span class="line">yum install -y iftop</span><br><span class="line">iftop</span><br></pre></td></tr></table></figure>
+        <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>在调用一个方法后需要链式的获取某个字段, 比如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调用接口, 获取用户名</span></span><br><span class="line">ResponseDTO dto = xxxServcice.foo();</span><br><span class="line">String username = dto.getUser().getUserName();</span><br></pre></td></tr></table></figure>
+<p>但是上面的方法可能会抛出空指针异常, 因此, 为了程序的健壮性, 我们一般在每一步的<code>get</code>前都需要进行非空判断:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调用接口, 获取用户名</span></span><br><span class="line">ResponseDTO dto = xxxServcice.foo();</span><br><span class="line"><span class="keyword">if</span> (dto != <span class="keyword">null</span>) &#123;</span><br><span class="line">    User user = dto.getUser();</span><br><span class="line">    <span class="keyword">if</span> (user != <span class="keyword">null</span>)&#123;</span><br><span class="line">        String username = user.getUserName();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果字段获取链路过深, 那么这些非空判断非常多, 很烦. 下面介绍下 如何使用 jdk8 中的<code>Optional</code>类解决这个问题.</p>
+<h1 id="Optional"><a href="#Optional" class="headerlink" title="Optional"></a>Optional</h1><h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><p>首先看一下<code>Optional</code>都有哪些方法</p>
+<h3 id="构造类方法"><a href="#构造类方法" class="headerlink" title="构造类方法"></a>构造类方法</h3><p>有三个静态 <code>empty()</code>, <code>ofNullAble()</code> 和 <code>of()</code> 可以创建<code>Optional</code>对象<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 显示的创建一个包含 Null 值的 Optional 对象</span></span><br><span class="line">Optional&lt;String&gt; empty = Optional.empty();</span><br><span class="line"></span><br><span class="line">String username = <span class="keyword">null</span>;</span><br><span class="line"><span class="comment">// 创建一个值可以为空的 Optional 对象</span></span><br><span class="line">Optional&lt;String&gt; nullable = Optional.ofNullable(username);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个值不能为空的 Optional 对象, 值为空时会抛出空指针异常</span></span><br><span class="line">Optional&lt;String&gt; of = Optional.of(username);</span><br></pre></td></tr></table></figure></p>
+<h3 id="判断类方法"><a href="#判断类方法" class="headerlink" title="判断类方法"></a>判断类方法</h3><p>就一个实例方法<code>isPresent()</code>用来判断值是否为<code>null</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Optional&lt;String&gt; optional = Optional.of(username);</span><br><span class="line"><span class="comment">// 如果值不为 null(不推荐这种用法, 与原来的非空判断写法没有区别)</span></span><br><span class="line"><span class="keyword">if</span> (optional.isPresent()) &#123;</span><br><span class="line">    <span class="comment">// 获取值</span></span><br><span class="line">    username = optional.get();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"username cannot null"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="获取值类方法"><a href="#获取值类方法" class="headerlink" title="获取值类方法"></a>获取值类方法</h3><p>一共有4个方法, <code>get()</code>, <code>orElse(T)</code>, <code>orElseGet(Supplier)</code> 和 <code>orElseThrow(Supplier)</code>, 对应着当值为<code>null</code>时的不同处理策略<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 值为 null 时返回默认值</span></span><br><span class="line">username = optional.orElse(<span class="string">"张三"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 值为 null 时调用Supplier接口实现来获取值</span></span><br><span class="line">username = optional.orElseGet(() -&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> yyService.get();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 值为 null 时直接抛出异常, 该异常对象由Supplier接口实现创建</span></span><br><span class="line">username = optional.orElseThrow(() -&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"username cannot be null"</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果值为 null 抛出默认的NoSuchElementException异常</span></span><br><span class="line">username = of.get();</span><br></pre></td></tr></table></figure></p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 当值不为 null 时消费该值, 接受一个 Consumer 接口实现</span></span><br><span class="line">optional.ifPresent(username -&gt; &#123;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对值进行过滤, 通过则返回当前 Optional 对象, 否则调用 empty() 返回空值对象</span></span><br><span class="line">optional = optional.filter(StringUtils::isNotBlank);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 该方法会将入参Function接口实现返回值包装成 Optional 对象, 从而实现链式操作</span></span><br><span class="line">Optional&lt;String&gt; s1 = of.map(s -&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> s + <span class="string">"12"</span>;</span><br><span class="line">&#125;).map(String::toUpperCase);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 类似 map, 但入参Function接口实现的返回值类型是 Optional 对象了</span></span><br><span class="line"><span class="comment">// 且要求该对象不能为 null</span></span><br><span class="line">Optional&lt;String&gt; s1 = of.flatMap(s -&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> Optional.of(s + <span class="string">"12"</span>);</span><br><span class="line">&#125;).map(String::toUpperCase);</span><br></pre></td></tr></table></figure>
+<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><p>回到上面的问题, 看看如何使用<code>Optional</code>解决联系空值判断的问题.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String username = Optional.ofNullable(dto)</span><br><span class="line">        .map(ResponseDTO::getUser)</span><br><span class="line">        .map(User::getUsername)</span><br><span class="line">        .orElseThrow(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> RuntimeException(<span class="string">"username cannot be null"</span>);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// do something with username</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>尽量避免在程序中直接调用<code>Optional</code>对象的<code>get()</code>和<code>isPresent()</code>方法</strong></li>
+<li><strong>避免使用<code>Optional</code>类型声明实体类的属性</strong>, <code>Optional</code>是没有继承<code>Serializable</code>接口的, 所以一旦用了, 该属性就没法被序列化的</li>
+<li><strong>Optional 主要用作返回类型以构建流畅的API</strong>, <strong>不要使用<code>Optional</code>作为方法的入参</strong>, 这样做会让代码变得复杂. </li>
+</ol>
+<h2 id="JDK9增强"><a href="#JDK9增强" class="headerlink" title="JDK9增强"></a>JDK9增强</h2><p>上面介绍的 API 都是基于 JDK8 的, JDK 9 为 <code>Optional</code> 类添加了三个方法: <code>or()</code>,<code>ifPresentOrElse()</code> 和 <code>stream()</code>.</p>
+<ol>
+<li><p><code>or()</code> 方法与 <code>orElse()</code> 和 <code>orElseGet()</code> 类似, 它们都在对象为空的时候提供了替代情况. </p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">User result = Optional.ofNullable(user)</span><br><span class="line">     .or(() -&gt; Optional.of(<span class="keyword">new</span> User(<span class="string">"default"</span>,<span class="string">"1234"</span>)))</span><br><span class="line">     .get();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>ifPresentOrElse()</code> 方法需要两个参数: 一个 <code>Consumer</code> 和一个 <code>Runnable</code>. 如果对象包含值, 会执行 <code>Consumer</code> 的动作, 否则运行 Runnable.</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Optional.ofNullable(user)</span><br><span class="line">    .ifPresentOrElse(</span><br><span class="line">        u -&gt; logger.info(<span class="string">"User is:"</span> + u.getEmail()), </span><br><span class="line">        () -&gt; logger.info(<span class="string">"User not found"</span>)</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>stream()</code> 方法把<code>Optional</code>实例转换为 <code>Stream</code> 对象, 从而可以使用大量的<code>Stream</code>接口</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; emails = Optional.ofNullable(user)</span><br><span class="line">  .stream()</span><br><span class="line">  .filter(u -&gt; u.getEmail() != <span class="keyword">null</span> &amp;&amp; u.getEmail().contains(<span class="string">"@"</span>))</span><br><span class="line">  .map(u -&gt; u.getEmail())</span><br><span class="line">  .collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 
       
     </div>
@@ -478,7 +490,7 @@
     <strong>本文作者： </strong>Tonny Yi</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://codertang.com/2018/04/30/shadowsocks/" title="shadowsocks">http://codertang.com/2018/04/30/shadowsocks/</a>
+    <a href="http://codertang.com/2019/03/29/jdk8-optional/" title="java8-optional">http://codertang.com/2019/03/29/jdk8-optional/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="external nofollow" target="_blank">CC BY-NC 4.0</a> 许可协议。转载请注明出处！</li>
@@ -491,7 +503,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/shadowsocks/" rel="tag"># shadowsocks</a>
+            <a href="/tags/jdk/" rel="tag"># jdk</a>
           
         </div>
       
@@ -504,8 +516,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/20/python/" rel="next" title="python">
-                <i class="fa fa-chevron-left"></i> python
+              <a href="/2019/02/26/spring-resource/" rel="next" title="spring-resource">
+                <i class="fa fa-chevron-left"></i> spring-resource
               </a>
             
           </div>
@@ -513,10 +525,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/30/resolve-ip/" rel="prev" title="my public ip">
-                my public ip <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -820,7 +828,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装系统依赖"><span class="nav-number">1.</span> <span class="nav-text">安装系统依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装谷歌BBR"><span class="nav-number">2.</span> <span class="nav-text">安装谷歌BBR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#系统优化"><span class="nav-number">3.</span> <span class="nav-text">系统优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#脚本一键安装"><span class="nav-number">4.</span> <span class="nav-text">脚本一键安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置"><span class="nav-number">5.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#管理"><span class="nav-number">6.</span> <span class="nav-text">管理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Optional"><span class="nav-number">2.</span> <span class="nav-text">Optional</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-number">2.1.</span> <span class="nav-text">API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造类方法"><span class="nav-number">2.1.1.</span> <span class="nav-text">构造类方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断类方法"><span class="nav-number">2.1.2.</span> <span class="nav-text">判断类方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取值类方法"><span class="nav-number">2.1.3.</span> <span class="nav-text">获取值类方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">2.1.4.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最佳实践"><span class="nav-number">2.2.</span> <span class="nav-text">最佳实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK9增强"><span class="nav-number">2.3.</span> <span class="nav-text">JDK9增强</span></a></li></ol></li></ol></div>
             
 
           </div>
