@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link rel="stylesheet" media="all" href="https://cdnjs.cat.net/ajax/libs/Han/3.3.0/han.min.css">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="环境信息macOS Catalina 10.15 环境准备 Xcode 11 xcode-select   1$ xcode-select -install  homebrew  XQuartz freetype   1$ brew install freetype    JDK 8   1234$ java -versionjava version &quot;1.8.0_191&quot;Java(TM) SE">
+<meta name="keywords" content="jdk,macos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MacOS 下编译 OpenJDK8">
+<meta property="og:url" content="http://codertang.com/2019/11/11/build-jdk8/index.html">
+<meta property="og:site_name" content="Tonny&#39;s Blog">
+<meta property="og:description" content="环境信息macOS Catalina 10.15 环境准备 Xcode 11 xcode-select   1$ xcode-select -install  homebrew  XQuartz freetype   1$ brew install freetype    JDK 8   1234$ java -versionjava version &quot;1.8.0_191&quot;Java(TM) SE">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-11T08:18:40.191Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MacOS 下编译 OpenJDK8">
+<meta name="twitter:description" content="环境信息macOS Catalina 10.15 环境准备 Xcode 11 xcode-select   1$ xcode-select -install  homebrew  XQuartz freetype   1$ brew install freetype    JDK 8   1234$ java -versionjava version &quot;1.8.0_191&quot;Java(TM) SE">
+
+
+
+
+
+
+  <link rel="canonical" href="http://codertang.com/2019/11/11/build-jdk8/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>MacOS 下编译 OpenJDK8 | Tonny's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tonny's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">莫等闲, 白了少年头, 空悲切</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://codertang.com/2019/11/11/build-jdk8/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tonny Yi">
+      <meta itemprop="description" content="Coding, Life, Zen">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tonny's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MacOS 下编译 OpenJDK8
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-11 14:15:18 / 修改时间：16:18:40" itemprop="dateCreated datePublished" datetime="2019-11-11T14:15:18+08:00">2019-11-11</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="环境信息"><a href="#环境信息" class="headerlink" title="环境信息"></a>环境信息</h2><p>macOS Catalina 10.15</p>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ul>
+<li><a href="https://itunes.apple.com/us/app/xcode/id497799835?mt=12" target="_blank" rel="noopener">Xcode 11</a></li>
+<li><p>xcode-select</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ xcode-select -install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><a href="https://brew.sh/" target="_blank" rel="noopener">homebrew</a></p>
+</li>
+<li><a href="https://www.xquartz.org/" target="_blank" rel="noopener">XQuartz</a></li>
+<li><p>freetype</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install freetype</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>JDK 8</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ java -version</span><br><span class="line">java version <span class="string">"1.8.0_191"</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_191-b12)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.191-b12, mixed mode)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h2><p>下载源码有两种方式:</p>
+<ol>
+<li><p>从 openjdk 的 mercurial 仓库下载, 本地安装 mercurial 后执行如下命令:</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hg <span class="built_in">clone</span> http://hg.openjdk.java.net/jdk8/jdk8 JDK8</span><br><span class="line">$ <span class="built_in">cd</span> JDK8</span><br><span class="line">$ bash ./get_source.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打开<a href="http://jdk.java.net/" target="_blank" rel="noopener">http://jdk.java.net/</a>, 选择版本, 在新页面的<strong>RI Source Code</strong>区域, 点击<strong>zip file</strong>连接, 下载源码压缩包, 这种方式下载下来的源码版本是固定的. </p>
+</li>
+</ol>
+<p>这里采用第二种方式, 并将下载下来的 zip 包解压到 <code>openjdk8</code> 目录</p>
+<h1 id="系统准备"><a href="#系统准备" class="headerlink" title="系统准备"></a>系统准备</h1><ul>
+<li><p>先创建一个 <code>envsetup.sh</code>, 写入以下内容</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 设定语言选项，必须设置</span></span><br><span class="line">export LANG=C</span><br><span class="line"><span class="meta">#</span><span class="bash"> Mac平台，C编译器不再是GCC，是clang</span></span><br><span class="line">export CC=gcc</span><br><span class="line"><span class="meta">#</span><span class="bash"> 跳过clang的一些严格的语法检查，不然会将N多的警告作为Error</span></span><br><span class="line">export COMPILER_WARNINGS_FATAL=false</span><br><span class="line"><span class="meta">#</span><span class="bash"> 链接时使用的参数</span></span><br><span class="line">export LFLAGS='-Xlinker -lstdc++'</span><br><span class="line"><span class="meta">#</span><span class="bash"> 是否使用clang</span></span><br><span class="line">export USE_CLANG=true</span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用64位数据模型</span></span><br><span class="line">export LP64=1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 告诉编译平台是64位，不然会按32位来编译</span></span><br><span class="line">export ARCH_DATA_MODEL=64</span><br><span class="line"><span class="meta">#</span><span class="bash"> 允许自动下载依赖</span></span><br><span class="line">export ALLOW_DOWNLOADS=true</span><br><span class="line"><span class="meta">#</span><span class="bash"> 并行编译的线程数，编译时间长，为了不影响其他工作，我选择为2</span></span><br><span class="line">export HOTSPOT_BUILD_JOBS=2</span><br><span class="line"><span class="meta">#</span><span class="bash"> 是否跳过与先前版本的比较</span></span><br><span class="line">export SKIP_COMPARE_IMAGES=true</span><br><span class="line"><span class="meta">#</span><span class="bash"> 是否使用预编译头文件，加快编译速度</span></span><br><span class="line">export USE_PRECOMPILED_HEADER=true</span><br><span class="line"><span class="meta">#</span><span class="bash"> 是否使用增量编译</span></span><br><span class="line">export INCREMENTAL_BUILD=true</span><br><span class="line"><span class="meta">#</span><span class="bash"> 编译内容</span></span><br><span class="line">export BUILD_LANGTOOLS=true</span><br><span class="line">export BUILD_JAXP=false</span><br><span class="line">export BUILD_JAXWS=false</span><br><span class="line">export BUILD_CORBA=false</span><br><span class="line">export BUILD_HOTSPOT=true</span><br><span class="line">export BUILD_JDK=true</span><br><span class="line"><span class="meta">#</span><span class="bash"> 编译版本</span></span><br><span class="line">export SKIP_DEBUG_BUILD=true</span><br><span class="line">export SKIP_FASTDEBUG_BUILD=false</span><br><span class="line">export DEBUG_NAME=debug</span><br><span class="line"><span class="meta">#</span><span class="bash"> 避开javaws和浏览器Java插件之类的部分的build</span></span><br><span class="line">export BUILD_DEPLOY=false</span><br><span class="line">export BUILD_INSTALL=false</span><br><span class="line"><span class="meta">#</span><span class="bash"> 加上产生调试信息时需要的 objcopy</span></span><br><span class="line">export OBJCOPY=gobjcopy</span><br></pre></td></tr></table></figure>
+<p>  然后执行命令: <code>source envsetup.sh</code></p>
+</li>
+<li><p>Xcode 10 以后移除了 libstdc++ 的支持, 但 hotspot 编译时还需要依赖这个过期 5 年的库, 因此需要从 Xcode9 中拷贝出libstdc++和 c++包, 复制到响应位置. 也可以打开 <a href="https://github.com/imkiwa/xcode-missing-libstdc-" target="_blank" rel="noopener">这个链接</a>, clone 到本地，参考 <code>install.sh</code> 将文件链接或者复制到对应位置(<strong>慎重直接执行</strong>, 请一定事先核对路径是否正确!)</p>
+</li>
+</ul>
+<h2 id="configure"><a href="#configure" class="headerlink" title="configure"></a>configure</h2><p>在 openjdk8 目录下执行以下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ bash ./configure \</span><br><span class="line">    --with-target-bits=64 \</span><br><span class="line">    --with-debug-level=slowdebug \</span><br><span class="line">    --<span class="built_in">enable</span>-debug-symbols \</span><br><span class="line">    ZIP_DEBUGINFO_FILES=0</span><br></pre></td></tr></table></figure>
+<h3 id="错误1"><a href="#错误1" class="headerlink" title="错误1"></a>错误1</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">configure: error: GCC compiler is required. Try setting --with-tools-dir.</span><br></pre></td></tr></table></figure>
+<p>编辑<code>common/autoconf/generated-configure.sh</code>, 搜索 <code>GCC compiler is required</code>, 在搜索结果的每一行加上<code>#</code>, 注释掉, 例如:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># as_fn_error $? "GCC compiler is required. Try setting --with-tools-dir." "$LINENO" 5</span></span><br></pre></td></tr></table></figure>
+<h3 id="错误-2"><a href="#错误-2" class="headerlink" title="错误 2"></a>错误 2</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">checking <span class="keyword">if</span> we should generate debug symbols... configure: error: Unable to find objcopy, cannot <span class="built_in">enable</span> debug-symbols</span><br></pre></td></tr></table></figure>
+<p>因为没有正确执行上面的<code>envsetup.sh</code>文件, 解决办法:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">source</span> envsetup.sh</span><br></pre></td></tr></table></figure></p>
+<p>再次执行 <code>configure</code> 命令后, 输出如下成功信息<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">====================================================</span><br><span class="line">A new configuration has been successfully created <span class="keyword">in</span></span><br><span class="line">/Users/tonnyyi/workspace/sourceCode/openjdk8/build/macosx-x86_64-normal-server-slowdebug</span><br><span class="line">using configure arguments <span class="string">'--with-target-bits=64 --with-debug-level=slowdebug --enable-debug-symbols ZIP_DEBUGINFO_FILES=0'</span>.</span><br><span class="line"></span><br><span class="line">Configuration summary:</span><br><span class="line">* Debug level:    slowdebug</span><br><span class="line">* JDK variant:    normal</span><br><span class="line">* JVM variants:   server</span><br><span class="line">* OpenJDK target: OS: macosx, CPU architecture: x86, address length: 64</span><br><span class="line"></span><br><span class="line">Tools summary:</span><br><span class="line">* Boot JDK:       java version <span class="string">"1.8.0_191"</span> Java(TM) SE Runtime Environment (build 1.8.0_191-b12) Java HotSpot(TM) 64-Bit Server VM (build 25.191-b12, mixed mode)  (at /Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home)</span><br><span class="line">* C Compiler:      version  (at /usr/bin/gcc)</span><br><span class="line">* C++ Compiler:    version  (at /usr/bin/g++)</span><br><span class="line"></span><br><span class="line">Build performance summary:</span><br><span class="line">* Cores to use:   4</span><br><span class="line">* Memory <span class="built_in">limit</span>:   16384 MB</span><br><span class="line">* ccache status:  installed, but disabled (version older than 3.1.4)</span><br><span class="line"></span><br><span class="line">Build performance tip: ccache gives a tremendous speedup <span class="keyword">for</span> C++ recompilations.</span><br><span class="line">You have ccache installed, but it is a version prior to 3.1.4. Try upgrading.</span><br></pre></td></tr></table></figure></p>
+<h2 id="make"><a href="#make" class="headerlink" title="make"></a>make</h2><p>执行如下命令:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ make all LOG=debug  2&gt;&amp;1 | tee make_mac_x64.log</span><br></pre></td></tr></table></figure></p>
+<h3 id="错误-1"><a href="#错误-1" class="headerlink" title="错误 1"></a>错误 1</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (Universe::narrow_oop_base() &gt; 0) &#123; // Implies UseCompressedOops.</span><br></pre></td></tr></table></figure>
+<p>编辑<code>hotspot/src/share/vm/opto/lcm.cpp</code>文件, 作如下调整<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// if (Universe::narrow_oop_base() &gt; 0) &#123; // Implies UseCompressedOops.</span></span><br><span class="line"><span class="keyword">if</span> (Universe::narrow_oop_base() != <span class="literal">NULL</span>) &#123; <span class="comment">// Implies UseCompressedOops.</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="错误-2-1"><a href="#错误-2-1" class="headerlink" title="错误 2"></a>错误 2</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assert(rng-&gt;Opcode() == Op_LoadRange || _igvn.type(rng)-&gt;is_int() &gt;= 0, <span class="string">"must be"</span>);</span><br></pre></td></tr></table></figure>
+<p>编辑<code>hotspot/src/share/vm/opto/loopPredicate.cpp</code>文件, 做如下调整<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//assert(rng-&gt;Opcode() == Op_LoadRange || _igvn.type(rng)-&gt;is_int() &gt;= 0, "must be");</span></span><br><span class="line">assert(rng-&gt;Opcode() == Op_LoadRange || _igvn.type(rng)-&gt;is_int()-&gt;_lo &gt;= <span class="number">0</span>, <span class="string">"must be"</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="错误-3"><a href="#错误-3" class="headerlink" title="错误 3"></a>错误 3</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (base() &gt; 0) &#123;</span><br></pre></td></tr></table></figure>
+<p>编辑<code>hotspot/src/share/vm/runtime/virtualspace.cpp</code>, 做如下调整:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// if (base() &gt; 0) &#123;</span></span><br><span class="line"><span class="keyword">if</span> (base() != <span class="number">0</span>) &#123;</span><br></pre></td></tr></table></figure></p>
+<h3 id="错误-4"><a href="#错误-4" class="headerlink" title="错误 4"></a>错误 4</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#import &lt;JavaNativeFoundation/JavaNativeFoundation.h&gt;</span></span><br></pre></td></tr></table></figure>
+<p>因为 Xcode 之前会安装类似 xxx-for-java-command-lines-tools 的框架包到 /System/Library/Frameworks, 而自从 macOS 10.14 开始, 这些框架包全部都被安装到了 /Library/Developer/CommandLineTools/SDKs/MacOSX10.1x.sdk, 首先执行如下命令行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ find / -name <span class="string">"*JavaNativeFoundation.h*"</span></span><br><span class="line">...</span><br><span class="line">/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Frameworks/JavaNativeFoundation.framework/Versions/A/Headers/JavaNativeFoundation.h</span><br><span class="line">/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Frameworks/JavaNativeFoundation.framework/Versions/A/Headers/JavaNativeFoundation.h</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>得到了真正的<code>JavaVM.framework</code>是被安装到了<code>/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk</code>目录下<br>编辑<code>hotspot/make/bsd/makefiles/saproc.make</code>文件, 作如下调整, 加上路径前缀<code>/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># SALIBS = -g -framework Foundation -F/System/Library/Frameworks/JavaVM.framework/Frameworks -framework JavaNativeFoundation -framework Security -framework CoreFoundation</span><br><span class="line">SALIBS = -g -framework Foundation -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/JavaVM.framework/Frameworks -framework JavaNativeFoundation -framework Security -framework CoreFoundation</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># -I/System/Library/Frameworks/JavaVM.framework/Headers</span><br><span class="line">-I/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/JavaVM.framework/Headers</span><br></pre></td></tr></table></figure>
+<h3 id="错误-5"><a href="#错误-5" class="headerlink" title="错误 5"></a>错误 5</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;CoreGraphics/CGBase.h&gt;</span><br></pre></td></tr></table></figure>
+<p>这个问题和上面一样, 需要编辑两个文件</p>
+<ul>
+<li><code>jdk/make/lib/PlatformLibraries.gmk</code></li>
+<li><code>jdk/make/lib/Awt2dLibraries.gmk</code></li>
+</ul>
+<p>将包含 <code>ApplicationServices.framework</code> 的路径前替换成<br><code>/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/CoreGraphics.framework</code></p>
+<p>将包含 <code>JavaVM.framwork</code> 的路径替换成<br><code>/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/JavaVM.framework/Frameworks</code></p>
+<h3 id="错误-6"><a href="#错误-6" class="headerlink" title="错误 6"></a>错误 6</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Undefined symbols for architecture x86_64:</span><br><span class="line">  &quot;_attachCurrentThread&quot;, referenced from:</span><br><span class="line">      +[ThreadUtilities getJNIEnv] in ThreadUtilities.o</span><br><span class="line">      +[ThreadUtilities getJNIEnvUncached] in ThreadUtilities.o</span><br><span class="line">ld: symbol(s) not found for architecture x86_64</span><br></pre></td></tr></table></figure>
+<p>编辑<code>jdk/src/macosx/native/sun/osxapp/ThreadUtilities.m</code>, 作如下调整<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// inline void attachCurrentThread(void** env) &#123;</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">attachCurrentThread</span><span class="params">(<span class="keyword">void</span>** env)</span> </span>&#123;</span><br></pre></td></tr></table></figure></p>
+<h3 id="编译完成"><a href="#编译完成" class="headerlink" title="编译完成"></a>编译完成</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## Finished docs (build time 00:01:39)</span></span><br><span class="line"></span><br><span class="line">----- Build <span class="built_in">times</span> -------</span><br><span class="line">Start 2019-11-11 15:47:26</span><br><span class="line">End   2019-11-11 15:51:36</span><br><span class="line">00:00:01 corba</span><br><span class="line">00:00:40 demos</span><br><span class="line">00:01:39 docs</span><br><span class="line">00:00:00 hotspot</span><br><span class="line">00:01:28 images</span><br><span class="line">00:00:00 jaxp</span><br><span class="line">00:00:00 jaxws</span><br><span class="line">00:00:14 jdk</span><br><span class="line">00:00:00 langtools</span><br><span class="line">00:00:08 nashorn</span><br><span class="line">00:04:10 TOTAL</span><br><span class="line">-------------------------</span><br><span class="line">Finished building OpenJDK <span class="keyword">for</span> target <span class="string">'all'</span></span><br></pre></td></tr></table></figure>
+<h2 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h2><p>执行如下命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ build/macosx-x86_64-normal-server-slowdebug/jdk/bin/java -version</span><br></pre></td></tr></table></figure></p>
+<h3 id="错误-1-1"><a href="#错误-1-1" class="headerlink" title="错误 1"></a>错误 1</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># A fatal error has been detected by the Java Runtime Environment:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  SIGILL (0x4) at pc=0x000000010840f0e8, pid=36538, tid=9987</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># JRE version: OpenJDK Runtime Environment (8.0) (build 1.8.0-internal-debug-tonnyyi_2019_11_11_14_52-b00)</span></span><br><span class="line"><span class="comment"># Java VM: OpenJDK 64-Bit Server VM (25.40-b25-debug mixed mode bsd-amd64 compressed oops)</span></span><br><span class="line"><span class="comment"># Problematic frame:</span></span><br><span class="line"><span class="comment"># V  [libjvm.dylib+0xa0f0e8]  PerfData::~PerfData()+0x8</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># An error report file with more information is saved as:</span></span><br><span class="line"><span class="comment"># /Users/tonnyyi/workspace/sourceCode/openjdk8/hs_err_pid36538.log</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># If you would like to submit a bug report, please visit:</span></span><br><span class="line"><span class="comment">#   http://bugreport.java.com/bugreport/crash.jsp</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line">[error occurred during error reporting , id 0x4]</span><br></pre></td></tr></table></figure>
+<p>编辑<code>hotspot/src/share/vm/runtime/perfMemory.cpp</code>的<code>perfMemory_exit()</code>函数, 作如下调整:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!StatSampler::is_active())</span><br><span class="line">  PerfDataManager::destroy();</span><br><span class="line">  </span><br><span class="line"><span class="keyword">if</span> (!StatSampler::is_active())</span><br><span class="line">  <span class="comment">// PerfDataManager::destroy();</span></span><br></pre></td></tr></table></figure></p>
+<p>然后再次重新编译<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ make all LOG=debug  2&gt;&amp;1 | tee make_mac_x64.log</span><br></pre></td></tr></table></figure></p>
+<p>但是这样处理后，使用jstat监控JVM时可能会导致 <strong>内存泄露</strong></p>
+<p>再次验证<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ build/macosx-x86_64-normal-server-slowdebug/jdk/bin/java -version</span><br><span class="line">openjdk version <span class="string">"1.8.0-internal-debug"</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0-internal-debug-tonnyyi_2019_11_11_14_52-b00)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.40-b25-debug, mixed mode)</span><br></pre></td></tr></table></figure></p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://www.jianshu.com/p/ee7e9176632c" target="_blank" rel="noopener">https://www.jianshu.com/p/ee7e9176632c</a><br><a href="https://imkiva.com/2018/02/24/building-openjdk8-on-macos/" target="_blank" rel="noopener">https://imkiva.com/2018/02/24/building-openjdk8-on-macos/</a><br><a href="https://juejin.im/post/5a6d7d106fb9a01ca47abd8b" target="_blank" rel="noopener">https://juejin.im/post/5a6d7d106fb9a01ca47abd8b</a><br><a href="http://menzhongxin.com/2017/04/27/MAC%E4%B8%8B%E7%BC%96%E8%AF%91openJDK/" target="_blank" rel="noopener">http://menzhongxin.com/2017/04/27/MAC%E4%B8%8B%E7%BC%96%E8%AF%91openJDK/</a><br><a href="https://iyichen.xyz/2019/10/mac-compile-openjdk/" target="_blank" rel="noopener">https://iyichen.xyz/2019/10/mac-compile-openjdk/</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Tonny Yi</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://codertang.com/2019/11/11/build-jdk8/" title="MacOS 下编译 OpenJDK8">http://codertang.com/2019/11/11/build-jdk8/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="external nofollow" target="_blank">CC BY-NC 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jdk/" rel="tag"># jdk</a>
+          
+            <a href="/tags/macos/" rel="tag"># macos</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/26/typical-jvm-parameters/" rel="next" title="常用的 JVM 启动参数">
+                <i class="fa fa-chevron-left"></i> 常用的 JVM 启动参数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/12/loading-resource/" rel="prev" title="java 中资源文件的加载方式">
+                java 中资源文件的加载方式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Tonny Yi">
+            
+              <p class="site-author-name" itemprop="name">Tonny Yi</p>
+              <p class="site-description motion-element" itemprop="description">Coding, Life, Zen</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">32</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">38</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tonnyyi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:tonnyemails@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境信息"><span class="nav-number">1.</span> <span class="nav-text">环境信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境准备"><span class="nav-number">2.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载源码"><span class="nav-number">3.</span> <span class="nav-text">下载源码</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#系统准备"><span class="nav-number"></span> <span class="nav-text">系统准备</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#configure"><span class="nav-number">1.</span> <span class="nav-text">configure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#错误1"><span class="nav-number">1.1.</span> <span class="nav-text">错误1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误-2"><span class="nav-number">1.2.</span> <span class="nav-text">错误 2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#make"><span class="nav-number">2.</span> <span class="nav-text">make</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#错误-1"><span class="nav-number">2.1.</span> <span class="nav-text">错误 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误-2-1"><span class="nav-number">2.2.</span> <span class="nav-text">错误 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误-3"><span class="nav-number">2.3.</span> <span class="nav-text">错误 3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误-4"><span class="nav-number">2.4.</span> <span class="nav-text">错误 4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误-5"><span class="nav-number">2.5.</span> <span class="nav-text">错误 5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误-6"><span class="nav-number">2.6.</span> <span class="nav-text">错误 6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译完成"><span class="nav-number">2.7.</span> <span class="nav-text">编译完成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试验证"><span class="nav-number">3.</span> <span class="nav-text">测试验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#错误-1-1"><span class="nav-number">3.1.</span> <span class="nav-text">错误 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">3.2.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tonny Yi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>
