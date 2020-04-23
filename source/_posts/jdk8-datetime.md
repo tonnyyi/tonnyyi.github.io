@@ -44,16 +44,20 @@ JDK8之前的日期api有很多不便的地方, 如:
 | format | 格式化 | `localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));` |
 
 ### LocalDate和LocalTime
-`LocalDate`表示日期(年月日), 但不包含时间(时分秒), 也不包时区信息. 
+`LocalDate`表示日期(年月日), 但不包含时间(时分秒), 也**不包时区信息**, 内部使用3个属性`(int: year, short: month, short: day)`记录时间信息. 
+
 ```java
 /* 创建 */
 LocalDate localDate = LocalDate.now();
 LocalDate.now(Clock.systemDefaultZone());   // 指定时钟
-LocalDate.now(ZoneId.systemDefault());      // 指定时区
+LocalDate.now(ZoneId.systemDefault());      // 获取某个时区下当前日期
+// 统一时刻, 中国时间与夏威夷时间
+LocalDate.now(ZoneId.systemDefault()); 		  // 中国: 2020-04-22
+LocalDate.now(ZoneId.of("UTC-10"));         // 夏威夷: 2020-04-21
 
 LocalDate.of(2018, 12, 20);                 // 年月日
 LocalDate.of(2018, Month.DECEMBER, 20);
-LocalDate.ofYearDay(2018, 265);             // 根据年和在本年的天数创建
+LocalDate.ofYearDay(2018, 265);             // 根据年和在本年的天数创建, 2018年第265天
 LocalDate.ofEpochDay(17888);                // 自1970-01-01以来的天数
 
 LocalDate.parse("2018-12-20");              // 解析字符串
@@ -139,7 +143,8 @@ localDate.query(new TemporalQuery<String>() {
     }
 });
 ```
-`LocalTime`与`LocalDate`类似, 大部分接口名都相同
+`LocalTime`与`LocalDate`类似, 大部分接口名都相同, 包含纳秒信息, **不包时区信息**, 内部使用`(byte: hour, byte: minute, byte: second, int: nano)`记录时间信息
+
 ```java
 LocalTime localTime = LocalTime.now();
 LocalTime.now(Clock.systemDefaultZone());           // SystemClock[Asia/Shanghai]
@@ -178,7 +183,8 @@ OffsetTime offsetTime = localTime.atOffset(ZoneOffset.ofHours(8));
 ```
 
 ### LocalDateTime
-`LocalDateTime`是`LocalDate`和`LocalTime`的结合体, 能表示日期+时间
+`LocalDateTime`内部用两个属性: `LocalDate`和`LocalTime`记录时间信息, **不包含时区信息**
+
 ```java
 /* 创建 */
 LocalDateTime localDateTime = LocalDateTime.now();
@@ -191,19 +197,37 @@ LocalTime.now().atDate(LocalDate.now());
 ```
 
 ### Instant
-`Instant`表示一个时间戳, 相比`System.currentTimeMillis()`, 它可以精确到纳秒. 其内部有两个常量, `seconds`表示从1970-01-01 00:00:00开始到现在的秒数, `nanos`表示纳秒部分(不超过999,999,999).
+`Instant`表示一个UTC时间戳(从1970-01-01T00:00:00Z开始),**不包含时区信息** , 相比`System.currentTimeMillis()`, 它可以精确到纳秒. 其内部有两个常量, `seconds`表示从1970-01-01 00:00:00开始到现在的秒数, `nanos`表示纳秒部分(不超过999,999,999). **可以替换`Date`使用**
+
 ```java
 /* 创建 */
-Instant instant = Instant.now();
+Instant now = Instant.now();
 Instant.ofEpochMilli(333L);     // 从1970-01-01T00:00:00Z开始到现在的毫秒数
+Instant.ofEpochMilli(new Date().getTime());
 Instant.ofEpochSecond(22L);     // 从1970-01-01T00:00:00Z开始到现在的秒数
 Instant.ofEpochSecond(44L, 6L); // 从1970-01-01T00:00:00Z开始到现在的秒数 + 纳秒
 
-instant.getEpochSecond();       // 获取秒部分
-instant.getNano();              // 获取纳秒部分
+now.getEpochSecond();       // 获取秒部分
+now.getNano();              // 获取纳秒部分
+
+// 增加5小时4分钟, 因为是不可变对象, 所以会产生新的对象
+Instant after = now.plus(Duration.ofHours(5).plusMinutes(4));
+// 等同于此, 但会多产生一个对象
+after = now.plus(5, ChronoUnit.HOURS).plus(4, ChronoUnit.MINUTES);
+
+// 时间比对, 可读性更强
+now.isBefore(after); // true
+
+// 计算差异(5*60+4=304), 用不同单位表示
+after.until(now, ChronoUnit.MINUTES); // -304
+ChronoUnit.MINUTES.between(after, now); // -304
+// 等同于
+now.until(after, ChronoUnit.MINUTES); // 304
+ChronoUnit.MINUTES.between(now, after); // 304
 ```
 ### Duration
 `Duration`用来表示一小段时间(时分秒), 其内部和`Instant`类似也有`seconds`和`nanos`
+
 ```java
 /* 创建 */
 Duration duration = Duration.between(LocalTime.now(), LocalTime.now());
@@ -233,6 +257,7 @@ duration.abs();             // 转正值
 ```
 
 `Period`用来表示较长的时间(年月日)
+
 ```java
 /* 创建 */
 Period period = Period.of(1, 3, 28);    //年 月 日
@@ -256,6 +281,7 @@ System.out.println(normalized.getDays());     // 400
 ## 日期调整与格式化
 ### 加减调整
 jdk8中时间日期对象都是不可变的, 因此在调整时, 总是会返回新的实例. 调整方法主要有`plus`, `minus` 和 `with`
+
 ```java
 LocalDate date = LocalDate.of(2018, 12, 5);          // 2018-12-05
 
@@ -268,6 +294,7 @@ LocalDate date5 = date.minusMonths(2);              // 减少两个月 2018-10-0
 LocalDate date6 = date.plus(5, ChronoUnit.DAYS);    // 增加5天 2018-12-10
 ```
 在进行复杂的操作时, 比如下一个工作日, 下个月的第一天时, 可以使用`with`的重载方法, 接受一个`TemporalAdjuster`参数.
+
 ```java
 // 返回下一个距离当前时间最近的星期日
 LocalDate date7 = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
@@ -279,6 +306,7 @@ LocalDate date9 = date.with(TemporalAdjusters.lastInMonth(DayOfWeek.SATURDAY));
 
 ### java.time.temporal.ChronoField枚举类
 此枚举类是作为get方法的参数获取时间的某个字段(年/月/日/时/分/秒...)值, 它里面的属性含义有的跟Calendar的成员变量含义差不多
+
 ```java
 localDate.with(ChronoField.DAY_OF_WEEK, 4); 
 localDate.getLong(ChronoField.DAY_OF_WEEK);
@@ -296,6 +324,7 @@ case 1:
 ```
 ### java.time.temporal.ChronoUnit枚举类
 此枚举表示时间单位
+
 ```java
 localDate.minus(1, ChronoUnit.DAYS);
 localDate.isSupported(ChronoUnit.NANOS);  
@@ -327,6 +356,7 @@ long amount = LocalDate.now().until(MinguoDate.of(0, 1, 1), ChronoUnit.DAYS);
 | `next` / `previous` | 返回后一个/前一个给定的星期几 |
 | `nextOrSame` / `previousOrSame` | 返回后一个/前一个给定的星期几，如果这个值满足条件，直接返回 |
 还可以通过创建自定义的`TemporalAdjuster`实现来实现更复杂的逻辑, `TemporalAdjuster`是函数式接口, 所有可以使用Lambda表达式. 比如给定一个日期，计算该日期的下一个工作日（不包括星期六和星期天）：
+
 ```java
 LocalDate date = LocalDate.of(2017, 1, 5);
 date.with(temporal -> {
@@ -353,6 +383,7 @@ date.with(temporal -> {
 ### 格式化
 JDK8中提供了一个新的类`java.time.format.DateTimeFormatter`
 来处理格式化操作. 日期类中有一个`format`方法, 该方法接收一个`DateTimeFormatter`类型的参数.
+
 ```java
 LocalDateTime dateTime = LocalDateTime.now();
 dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));   // 2018-12-24
@@ -363,6 +394,7 @@ String dateTimeStr = "2018-12-24 12:30:05";
 LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 LocalDateTime localDateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 ```
+
 其中`DateTimeFormatter`中预定义了许多格式
 
 | 变量 | 输出示例 |
@@ -382,7 +414,9 @@ LocalDateTime localDateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter
 | ISO_WEEK_DATE | 2012-W48-6 |
 | ISO_INSTANT | 2011-12-03T10:15:30Z |
 | RFC_1123_DATE_TIME | Tue, 3 Jun 2008 11:05:30 GMT |
+
 还可以自定义格式
+
 ```java
 DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("HH.mm.ss")
                 // 可以有9位的纳秒表示(包含了点符号)
@@ -397,6 +431,7 @@ LocalTime.parse("10.15.23.899", formatter);
 LocalTime.parse("10.15.23.898989", formatter);
 LocalTime.parse("10.15.23.889778667", formatter);
 ```
+
 模板字段含义如下
 > G 年代标志符
 y 年
@@ -418,10 +453,12 @@ K 时 (12小时值,其值与h的不同点在于,当数值小于10时,前面不�
 z 时区
 
 ## 时区
-jdk8中使用新的时区类`java.time.ZoneId`来替代原来的`java.util.TimeZone`. 使用方式如下:
+jdk8中使用新的时区类`java.time.ZoneId`来替代原来的`java.util.TimeZone`, 对应的时间类是`ZonedDateTime`. 使用方式如下:
+
 ```java
 // 创建
 ZoneId shanghaiZoneId = ZoneId.of("Asia/Shanghai");
+// ZoneId.of("UTC+8");
 ZoneId systemZoneId = ZoneId.systemDefault();
 ZoneId oldToNewZoneId = TimeZone.getDefault().toZoneId();
 
@@ -435,9 +472,12 @@ ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, shanghaiZoneId);
 // 输出格式 2018-12-24T11:43:37.183+08:00[Asia/Shanghai]
 ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, shanghaiZoneId);
 ```
-另一种表示时区的方式是使用`ZoneOffset`, 它是以当前时间和**世界标准时间(UTC)/格林威治时间(GMT)**的偏差来表示.
+另一种表示时区的方式是使用`ZoneOffset`, 它是以当前时间和**世界标准时间(UTC)/格林威治时间(GMT)**的偏差来表示, 对应的类是`OffsetDateTime`.
+
 ```java
 ZoneOffset zoneOffset = ZoneOffset.of("+08:00");
+// ZoneOffset.of("+8");
+// ZoneOffset.ofHours(-10);
 LocalDateTime localDateTime = LocalDateTime.now();
 // 2018-12-24T11:47:36.897+08:00
 OffsetDateTime offsetDateTime = OffsetDateTime.of(localDateTime, zoneOffset);
