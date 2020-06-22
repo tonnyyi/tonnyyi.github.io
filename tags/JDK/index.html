@@ -145,7 +145,7 @@
   <meta name="description" content="Coding, Life, Zen">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Tonny&#39;s Blog">
-<meta property="og:url" content="http://codertang.com/tags/JDK/index.html">
+<meta property="og:url" content="http://codertang.com/tags/jdk/index.html">
 <meta property="og:site_name" content="Tonny&#39;s Blog">
 <meta property="og:description" content="Coding, Life, Zen">
 <meta property="og:locale" content="zh-Hans">
@@ -158,7 +158,7 @@
 
 
 
-  <link rel="canonical" href="http://codertang.com/tags/JDK/">
+  <link rel="canonical" href="http://codertang.com/tags/jdk/">
 
 
 
@@ -168,7 +168,7 @@
   };
 </script>
 
-  <title>标签: JDK | Tonny's Blog</title>
+  <title>标签: jdk | Tonny's Blog</title>
   
 
 
@@ -343,7 +343,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h1>JDK<small>标签</small>
+        <h1>jdk<small>标签</small>
         </h1>
       </div>
 
@@ -355,17 +355,17 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2018/02/28/threadlocal/" itemprop="url">
+            <a class="post-title-link" href="/2019/11/11/build-jdk8/" itemprop="url">
               
-                <span itemprop="name">Java源码 - TheadLocal</span>
+                <span itemprop="name">MacOS 下编译 OpenJDK8</span>
               
             </a>
         
       </h2>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-28T16:43:26+08:00" content="2018-02-28">
-          02-28
+        <time class="post-time" itemprop="dateCreated" datetime="2019-11-11T14:15:18+08:00" content="2019-11-11">
+          11-11
         </time>
       </div>
 
@@ -381,43 +381,17 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2016/09/12/linkedlist/" itemprop="url">
+            <a class="post-title-link" href="/2019/03/29/jdk8-optional/" itemprop="url">
               
-                <span itemprop="name">Java源码 - Collection - LinkedList</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2016-09-12T12:08:19+08:00" content="2016-09-12">
-          09-12
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016/08/26/arraylist/" itemprop="url">
-              
-                <span itemprop="name">Java源码 - Collection - ArrayList</span>
+                <span itemprop="name">java8-optional</span>
               
             </a>
         
       </h2>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2016-08-26T14:45:50+08:00" content="2016-08-26">
-          08-26
+        <time class="post-time" itemprop="dateCreated" datetime="2019-03-29T09:52:53+08:00" content="2019-03-29">
+          03-29
         </time>
       </div>
 
@@ -964,6 +938,33 @@
           return $(e).text()
         }).toArray().join('\n')
         var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>
+('textarea')
         document.body.appendChild(ta)
         ta.style.position = 'absolute'
         ta.style.top = '0px'

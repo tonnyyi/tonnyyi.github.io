@@ -150,7 +150,7 @@
 <meta property="og:site_name" content="Tonny&#39;s Blog">
 <meta property="og:description" content="环境信息macOS Catalina 10.15 环境准备 Xcode 11 xcode-select   1$ xcode-select -install  homebrew  XQuartz freetype   1$ brew install freetype    JDK 8   1234$ java -versionjava version &quot;1.8.0_191&quot;Java(TM) SE">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-11T08:18:40.191Z">
+<meta property="og:updated_time" content="2020-06-22T11:15:30.120Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MacOS 下编译 OpenJDK8">
 <meta name="twitter:description" content="环境信息macOS Catalina 10.15 环境准备 Xcode 11 xcode-select   1$ xcode-select -install  homebrew  XQuartz freetype   1$ brew install freetype    JDK 8   1234$ java -versionjava version &quot;1.8.0_191&quot;Java(TM) SE">
@@ -377,12 +377,24 @@
                 
               
 
-              <time title="创建时间：2019-11-11 14:15:18 / 修改时间：16:18:40" itemprop="dateCreated datePublished" datetime="2019-11-11T14:15:18+08:00">2019-11-11</time>
+              <time title="创建时间：2019-11-11 14:15:18" itemprop="dateCreated datePublished" datetime="2019-11-11T14:15:18+08:00">2019-11-11</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-06-22 19:15:30" itemprop="dateModified" datetime="2020-06-22T19:15:30+08:00">2020-06-22</time>
               
             
           </span>
@@ -465,7 +477,7 @@
   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 设定语言选项，必须设置</span></span><br><span class="line">export LANG=C</span><br><span class="line"><span class="meta">#</span><span class="bash"> Mac平台，C编译器不再是GCC，是clang</span></span><br><span class="line">export CC=gcc</span><br><span class="line"><span class="meta">#</span><span class="bash"> 跳过clang的一些严格的语法检查，不然会将N多的警告作为Error</span></span><br><span class="line">export COMPILER_WARNINGS_FATAL=false</span><br><span class="line"><span class="meta">#</span><span class="bash"> 链接时使用的参数</span></span><br><span class="line">export LFLAGS='-Xlinker -lstdc++'</span><br><span class="line"><span class="meta">#</span><span class="bash"> 是否使用clang</span></span><br><span class="line">export USE_CLANG=true</span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用64位数据模型</span></span><br><span class="line">export LP64=1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 告诉编译平台是64位，不然会按32位来编译</span></span><br><span class="line">export ARCH_DATA_MODEL=64</span><br><span class="line"><span class="meta">#</span><span class="bash"> 允许自动下载依赖</span></span><br><span class="line">export ALLOW_DOWNLOADS=true</span><br><span class="line"><span class="meta">#</span><span class="bash"> 并行编译的线程数，编译时间长，为了不影响其他工作，我选择为2</span></span><br><span class="line">export HOTSPOT_BUILD_JOBS=2</span><br><span class="line"><span class="meta">#</span><span class="bash"> 是否跳过与先前版本的比较</span></span><br><span class="line">export SKIP_COMPARE_IMAGES=true</span><br><span class="line"><span class="meta">#</span><span class="bash"> 是否使用预编译头文件，加快编译速度</span></span><br><span class="line">export USE_PRECOMPILED_HEADER=true</span><br><span class="line"><span class="meta">#</span><span class="bash"> 是否使用增量编译</span></span><br><span class="line">export INCREMENTAL_BUILD=true</span><br><span class="line"><span class="meta">#</span><span class="bash"> 编译内容</span></span><br><span class="line">export BUILD_LANGTOOLS=true</span><br><span class="line">export BUILD_JAXP=false</span><br><span class="line">export BUILD_JAXWS=false</span><br><span class="line">export BUILD_CORBA=false</span><br><span class="line">export BUILD_HOTSPOT=true</span><br><span class="line">export BUILD_JDK=true</span><br><span class="line"><span class="meta">#</span><span class="bash"> 编译版本</span></span><br><span class="line">export SKIP_DEBUG_BUILD=true</span><br><span class="line">export SKIP_FASTDEBUG_BUILD=false</span><br><span class="line">export DEBUG_NAME=debug</span><br><span class="line"><span class="meta">#</span><span class="bash"> 避开javaws和浏览器Java插件之类的部分的build</span></span><br><span class="line">export BUILD_DEPLOY=false</span><br><span class="line">export BUILD_INSTALL=false</span><br><span class="line"><span class="meta">#</span><span class="bash"> 加上产生调试信息时需要的 objcopy</span></span><br><span class="line">export OBJCOPY=gobjcopy</span><br></pre></td></tr></table></figure>
 <p>  然后执行命令: <code>source envsetup.sh</code></p>
 </li>
-<li><p>Xcode 10 以后移除了 libstdc++ 的支持, 但 hotspot 编译时还需要依赖这个过期 5 年的库, 因此需要从 Xcode9 中拷贝出libstdc++和 c++包, 复制到响应位置. 也可以打开 <a href="https://github.com/imkiwa/xcode-missing-libstdc-" target="_blank" rel="noopener">这个链接</a>, clone 到本地，参考 <code>install.sh</code> 将文件链接或者复制到对应位置(<strong>慎重直接执行</strong>, 请一定事先核对路径是否正确!)</p>
+<li><p>Xcode 10 以后移除了 libstdc++ 的支持, 但 hotspot 编译时还需要依赖这个过期 5 年的库, 因此需要从 Xcode9 中拷贝出libstdc++和 c++包, 复制到响应位置. 也可以打开 <a href="https://github.com/tonnyyi/xcode-missing-libstdc-" target="_blank" rel="noopener">这个链接</a>, clone 到本地，参考 <code>install.sh</code> 将文件链接或者复制到对应位置(<strong>慎重直接执行</strong>, 请一定事先核对路径是否正确!)</p>
 </li>
 </ul>
 <h2 id="configure"><a href="#configure" class="headerlink" title="configure"></a>configure</h2><p>在 openjdk8 目录下执行以下命令</p>
