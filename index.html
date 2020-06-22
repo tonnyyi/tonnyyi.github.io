@@ -334,6 +334,188 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://codertang.com/2020/06/22/nginx-config/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tonny Yi">
+      <meta itemprop="description" content="Coding, Life, Zen">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tonny's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/22/nginx-config/" itemprop="url">
+                  nginx config
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-22 18:44:29 / 修改时间：19:10:23" itemprop="dateCreated datePublished" datetime="2020-06-22T18:44:29+08:00">2020-06-22</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/nginx/" itemprop="url" rel="index"><span itemprop="name">nginx</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          nginx路由匹配规则常见的路由匹配符号有:
+
+＝：精确匹配
+^~：精确前缀匹配
+~：区分大小写的正则匹配;  ~*：不区分大小写的正则匹配
+/uri：普通前缀匹配
+/：通用匹配
+
+123456789101112131415161718192021222324location = / &#123;   echo "规则A";&#125;location = /login &#123;   echo "规则B";&#125;location ^~ /static/ &#123;   echo "规则C";&#125;location ^~ /static/files &#123;    echo "规则X";&#125;location ~ \.(gif|jpg|png|js|css)$ &#123;   echo "规则D";&#125;location ~* \.png$ &#123;   echo "规则E";&#125;location /img &#123;    echo "规则Y";&#125;location / &#123;   echo "规则F";&#125;
+
+
+
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/06/22/nginx-config/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://codertang.com/2020/05/08/logger-level-modifier/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1908,155 +2090,6 @@ OptionalAPI首先看一下Optional都有哪些方法
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://codertang.com/2019/02/22/spring-refresh/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tonny Yi">
-      <meta itemprop="description" content="Coding, Life, Zen">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tonny's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/22/spring-refresh/" itemprop="url">
-                  spring-refresh方法分析
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-02-22 14:58:15 / 修改时间：17:29:06" itemprop="dateCreated datePublished" datetime="2019-02-22T14:58:15+08:00">2019-02-22</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body han-init-context" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          
-spring源码版本: 4.3.1-RELEASE
-
-AbstractApplicationContext#refresh1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465public void refresh() throws BeansException, IllegalStateException &#123;    synchronized (this.startupShutdownMonitor) &#123;        // 设置启动时间和启动标识active为true        // 如果是web应用, 则会替换servletContextInitParams和servletConfigInitParams配置        prepareRefresh();        // 创建DefaultListableBeanFactory, 加载BeanDefinition 
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/02/22/spring-refresh/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2106,7 +2139,7 @@ AbstractApplicationContext#refresh1234567891011121314151617181920212223242526272
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-count">34</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2195,7 +2228,9 @@ AbstractApplicationContext#refresh1234567891011121314151617181920212223242526272
                     
                       
                     
-                    <span class="site-state-item-count">34</span>
+                      
+                    
+                    <span class="site-state-item-count">35</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2310,7 +2345,9 @@ AbstractApplicationContext#refresh1234567891011121314151617181920212223242526272
                     
                       
                     
-                    <span class="site-state-item-count">41</span>
+                      
+                    
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
