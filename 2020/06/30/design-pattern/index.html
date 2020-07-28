@@ -142,23 +142,25 @@
 
 
 
-  <meta name="description" content="Coding, Life, Zen">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Tonny&#39;s Blog">
-<meta property="og:url" content="http://codertang.com/archives/2018/06/index.html">
+  <meta name="description" content="Builder与Factory模式区别 Builder模式专注与构建一个复杂的对象. Factory则关注在对象家族的创建 通常, 开始会使用Factory方法创建对象, 但随着对象的创建过程变得复杂, 会转为使用抽象工厂, 原型或者Builder模式, 以满足程序的灵活性 有时候创建型模式之间是互补的, 你调我, 我调你.   stackoverflow">
+<meta name="keywords" content="design">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式">
+<meta property="og:url" content="http://codertang.com/2020/06/30/design-pattern/index.html">
 <meta property="og:site_name" content="Tonny&#39;s Blog">
-<meta property="og:description" content="Coding, Life, Zen">
+<meta property="og:description" content="Builder与Factory模式区别 Builder模式专注与构建一个复杂的对象. Factory则关注在对象家族的创建 通常, 开始会使用Factory方法创建对象, 但随着对象的创建过程变得复杂, 会转为使用抽象工厂, 原型或者Builder模式, 以满足程序的灵活性 有时候创建型模式之间是互补的, 你调我, 我调你.   stackoverflow">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-06-30T12:27:36.292Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Tonny&#39;s Blog">
-<meta name="twitter:description" content="Coding, Life, Zen">
+<meta name="twitter:title" content="设计模式">
+<meta name="twitter:description" content="Builder与Factory模式区别 Builder模式专注与构建一个复杂的对象. Factory则关注在对象家族的创建 通常, 开始会使用Factory方法创建对象, 但随着对象的创建过程变得复杂, 会转为使用抽象工厂, 原型或者Builder模式, 以满足程序的灵活性 有时候创建型模式之间是互补的, 你调我, 我调你.   stackoverflow">
 
 
 
 
 
 
-  <link rel="canonical" href="http://codertang.com/archives/2018/06/">
+  <link rel="canonical" href="http://codertang.com/2020/06/30/design-pattern/">
 
 
 
@@ -168,7 +170,7 @@
   };
 </script>
 
-  <title>归档 | Tonny's Blog</title>
+  <title>设计模式 | Tonny's Blog</title>
   
 
 
@@ -215,7 +217,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -280,7 +282,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
@@ -292,25 +294,6 @@
 
   
     
-
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
 
   
 
@@ -336,112 +319,210 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      
-      <span class="archive-page-counter">
-        
-        
-         
-        
-        还行! 目前共计 35 篇日志。 继续努力。
-      </span>
-      
+  
 
-      
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://codertang.com/2020/06/30/design-pattern/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tonny Yi">
+      <meta itemprop="description" content="Coding, Life, Zen">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tonny's Blog">
+    </span>
+
+    
+      <header class="post-header">
 
         
         
+          <h1 class="post-title" itemprop="name headline">设计模式
+              
+            
+          </h1>
         
 
-        
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-30 20:20:27 / 修改时间：20:27:36" itemprop="dateCreated datePublished" datetime="2020-06-30T20:20:27+08:00">2020-06-30</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/06/28/spring1-hierarchy/" itemprop="url">
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
               
-                <span itemprop="name">spring1 hierarchy</span>
+                <span class="post-meta-item-text">分类于</span>
               
-            </a>
-        
-      </h2>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/design/" itemprop="url" rel="index"><span itemprop="name">design</span></a></span>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-06-28T15:00:49+08:00" content="2018-06-28">
-          06-28
-        </time>
-      </div>
+                
+                
+              
+            </span>
+          
 
-    </header>
-  </article>
+          
+            
+          
 
+          
+          
 
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/06/22/build-blog/" itemprop="url">
-              
-                <span itemprop="name">build blog</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-06-22T10:44:35+08:00" content="2018-06-22">
-          06-22
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
+      
+        <h2 id="Builder与Factory模式区别"><a href="#Builder与Factory模式区别" class="headerlink" title="Builder与Factory模式区别"></a>Builder与Factory模式区别</h2><ul>
+<li>Builder模式专注与构建一个复杂的对象. Factory则关注在对象家族的创建</li>
+<li>通常, 开始会使用Factory方法创建对象, 但随着对象的创建过程变得复杂, 会转为使用抽象工厂, 原型或者Builder模式, 以满足程序的灵活性</li>
+<li>有时候创建型模式之间是互补的, 你调我, 我调你. </li>
+</ul>
+<p><a href="https://stackoverflow.com/a/757773/3351286" target="_blank" rel="noopener">stackoverflow</a></p>
+
+      
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Tonny Yi</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://codertang.com/2020/06/30/design-pattern/" title="设计模式">http://codertang.com/2020/06/30/design-pattern/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="external nofollow" target="_blank">CC BY-NC 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/design/" rel="tag"># design</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/22/nginx-config/" rel="next" title="nginx config">
+                <i class="fa fa-chevron-left"></i> nginx config
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -462,8 +543,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -739,6 +829,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Builder与Factory模式区别"><span class="nav-number">1.</span> <span class="nav-text">Builder与Factory模式区别</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -865,6 +971,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
 
   
 
