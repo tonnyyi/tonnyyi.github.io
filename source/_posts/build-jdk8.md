@@ -96,7 +96,7 @@ macOS Catalina 10.15
     ```
     然后执行命令: `source envsetup.sh`
 
-- Xcode 10 以后移除了 libstdc++ 的支持, 但 hotspot 编译时还需要依赖这个过期 5 年的库, 因此需要从 Xcode9 中拷贝出libstdc++和 c++包, 复制到响应位置. 也可以打开 [这个链接](https://github.com/imkiwa/xcode-missing-libstdc-), clone 到本地，参考 `install.sh` 将文件链接或者复制到对应位置(**慎重直接执行**, 请一定事先核对路径是否正确!)
+- Xcode 10 以后移除了 libstdc++ 的支持, 但 hotspot 编译时还需要依赖这个过期 5 年的库, 因此需要从 Xcode9 中拷贝出libstdc++和 c++包, 复制到响应位置. 也可以打开 [这个链接](https://github.com/tonnyyi/xcode-missing-libstdc-), clone 到本地，参考 `install.sh` 将文件链接或者复制到对应位置(**慎重直接执行**, 请一定事先核对路径是否正确!)
 
 ## configure
 在 openjdk8 目录下执行以下命令

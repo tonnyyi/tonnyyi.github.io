@@ -45,6 +45,8 @@ spring可以通过命令行参数**`spring.config.location`**自定义配置文�
 
 需要注意的是, 如果一个配置项在多个文件都定义了, 则**先定义的优先级更高**, 所以应用`resource`下的配置文件优先级最高
 
+
+
 ## profile配置文件加载
 
 > https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-external-config-profile-specific-properties
@@ -66,6 +68,8 @@ spring中可以使用` application-{profile}.properties`配置作为`application
 
 **profile优先级最高, 其次先外部再内部, 然后config目录, 最后是默认配置**
 
+
+
 ## 配置参数加载顺序
 
 > https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-external-config
@@ -82,3 +86,41 @@ spring中通过`${xxx}`加载变量时, 会从多个位置查找这个配置项,
 8. 外部目录的`application.properties`
 9. `classpath`下的`application.properties`文件
 10. 应用内使用`@PropertySource`的配置类(`@Configuration`)
+
+
+
+## 序列化LocalDateTime成数组问题
+
+### 问题表现
+
+在JDK8之前, 后端如果想将日期格式的JSON数据转成时间戳返回给前端, 只需要在配置文件中增加如下配置
+
+```properties
+# 返回时间戳
+spring.jackson.serialization.write-dates-as-timestamps=true
+```
+
+使用`@responseBody`返回json数据时，会自动将时间格式化为毫秒值。
+
+但是在使用了`LocalDateTime`后, 返回的数据格式成了这样`"createTime":[2020,6,9,15,47,29]`, 上面的配置没有失效了. 对此官方文档的说明如下: [jackson-modules-java8](https://github.com/FasterXML/jackson-modules-java8/tree/master/datetime)
+
+> [`LocalDate`](https://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html), [`LocalTime`](https://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html), [`LocalDateTime`](https://docs.oracle.com/javase/8/docs/api/java/time/LocalDateTime.html), and [`OffsetTime`](https://docs.oracle.com/javase/8/docs/api/java/time/OffsetTime.html), which cannot portably be converted to timestamps and are instead represented as arrays when `WRITE_DATES_AS_TIMESTAMPS` is enabled.
+
+### 解决办法
+
+1. 自定义`JsonSerialize`
+
+   ```java
+   public class LocalDateTimeConverter extends JsonSerializer<LocalDateTime> {
+   
+       @Override
+       public void serialize(LocalDateTime value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+           gen.writeNumber(value.toInstant(ZoneOffset.of("+8")).toEpochMilli());
+       }
+   }
+   ```
+
+2. 在实体类时间属性上，加入`@JsonSerialize(using = LocalDateTimeConverter.class)`注解即可
+
+### 发序列化问题
+
