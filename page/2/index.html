@@ -334,6 +334,195 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://codertang.com/2019/03/29/jdk8-optional/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tonny Yi">
+      <meta itemprop="description" content="Coding, Life, Zen">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tonny's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/29/jdk8-optional/" itemprop="url">
+                  java8-optional
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-29 09:52:53" itemprop="dateCreated datePublished" datetime="2019-03-29T09:52:53+08:00">2019-03-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-08-04 14:09:43" itemprop="dateModified" datetime="2020-08-04T14:09:43+08:00">2020-08-04</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/jdk/" itemprop="url" rel="index"><span itemprop="name">jdk</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/jdk/source/" itemprop="url" rel="index"><span itemprop="name">source</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          问题在调用一个方法后需要链式的获取某个字段, 比如:
+123// 调用接口, 获取用户名ResponseDTO dto = xxxServcice.foo();String username = dto.getUser().getUserName();
+但是上面的方法可能会抛出空指针异常, 因此, 为了程序的健壮性, 我们一般在每一步的get前都需要进行非空判断:
+12345678// 调用接口, 获取用户名ResponseDTO dto = xxxServcice.foo();if (dto != null) &#123;    User user = dto.getUser();    if (user != null)&#123;        String username = user.getUserName();    &#125;&#125;
+如果字段获取链路过深, 那么这些非空判断非常多, 很烦. 下面介绍下 如何使用 jdk8 中的Optional类解决这个问题.
+OptionalAPI首先看一下Optional都有哪些方法
+构造类方法有三个静态 empty(), o
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/29/jdk8-optional/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://codertang.com/2019/02/26/spring-resource/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -397,7 +586,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-04 09:59:50" itemprop="dateModified" datetime="2019-03-04T09:59:50+08:00">2019-03-04</time>
+                <time title="修改时间：2020-08-04 14:09:43" itemprop="dateModified" datetime="2020-08-04T14:09:43+08:00">2020-08-04</time>
               
             
           </span>
@@ -538,12 +727,24 @@
                 
               
 
-              <time title="创建时间：2019-02-22 14:58:15 / 修改时间：17:29:06" itemprop="dateCreated datePublished" datetime="2019-02-22T14:58:15+08:00">2019-02-22</time>
+              <time title="创建时间：2019-02-22 14:58:15" itemprop="dateCreated datePublished" datetime="2019-02-22T14:58:15+08:00">2019-02-22</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-08-04 14:09:43" itemprop="dateModified" datetime="2020-08-04T14:09:43+08:00">2020-08-04</time>
               
             
           </span>
@@ -687,12 +888,24 @@ AbstractApplicationContext#refresh1234567891011121314151617181920212223242526272
                 
               
 
-              <time title="创建时间：2019-02-21 11:47:15 / 修改时间：15:49:51" itemprop="dateCreated datePublished" datetime="2019-02-21T11:47:15+08:00">2019-02-21</time>
+              <time title="创建时间：2019-02-21 11:47:15" itemprop="dateCreated datePublished" datetime="2019-02-21T11:47:15+08:00">2019-02-21</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-08-04 14:09:43" itemprop="dateModified" datetime="2020-08-04T14:09:43+08:00">2020-08-04</time>
               
             
           </span>
@@ -872,7 +1085,7 @@ Echarts百度开源的一款前端绘图库, ECharts 提供了常规的折线图
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-22 15:09:34" itemprop="dateModified" datetime="2019-02-22T15:09:34+08:00">2019-02-22</time>
+                <time title="修改时间：2020-08-04 14:09:43" itemprop="dateModified" datetime="2020-08-04T14:09:43+08:00">2020-08-04</time>
               
             
           </span>
@@ -1051,7 +1264,7 @@ PlantUmlPlantUML 是一个画图脚本语言，用它可以快速地画出：时
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-12 14:51:07" itemprop="dateModified" datetime="2019-03-12T14:51:07+08:00">2019-03-12</time>
+                <time title="修改时间：2020-08-04 14:09:43" itemprop="dateModified" datetime="2020-08-04T14:09:43+08:00">2020-08-04</time>
               
             
           </span>
@@ -1243,7 +1456,7 @@ PlantUmlPlantUML 是一个画图脚本语言，用它可以快速地画出：时
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-04-23 16:47:01" itemprop="dateModified" datetime="2020-04-23T16:47:01+08:00">2020-04-23</time>
+                <time title="修改时间：2020-08-04 14:09:43" itemprop="dateModified" datetime="2020-08-04T14:09:43+08:00">2020-08-04</time>
               
             
           </span>
@@ -1419,12 +1632,24 @@ ja
                 
               
 
-              <time title="创建时间：2018-12-17 11:55:19 / 修改时间：11:55:57" itemprop="dateCreated datePublished" datetime="2018-12-17T11:55:19+08:00">2018-12-17</time>
+              <time title="创建时间：2018-12-17 11:55:19" itemprop="dateCreated datePublished" datetime="2018-12-17T11:55:19+08:00">2018-12-17</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-08-04 14:09:43" itemprop="dateModified" datetime="2020-08-04T14:09:43+08:00">2020-08-04</time>
               
             
           </span>
@@ -1617,7 +1842,7 @@ ja
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-09 14:17:55" itemprop="dateModified" datetime="2018-11-09T14:17:55+08:00">2018-11-09</time>
+                <time title="修改时间：2020-08-04 14:09:43" itemprop="dateModified" datetime="2020-08-04T14:09:43+08:00">2020-08-04</time>
               
             
           </span>
@@ -1804,7 +2029,7 @@ ja
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-09 14:17:55" itemprop="dateModified" datetime="2018-11-09T14:17:55+08:00">2018-11-09</time>
+                <time title="修改时间：2020-08-04 14:09:43" itemprop="dateModified" datetime="2020-08-04T14:09:43+08:00">2020-08-04</time>
               
             
           </span>
@@ -1851,188 +2076,6 @@ ja
         
       
     </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://codertang.com/2018/05/21/aqs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tonny Yi">
-      <meta itemprop="description" content="Coding, Life, Zen">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tonny's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/21/aqs/" itemprop="url">
-                  AQS
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-05-21 16:06:20" itemprop="dateCreated datePublished" datetime="2018-05-21T16:06:20+08:00">2018-05-21</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-11-09 14:17:55" itemprop="dateModified" datetime="2018-11-09T14:17:55+08:00">2018-11-09</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/Concurrent/" itemprop="url" rel="index"><span itemprop="name">Concurrent</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body han-init-context" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>总体流程:<br>ReentrantLock.lock -&gt; FairSync.lock() -&gt; AbstractQueuedSynchronizer.acquire() -&gt; FairSync.tryAcquire() 如果失败-&gt; AQS.acquireQueued(AQS.addWaiter()) + thread.interrupt()</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// AbstractQueuedSynchronizer</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!tryAcquire(arg) &amp;&amp;</span><br><span class="line">        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">        selfInterrupt();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/21/aqs/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
     
 
@@ -2115,7 +2158,7 @@ ja
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2208,7 +2251,9 @@ ja
                     
                       
                     
-                    <span class="site-state-item-count">36</span>
+                      
+                    
+                    <span class="site-state-item-count">37</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2327,7 +2372,11 @@ ja
                     
                       
                     
-                    <span class="site-state-item-count">43</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">46</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

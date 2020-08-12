@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/Han/3.3.0/han.min.css">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Get请求getForEntity 类方法返回的数据类型为 ResponseEntity&amp;lt;T&amp;gt; , 然后重载方法, 以不同的方式传递参数  getForEntity(String url, Class&amp;lt;T&amp;gt; responseType, Object... uriVariables)  getForEntity(String url, Class&amp;lt;T&amp;gt; respo">
+<meta name="keywords" content="spring,http,resttemplate">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring RestTemplate用法">
+<meta property="og:url" content="http://codertang.com/2020/08/12/spring-resttemplate/index.html">
+<meta property="og:site_name" content="Tonny&#39;s Blog">
+<meta property="og:description" content="Get请求getForEntity 类方法返回的数据类型为 ResponseEntity&amp;lt;T&amp;gt; , 然后重载方法, 以不同的方式传递参数  getForEntity(String url, Class&amp;lt;T&amp;gt; responseType, Object... uriVariables)  getForEntity(String url, Class&amp;lt;T&amp;gt; respo">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-12T08:02:34.882Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring RestTemplate用法">
+<meta name="twitter:description" content="Get请求getForEntity 类方法返回的数据类型为 ResponseEntity&amp;lt;T&amp;gt; , 然后重载方法, 以不同的方式传递参数  getForEntity(String url, Class&amp;lt;T&amp;gt; responseType, Object... uriVariables)  getForEntity(String url, Class&amp;lt;T&amp;gt; respo">
+
+
+
+
+
+
+  <link rel="canonical" href="http://codertang.com/2020/08/12/spring-resttemplate/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Spring RestTemplate用法 | Tonny's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tonny's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">莫等闲, 白了少年头, 空悲切</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://codertang.com/2020/08/12/spring-resttemplate/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tonny Yi">
+      <meta itemprop="description" content="Coding, Life, Zen">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tonny's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring RestTemplate用法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-08-12 11:37:12 / 修改时间：16:02:34" itemprop="dateCreated datePublished" datetime="2020-08-12T11:37:12+08:00">2020-08-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Get请求"><a href="#Get请求" class="headerlink" title="Get请求"></a>Get请求</h3><p><code>getForEntity</code> 类方法返回的数据类型为 <code>ResponseEntity&lt;T&gt;</code> , 然后重载方法, 以不同的方式传递参数</p>
+<ul>
+<li><p><code>getForEntity(String url, Class&lt;T&gt; responseType, Object... uriVariables)</code></p>
+</li>
+<li><p><code>getForEntity(String url, Class&lt;T&gt; responseType, Map&lt;String, ?&gt; uriVariables)</code></p>
+</li>
+<li><p><code>getForEntity(URI url, Class&lt;T&gt; responseType)</code></p>
+</li>
+</ul>
+<p>示例: </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1</span></span><br><span class="line">ResponseEntity&lt;Yiyan&gt; entity1 = restTemplate</span><br><span class="line">    .getForEntity(<span class="string">"https://v1.hitokoto.cn/?c=&#123;1&#125;&amp;encode=&#123;2&#125;"</span>, Yiyan.class, <span class="string">"h"</span>, <span class="string">"json"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2</span></span><br><span class="line">Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">map.put(<span class="string">"1"</span>, <span class="string">"i"</span>);</span><br><span class="line">map.put(<span class="string">"2"</span>, <span class="string">"json"</span>);</span><br><span class="line">ResponseEntity&lt;Yiyan&gt; entity2 = restTemplate</span><br><span class="line">    .getForEntity(<span class="string">"https://v1.hitokoto.cn/?c=&#123;1&#125;&amp;encode=&#123;2&#125;"</span>, Yiyan.class, map);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3</span></span><br><span class="line">String url3 = <span class="string">"https://v1.hitokoto.cn/?c=&#123;1&#125;&amp;encode=&#123;2&#125;"</span>;</span><br><span class="line">URI uri3 = UriComponentsBuilder.fromUriString(url3).build(<span class="string">"c"</span>, <span class="string">"json"</span>);</span><br><span class="line">ResponseEntity&lt;Yiyan&gt; entity3 = restTemplate.getForEntity(uri3, Yiyan.class);</span><br></pre></td></tr></table></figure>
+<p>如果希望接口直接返回需要的数据类型, 则可以使用下面这组方法, 返回的数据类型就是传入的<code>T</code></p>
+<ul>
+<li><code>getForObject(String url, Class&lt;T&gt; responseType, Object... uriVariables)</code></li>
+<li><code>getForObject(String url, Class&lt;T&gt; responseType, Map&lt;String, ?&gt; uriVariables)</code></li>
+<li><code>getForObject(URI url, Class&lt;T&gt; responseType)</code></li>
+</ul>
+<p>示例:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1</span></span><br><span class="line">Yiyan yiyan1 = restTemplate</span><br><span class="line">    .getForObject(<span class="string">"https://v1.hitokoto.cn/?c=&#123;1&#125;&amp;encode=&#123;2&#125;"</span>, Yiyan.class, <span class="string">"h"</span>, <span class="string">"json"</span>);</span><br><span class="line">System.out.println(yiyan1);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2</span></span><br><span class="line">Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">map.put(<span class="string">"1"</span>, <span class="string">"i"</span>);</span><br><span class="line">map.put(<span class="string">"2"</span>, <span class="string">"json"</span>);</span><br><span class="line">Yiyan yiyan2 = restTemplate.getForObject(<span class="string">"https://v1.hitokoto.cn/?c=&#123;1&#125;&amp;encode=&#123;2&#125;"</span>, Yiyan.class, map);</span><br><span class="line">System.out.println(yiyan2);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3</span></span><br><span class="line">String url3 = <span class="string">"https://v1.hitokoto.cn/?c=&#123;1&#125;&amp;encode=&#123;2&#125;"</span>;</span><br><span class="line">URI uri3 = UriComponentsBuilder.fromUriString(url3).build(<span class="string">"c"</span>, <span class="string">"json"</span>);</span><br><span class="line">Yiyan yiyan3 = restTemplate.getForObject(uri3, Yiyan.class);</span><br></pre></td></tr></table></figure>
+<h3 id="Post"><a href="#Post" class="headerlink" title="Post"></a>Post</h3><p>Post和Get方法一样, 有<code>postForObject</code>和<code>postForEntity</code>方法</p>
+<ul>
+<li><code>postForObject(URI url, @Nullable Object request, Class&lt;T&gt; responseType)</code></li>
+<li><code>postForObject(String url, @Nullable Object request, Class&lt;T&gt; responseType, Object... uriVariables)</code></li>
+<li><code>postForObject(String url, @Nullable Object request, Class&lt;T&gt; responseType, Map&lt;String, ?&gt; uriVariables)</code></li>
+</ul>
+<p><code>postForEntity</code>类方法</p>
+<ul>
+<li><code>postForEntity(URI url, @Nullable Object request, Class&lt;T&gt; responseType)</code></li>
+<li><code>postForEntity(String url, @Nullable Object request, Class&lt;T&gt; responseType, Object... uriVariables)</code></li>
+<li><code>postForEntity(String url, @Nullable Object request, Class&lt;T&gt; responseType, Map&lt;String, ?&gt; uriVariables)</code></li>
+</ul>
+<p>除此之外, 还有<code>postForLocation</code>, 但是这类方法的返回值为<code>URI</code>, 没法接收响应体</p>
+<h3 id="exchange"><a href="#exchange" class="headerlink" title="exchange"></a>exchange</h3><p>这组方法偏底层, 比如需要设置请求头时使用</p>
+<ul>
+<li><code>exchange(RequestEntity&lt;?&gt; requestEntity, Class&lt;T&gt; responseType)</code></li>
+<li><code>exchange(URI url, HttpMethod method, @Nullable HttpEntity&lt;?&gt; requestEntity, Class&lt;T&gt; responseType)</code></li>
+<li><code>exchange(String url, HttpMethod method, @Nullable HttpEntity&lt;?&gt; requestEntity, Class&lt;T&gt; responseType, Object... uriVariables)</code></li>
+<li><code>exchange(String url, HttpMethod method, @Nullable HttpEntity&lt;?&gt; requestEntity, Class&lt;T&gt; responseType, Map&lt;String, ?&gt; uriVariables)</code></li>
+</ul>
+<p>参数示例:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// URI构造方式</span></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line">URI uri = <span class="keyword">new</span> URI(<span class="string">"https://v1.hitokoto.cn/?c=h&amp;encode=json"</span>);</span><br><span class="line"><span class="comment">// 2</span></span><br><span class="line">URI uri = <span class="keyword">new</span> UriTemplate(<span class="string">"https://v1.hitokoto.cn/?c=&#123;1&#125;&amp;encode=&#123;2&#125;"</span>).expand(<span class="string">"h"</span>, <span class="string">"json"</span>);</span><br><span class="line"><span class="comment">// 或者 </span></span><br><span class="line">Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">map.put(<span class="string">"1"</span>, <span class="string">"h"</span>);</span><br><span class="line">map.put(<span class="string">"2"</span>, <span class="string">"json"</span>);</span><br><span class="line">URI uri2 = <span class="keyword">new</span> UriTemplate(url).expand(map);</span><br><span class="line"><span class="comment">// 3</span></span><br><span class="line">URI uri = UriComponentsBuilder.fromUriString(<span class="string">"https://v1.hitokoto.cn/?c=&#123;1&#125;&amp;encode=&#123;2&#125;"</span>).build(<span class="string">"h"</span>, <span class="string">"json"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// HttpEntity构造方式</span></span><br><span class="line">HttpHeaders httpHeaders = <span class="keyword">new</span> HttpHeaders();</span><br><span class="line">HttpEntity&lt;User&gt; httpEntity = <span class="keyword">new</span> HttpEntity&lt;&gt;(objBody, httpHeaders);</span><br><span class="line"><span class="comment">// RequestEntity继承了HttpEntity</span></span><br><span class="line">RequestEntity&lt;User&gt; entity1 = RequestEntity.post(uri).header(<span class="string">"Authorization"</span>, <span class="string">"Bearer xxxx"</span>).body(user);</span><br></pre></td></tr></table></figure>
+<p>请求示例:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1</span></span><br><span class="line">String url = <span class="string">"https://v1.hitokoto.cn/?c=&#123;1&#125;&amp;encode=&#123;2&#125;"</span>;</span><br><span class="line">URI uri = UriComponentsBuilder.fromUriString(url).build(<span class="string">"h"</span>, <span class="string">"json"</span>);</span><br><span class="line">RequestEntity&lt;Void&gt; request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON)</span><br><span class="line">    .header(<span class="string">"Authorization"</span>, <span class="string">"123"</span>).build();</span><br><span class="line">ResponseEntity&lt;Yiyan&gt; entity4 = restTemplate.exchange(request, Yiyan.class);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2</span></span><br><span class="line">URI uri = <span class="keyword">new</span> URI(<span class="string">"https://gorest.co.in/public-api/users"</span>);</span><br><span class="line"></span><br><span class="line">HttpHeaders httpHeaders = <span class="keyword">new</span> HttpHeaders();</span><br><span class="line">httpHeaders.add(<span class="string">"Authorization"</span>, <span class="string">"Bearer XXXXXX"</span>);</span><br><span class="line">httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);</span><br><span class="line"></span><br><span class="line">User user = <span class="keyword">new</span> User();</span><br><span class="line">user.setFirst_name(<span class="string">"Brian"</span>);</span><br><span class="line">user.setLast_name(<span class="string">"Ratke"</span>);</span><br><span class="line">user.setGender(<span class="string">"male"</span>);</span><br><span class="line">user.setEmail(<span class="string">"lew19@163.com"</span>);</span><br><span class="line">user.setStatu(<span class="string">"active"</span>);</span><br><span class="line">HttpEntity&lt;User&gt; httpEntity = <span class="keyword">new</span> HttpEntity&lt;&gt;(user, httpHeaders);</span><br><span class="line"></span><br><span class="line">ResponseEntity&lt;User&gt; entity = restTemplate.exchange(uri, HttpMethod.POST, httpEntity, User.class);</span><br><span class="line">System.out.println(entity);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3</span></span><br><span class="line">ResponseEntity&lt;Yiyan&gt; entity2 = restTemplate.exchange(<span class="string">"https://v1.hitokoto.cn/?c=&#123;1&#125;&amp;encode=&#123;2&#125;"</span>, HttpMethod.GET, <span class="keyword">null</span>, Yiyan.class, <span class="string">"h"</span>, <span class="string">"json"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4 略</span></span><br></pre></td></tr></table></figure>
+<p>下面这类方法是为了支持泛型, 比如, 返回数据类型是List, 但用上面方法无法进一步设置List内元素类型</p>
+<ul>
+<li><code>exchange(RequestEntity&lt;?&gt; requestEntity, ParameterizedTypeReference&lt;T&gt; responseType)</code></li>
+<li><code>exchange(URI url, HttpMethod method, @Nullable HttpEntity&lt;?&gt; requestEntity, ParameterizedTypeReference&lt;T&gt; responseType)</code></li>
+<li><code>exchange(String url, HttpMethod method, @Nullable HttpEntity&lt;?&gt; requestEntity, ParameterizedTypeReference&lt;T&gt; responseType, Object... uriVariables)</code></li>
+<li><code>exchange(String url, HttpMethod method, @Nullable HttpEntity&lt;?&gt; requestEntity, ParameterizedTypeReference&lt;T&gt; responseType, Map&lt;String, ?&gt; uriVariables)</code></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Tonny Yi</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://codertang.com/2020/08/12/spring-resttemplate/" title="Spring RestTemplate用法">http://codertang.com/2020/08/12/spring-resttemplate/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="external nofollow" target="_blank">CC BY-NC 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spring/" rel="tag"># spring</a>
+          
+            <a href="/tags/http/" rel="tag"># http</a>
+          
+            <a href="/tags/resttemplate/" rel="tag"># resttemplate</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/30/design-pattern/" rel="next" title="设计模式">
+                <i class="fa fa-chevron-left"></i> 设计模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Tonny Yi">
+            
+              <p class="site-author-name" itemprop="name">Tonny Yi</p>
+              <p class="site-description motion-element" itemprop="description">Coding, Life, Zen</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tonnyyi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:tonnyemails@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Get请求"><span class="nav-number">1.</span> <span class="nav-text">Get请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Post"><span class="nav-number">2.</span> <span class="nav-text">Post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exchange"><span class="nav-number">3.</span> <span class="nav-text">exchange</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tonny Yi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>
