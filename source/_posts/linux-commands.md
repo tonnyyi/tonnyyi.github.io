@@ -73,7 +73,7 @@ mv file1 file2 dir  # 移动多个文件到dir
 - **x** : 执行权限, 用数字1表示
 - **\-** : 删除权限, 用数字0表示
 - **s** : 特殊权限
-    
+  
 ```bash
 chmod a+x file      # 写法1, 所有人加执行权限
 chmod ug+x,o-x file     # 所有人及所在组加执行权限, 其他去除执行权限
@@ -540,4 +540,213 @@ echo log > /dev/null 2>&1
 
 在shell中, 每个进程都和三个系统文件相关联: 标准输入stdin, 标准输出stdout 和 标准错误stderr, 三个系统文件的文件描述符分别为0, 1, 2. 所以这里 2>&1 的意思就是将标准错误也输出到标准输出当中
 
+
+
+## 系统监控
+
+### mpstat  - cpu监控
+
+每隔1s打印所有cpu使用情况, 打印10次
+
+```bash
+[root@demo ~]# mpstat -P ALL 1 10
+Linux 3.10.0-862.14.4.el7.x86_64 (demo) 	2020年09月01日 	_x86_64_	(1 CPU)
+
+10时07分12秒  CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+10时07分13秒  all    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00  100.00
+10时07分13秒    0    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00  100.00
+```
+
+参数说明:
+
+​	`-P`: `ALL` 或 `0 - CPU个数-1` 监控哪个cpu
+
+结果说明:
+
+```
+%user      在间隔的时间段里，用户态的CPU时间(%)，不包含nice值为负进程  (usr/total)*100
+%nice      在间隔的时间段里，nice值为负进程的CPU时间(%)   (nice/total)*100
+%sys       在间隔的时间段里，内核时间(%)       (system/total)*100
+%iowait    在间隔的时间段里，硬盘IO等待时间(%) (iowait/total)*100
+%irq       在间隔的时间段里，硬中断时间(%)     (irq/total)*100
+%soft      在间隔的时间段里，软中断时间(%)     (softirq/total)*100
+%idle      在间隔的时间段里，CPU除去等待磁盘IO操作外的因为任何原因而空闲的时间闲置时间(%) (idle/total)*100
+```
+
+
+
+### pidstat - 进程监控
+
+pidstat 是sysstat软件套件的一部分, CentOS使用该命令安装: `yum install sysstat`
+
+**常用参数**
+
+- `-u` 默认参数，显示各个进程的 CPU 统计信息
+- `-r` 显示各个进程的内存使用情况
+- `-d` 显示各个进程的 IO 使用
+- `-w` 显示各个进程的上下文切换
+
+显示所有进程的CPU使用信息, `pidstat` 或 `pidstat -u -p ALL`
+
+```bash
+[root@demo ~]# pidstat
+Linux 3.10.0-862.14.4.el7.x86_64 (demo) 	2020年09月01日 	_x86_64_	(1 CPU)
+
+10时14分30秒   UID       PID    %usr %system  %guest    %CPU   CPU  Command
+10时14分30秒     0         1    0.01    0.01    0.00    0.01     0  systemd
+10时14分30秒     0         2    0.00    0.00    0.00    0.00     0  kthreadd
+10时14分30秒     0         3    0.00    0.00    0.00    0.00     0  ksoftirqd/0
+...
+```
+
+
+
+查看指定进程的cpu使用信息, `-p`
+
+```bash
+[root@demo ~]# pidstat -p 1205
+Linux 3.10.0-862.14.4.el7.x86_64 (demo) 	2020年09月01日 	_x86_64_	(1 CPU)
+
+10时20分19秒   UID       PID    %usr %system  %guest    %CPU   CPU  Command
+10时20分19秒     0      1205    0.00    0.00    0.00    0.00     0  nginx
+```
+
+
+
+查看指定进程的cpu使用信息,  间隔1s, 显示3次
+
+```bash
+[root@demo ~]# pidstat -p 1205 1 3
+Linux 3.10.0-862.14.4.el7.x86_64 (demo) 	2020年09月01日 	_x86_64_	(1 CPU)
+
+10时21分27秒   UID       PID    %usr %system  %guest    %CPU   CPU  Command
+10时21分28秒     0      1205    0.00    0.00    0.00    0.00     0  nginx
+10时21分29秒     0      1205    0.00    0.00    0.00    0.00     0  nginx
+10时21分30秒     0      1205    0.00    0.00    0.00    0.00     0  nginx
+平均时间:     0      1205    0.00    0.00    0.00    0.00     -  nginx
+```
+
+ 
+
+查看内存
+
+```bash
+[root@demo ~]# pidstat -r -p 1205 1 3
+Linux 3.10.0-862.14.4.el7.x86_64 (demo) 	2020年09月01日 	_x86_64_	(1 CPU)
+
+10时22分46秒   UID       PID  minflt/s  majflt/s     VSZ    RSS   %MEM  Command
+10时22分47秒     0      1205      0.00      0.00   47448   2672   0.14  nginx
+10时22分48秒     0      1205      0.00      0.00   47448   2672   0.14  nginx
+10时22分49秒     0      1205      0.00      0.00   47448   2672   0.14  nginx
+平均时间:     0      1205      0.00      0.00   47448   2672   0.14  nginx
+```
+
+
+
+查看io
+
+```bash
+[root@demo ~]# pidstat -d -p 1205 1 3
+Linux 3.10.0-862.14.4.el7.x86_64 (demo) 	2020年09月01日 	_x86_64_	(1 CPU)
+
+10时23分11秒   UID       PID   kB_rd/s   kB_wr/s kB_ccwr/s  Command
+10时23分12秒     0      1205      0.00      0.00      0.00  nginx
+10时23分13秒     0      1205      0.00      0.00      0.00  nginx
+10时23分14秒     0      1205      0.00      0.00      0.00  nginx
+平均时间:     0      1205      0.00      0.00      0.00  nginx
+```
+
+
+
+### ss - 网络
+
+```bash
+# 查看连接到端口的socket
+ss -t dst :6379
+
+# 占用端口
+ss -ltp | grep 6379
+```
+
+
+
+
+
+### SAR 
+
+```bash
+# 查看网卡流量 每隔1s 输出2次
+[root@jzcpx-no ~]# sar -n DEV 1 2
+Linux 2.6.32-431.el6.x86_64 (CDVM-213017031)    05/04/2017  _x86_64_    (4 CPU)
+
+08:05:30 PM   IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s
+08:05:31 PM      lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+08:05:31 PM    eth0   1788.00   1923.00    930.47    335.60      0.00      0.00      0.00
+
+08:05:31 PM   IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s
+08:05:32 PM      lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+08:05:32 PM    eth0   1387.00   1469.00    652.12    256.98      0.00      0.00      0.00
+
+Average:      IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s
+Average:         lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+Average:       eth0   1587.50   1696.00    791.29    296.29      0.00      0.00      0.00
+```
+
+`-n`参数:
+
+- DEV显示网络接口信息。
+- EDEV显示关于网络错误的统计数据。
+- NFS统计活动的NFS客户端的信息。
+- NFSD统计NFS服务器的信息
+- SOCK显示套接字信息
+- ALL显示所有5个开关
+
+输出结果
+
+- `IFACE` ：LAN接口
+- `rxpck/s` ：每秒钟接收的数据包
+- `txpck/s` ：每秒钟发送的数据包
+- `rxkB/s` ：每秒钟接收的字节数 千字节/s
+- `txkB/s` ：每秒钟发送的字节数 千字节/s
+- `rxcmp/s` ：每秒钟接收的压缩数据包
+- `txcmp/s` ：每秒钟发送的压缩数据包
+- `rxmcst/s` ：每秒钟接收的多播数据包
+- `rxerr/s` ：每秒钟接收的坏数据包
+- `txerr/s` ：每秒钟发送的坏数据包
+- `coll/s` ：每秒冲突数
+- `rxdrop/s` ：因为缓冲充满，每秒钟丢弃的已接收数据包数
+- `txdrop/s` ：因为缓冲充满，每秒钟丢弃的已发送数据包数
+- `txcarr/s` ：发送数据包时，每秒载波错误数
+- `rxfram/s` ：每秒接收数据包的帧对齐错误数
+- `rxfifo/s` ：接收的数据包每秒FIFO过速的错误数
+- `txfifo/s` ：发送的数据包每秒FIFO过速的错误数
+
+
+
+网卡带宽查看
+
+```bash
+[root@jzcpx-no ~]# ethtool enp95s0f0
+Settings for enp95s0f0:
+	Supported ports: [ FIBRE ]
+	Supported link modes:   10000baseT/Full
+	Supported pause frame use: Symmetric
+	Supports auto-negotiation: No
+	Advertised link modes:  Not reported
+	Advertised pause frame use: No
+	Advertised auto-negotiation: No
+	Speed: 10000Mb/s
+	Duplex: Full
+	Port: Direct Attach Copper
+	PHYAD: 0
+	Transceiver: external
+	Auto-negotiation: off
+	Supports Wake-on: g
+	Wake-on: g
+	Current message level: 0x0000000f (15)
+			       drv probe link timer
+	Link detected: yes
+```
+
+`Speed: 10000Mb/s`  万兆网卡,  最大1.22GB/s
 
