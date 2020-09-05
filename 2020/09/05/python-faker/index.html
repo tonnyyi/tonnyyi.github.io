@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/Han/3.3.0/han.min.css">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="系统测试时, 需要构造大量的测试数据, 同时这些数据最好有一定的业务含义, 比如: 姓名字段, 可以随便写个字符串”卡卡卡”, 虽然能正常测试, 但体验很不好, 而类似”蔡淑英”这种就很符合业务要求了.  faker是一个python库, 用来生成各种类型的数据, 比如姓名/地址/邮箱/电话等等, 而且支持不同语种, 比如: 姓名, 既可以生成英文的姓名”Lucy Cechtelar”, 也可生成">
+<meta name="keywords" content="python,数据,测试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="faker - 测试数据生成">
+<meta property="og:url" content="http://codertang.com/2020/09/05/python-faker/index.html">
+<meta property="og:site_name" content="Tonny&#39;s Blog">
+<meta property="og:description" content="系统测试时, 需要构造大量的测试数据, 同时这些数据最好有一定的业务含义, 比如: 姓名字段, 可以随便写个字符串”卡卡卡”, 虽然能正常测试, 但体验很不好, 而类似”蔡淑英”这种就很符合业务要求了.  faker是一个python库, 用来生成各种类型的数据, 比如姓名/地址/邮箱/电话等等, 而且支持不同语种, 比如: 姓名, 既可以生成英文的姓名”Lucy Cechtelar”, 也可生成">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-09-05T03:16:30.053Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="faker - 测试数据生成">
+<meta name="twitter:description" content="系统测试时, 需要构造大量的测试数据, 同时这些数据最好有一定的业务含义, 比如: 姓名字段, 可以随便写个字符串”卡卡卡”, 虽然能正常测试, 但体验很不好, 而类似”蔡淑英”这种就很符合业务要求了.  faker是一个python库, 用来生成各种类型的数据, 比如姓名/地址/邮箱/电话等等, 而且支持不同语种, 比如: 姓名, 既可以生成英文的姓名”Lucy Cechtelar”, 也可生成">
+
+
+
+
+
+
+  <link rel="canonical" href="http://codertang.com/2020/09/05/python-faker/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>faker - 测试数据生成 | Tonny's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tonny's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">莫等闲, 白了少年头, 空悲切</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://codertang.com/2020/09/05/python-faker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tonny Yi">
+      <meta itemprop="description" content="Coding, Life, Zen">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tonny's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">faker - 测试数据生成
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-09-05 10:50:09 / 修改时间：11:16:30" itemprop="dateCreated datePublished" datetime="2020-09-05T10:50:09+08:00">2020-09-05</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>系统测试时, 需要构造大量的测试数据, 同时这些数据最好有一定的业务含义, 比如: 姓名字段, 可以随便写个字符串”卡卡卡”, 虽然能正常测试, 但体验很不好, 而类似”蔡淑英”这种就很符合业务要求了. </p>
+<p><a href="https://github.com/joke2k/faker" target="_blank" rel="noopener">faker</a>是一个python库, 用来生成各种类型的数据, 比如姓名/地址/邮箱/电话等等, 而且支持不同语种, 比如: 姓名, 既可以生成英文的姓名”Lucy Cechtelar”, 也可生成中文姓名”贺建军”, 它一共支持日文/韩文/法文等30多种语言. </p>
+<h2 id="Java版API"><a href="#Java版API" class="headerlink" title="Java版API"></a>Java版API</h2><p>除了python版, 类似的还有Java/PHP/Ruby等, 先简单说下<a href="https://github.com/DiUS/java-faker" target="_blank" rel="noopener">Java</a>版.</p>
+<p>先引入maven依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.javafaker<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>javafaker<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>api使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Faker faker = <span class="keyword">new</span> Faker();</span><br><span class="line">faker.name().fullName();    <span class="comment">// Gordon Lemke</span></span><br><span class="line">faker.address().streetAddress();    <span class="comment">// 3980 Isaiah Square</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成中文类数据</span></span><br><span class="line">faker = <span class="keyword">new</span> Faker(<span class="keyword">new</span> Locale(<span class="string">"zh-CN"</span>));</span><br><span class="line">faker.name().fullName();    <span class="comment">// 胡靖琪</span></span><br><span class="line">faker.address().streetAddress();    <span class="comment">// 赖巷43213号</span></span><br></pre></td></tr></table></figure>
+<h2 id="python版API"><a href="#python版API" class="headerlink" title="python版API"></a>python版API</h2><p>下面是python版的API列表</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> randint</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> OrderedDict</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, date</span><br><span class="line"><span class="keyword">from</span> faker <span class="keyword">import</span> Faker</span><br><span class="line"><span class="keyword">from</span> faker.providers <span class="keyword">import</span> BaseProvider, internet     </span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------  faker.providers.BaseProvider -----------</span></span><br><span class="line">fake = Faker();</span><br><span class="line"><span class="comment"># 格式化输出 数字+字符 0-9</span></span><br><span class="line">fake.bothify(letters=<span class="string">'ABCDE'</span>    <span class="comment">#93 AA</span></span><br><span class="line">fake.bothify(text=<span class="string">'Product Number: ????-########'</span>)    <span class="comment">#aGEt-22666920</span></span><br><span class="line">fake.bothify(text=<span class="string">'Product Number: ????-########'</span>, letters=<span class="string">'ABCDE'</span>)    <span class="comment">#VDECE-73691847</span></span><br><span class="line"><span class="comment"># 格式化输出 字符</span></span><br><span class="line">fake.lexify(text=<span class="string">'Random Identifier: ??????????'</span>)  <span class="comment"># Random Identifier: HsoUenwndr</span></span><br><span class="line">fake.lexify(text=<span class="string">'Random Identifier: ??????????'</span>, letters=<span class="string">'ABCDE'</span>)   <span class="comment"># Random Identifier: AECDBBECEB</span></span><br><span class="line"><span class="comment"># 格式化输出 数字     #0-9 %1-9 !0-9空格 @1-9空格</span></span><br><span class="line">fake.numerify(text=<span class="string">'Intel Core i%-%%##K vs AMD Ryzen % %%##X'</span>)   <span class="comment"># Intel Core i4-6966K vs AMD Ryzen 7 1612X</span></span><br><span class="line"><span class="comment"># 格式化输出16进制数</span></span><br><span class="line">fake.hexify(text=<span class="string">'MAC Address: ^^:^^:^^:^^:^^:^^'</span>)   <span class="comment"># MAC Address: a9:c4:39:79:ba:4c</span></span><br><span class="line">fake.hexify(text=<span class="string">'MAC Address: ^^:^^:^^:^^:^^:^^'</span>, upper=<span class="keyword">True</span>)   <span class="comment"># MAC Address: DC:CC:19:2C:4F:A1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 组成随机列表</span></span><br><span class="line">fake.random_choices(elements=(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>))  <span class="comment"># ['a', 'd', 'b', 'b']</span></span><br><span class="line">fake.random_choices(elements=(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>), length=<span class="number">3</span>) <span class="comment"># ['c', 'd', 'd']</span></span><br><span class="line"><span class="comment"># 出现概率</span></span><br><span class="line">fake.random_choices(elements=OrderedDict([(<span class="string">"a"</span>, <span class="number">0.45</span>), (<span class="string">"b"</span>, <span class="number">0.35</span>), (<span class="string">"c"</span>, <span class="number">0.15</span>), (<span class="string">"d"</span>, <span class="number">0.05</span>), ]))    </span><br><span class="line"><span class="comment"># 随机列表, 不重复</span></span><br><span class="line">fake.random_sample(elements=(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>), length=<span class="number">3</span>)</span><br><span class="line"><span class="comment"># 随机元素</span></span><br><span class="line">fake.random_element(elements=(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>))   <span class="comment"># d</span></span><br><span class="line">fake.random_element(elements=OrderedDict([(<span class="string">"a"</span>, <span class="number">0.45</span>), (<span class="string">"b"</span>, <span class="number">0.35</span>), (<span class="string">"c"</span>, <span class="number">0.15</span>), (<span class="string">"d"</span>, <span class="number">0.05</span>), ]))    <span class="comment"># 有概率</span></span><br><span class="line"><span class="comment"># 随机元素不重复</span></span><br><span class="line">fake.random_elements(elements=(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>), unique=<span class="keyword">True</span>) <span class="comment">#['b', 'a', 'c']</span></span><br><span class="line">fake.random_elements(elements=OrderedDict([(<span class="string">"a"</span>, <span class="number">0.45</span>), (<span class="string">"b"</span>, <span class="number">0.35</span>), (<span class="string">"c"</span>, <span class="number">0.15</span>), (<span class="string">"d"</span>, <span class="number">0.05</span>), ]), length=<span class="number">2</span>, unique=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 随机数字</span></span><br><span class="line">fake.random_int()    <span class="comment"># 1127</span></span><br><span class="line">fake.random_int(min=<span class="number">100</span>, max=<span class="number">200</span>) <span class="comment"># 191</span></span><br><span class="line">fake.random_int(min=<span class="number">0</span>, max=<span class="number">15</span>, step=<span class="number">3</span>) <span class="comment"># 6</span></span><br><span class="line"><span class="comment"># 指定长度的数字</span></span><br><span class="line">fake.random_number()    <span class="comment"># 长度随机 435701</span></span><br><span class="line">fake.random_number(digits=<span class="number">3</span>)    <span class="comment"># 长度固定  785</span></span><br><span class="line"><span class="comment"># 指定范围数字</span></span><br><span class="line">fake.randomize_nb_elements(number=<span class="number">100</span>)   <span class="comment"># 默认 60% - 140% 139</span></span><br><span class="line">fake.randomize_nb_elements(number=<span class="number">100</span>, le=<span class="keyword">True</span>)  <span class="comment"># 60% - 100% </span></span><br><span class="line">fake.randomize_nb_elements(number=<span class="number">100</span>, ge=<span class="keyword">True</span>)  <span class="comment"># 100% -140%</span></span><br><span class="line">fake.randomize_nb_elements(number=<span class="number">100</span>, le=<span class="keyword">True</span>, max=<span class="number">80</span>)  <span class="comment"># 60% - max</span></span><br><span class="line">fake.randomize_nb_elements(number=<span class="number">100</span>, ge=<span class="keyword">True</span>, min=<span class="number">120</span>) <span class="comment"># min - 140%</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1位随机数  0-9</span></span><br><span class="line">fake.random_digit() <span class="comment"># 3</span></span><br><span class="line"><span class="comment"># 1位随机数  1-9</span></span><br><span class="line">fake.random_digit_not_null() <span class="comment"># 4</span></span><br><span class="line"><span class="comment"># 1位随机数或空格  1-9</span></span><br><span class="line">fake.random_digit_not_null_or_empty() <span class="comment"># 8</span></span><br><span class="line"><span class="comment"># 1位随机数或空格  0-9</span></span><br><span class="line">fake.random_digit_or_empty() <span class="comment"># 9</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 随机字母 a-z A-Z</span></span><br><span class="line">fake.random_letter()  <span class="comment"># a</span></span><br><span class="line"><span class="comment"># 随机小写字母</span></span><br><span class="line">fake.random_lowercase_letter()   <span class="comment"># i</span></span><br><span class="line"><span class="comment"># 随机大写字母</span></span><br><span class="line">fake.random_uppercase_letter()   <span class="comment"># D</span></span><br><span class="line"><span class="comment"># 随机字母列表</span></span><br><span class="line">fake.random_letters()   <span class="comment"># ['G', 'B', 'O', 'p', 'V', 'Q', 'F', 'P', 'n', 'H', 'c', 'N', 'r', 'r', 'h', 'A']</span></span><br><span class="line">fake.random_letters(length=<span class="number">6</span>)    <span class="comment"># ['A', 'E', 'W', 'Q', 'r', 'A']</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 语言代码</span></span><br><span class="line">fake.language_code()  <span class="comment"># uk</span></span><br><span class="line"><span class="comment"># 地区代码</span></span><br><span class="line">fake.locale()    <span class="comment"># zh_HK</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># fake.add_provider(internet)    </span></span><br><span class="line">fake.ipv4_private()</span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------  faker.providers.address.Provider -----------</span></span><br><span class="line">fake = Faker(<span class="string">"zh_CN"</span></span><br><span class="line"><span class="comment"># 随机地址</span></span><br><span class="line">fake.address()   <span class="comment"># 四川省柳州市沈河林街w座 521082</span></span><br><span class="line"><span class="comment"># 随机楼号</span></span><br><span class="line">fake.building_number()</span><br><span class="line"><span class="comment"># 随机城市</span></span><br><span class="line">fake.city()  <span class="comment"># 宁德市</span></span><br><span class="line"><span class="comment"># 随机行政单位  市县</span></span><br><span class="line">fake.city_suffix()   <span class="comment"># 市</span></span><br><span class="line"><span class="comment"># 随机国家</span></span><br><span class="line">fake.country()   <span class="comment"># 塔吉克斯坦</span></span><br><span class="line"><span class="comment"># 随机国家代码</span></span><br><span class="line">fake.country_code() <span class="comment"># MG</span></span><br><span class="line"><span class="comment"># 随机邮编</span></span><br><span class="line">fake.postcode()  <span class="comment"># 406008</span></span><br><span class="line"><span class="comment"># 随机街道地址</span></span><br><span class="line">fake.street_address()    <span class="comment"># 常街O座</span></span><br><span class="line"><span class="comment"># 随机路名</span></span><br><span class="line">fake.street_name()   <span class="comment"># 宜都路</span></span><br><span class="line"><span class="comment"># 街道后缀</span></span><br><span class="line">fake.street_suffix() <span class="comment"># 路</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------  faker.providers.color.Provider -----------</span></span><br><span class="line"><span class="comment"># HSV</span></span><br><span class="line"><span class="comment"># 随机某个色系颜色  monochrome灰度  red orange yellow green blue purple pink</span></span><br><span class="line">fake.color(hue=<span class="string">'monochrome'</span>)    <span class="comment"># #a80a14</span></span><br><span class="line"><span class="comment"># 随机亮色</span></span><br><span class="line">fake.color(luminosity=<span class="string">'light'</span>)   <span class="comment"># #86b3ef</span></span><br><span class="line"><span class="comment"># 颜色格式 hex rgb hsv hsl</span></span><br><span class="line">fake.color(hue=(<span class="number">100</span>, <span class="number">200</span>), color_format=<span class="string">'rgb'</span>)   <span class="comment"># rgb(176, 227, 244)</span></span><br><span class="line">fake.color(hue=<span class="number">135</span>, luminosity=<span class="string">'dark'</span>, color_format=<span class="string">'hsv'</span>)   <span class="comment"># hsv(135, 95, 46)</span></span><br><span class="line">fake.color(hue=(<span class="number">300</span>, <span class="number">20</span>), luminosity=<span class="string">'random'</span>, color_format=<span class="string">'hsl'</span>)   <span class="comment"># hsl(195, 16, 2</span></span><br><span class="line"><span class="comment"># 随机颜色名称</span></span><br><span class="line">fake.color_name()    <span class="comment"># MediumOrchid</span></span><br><span class="line"><span class="comment"># 随机16进制颜色</span></span><br><span class="line">fake.hex_color()     <span class="comment"># #a65ad6</span></span><br><span class="line"><span class="comment"># 随机rgb颜色</span></span><br><span class="line">fake.rgb_color()     <span class="comment"># 27,14,255</span></span><br><span class="line"><span class="comment"># 随机css格式rgb颜色</span></span><br><span class="line">fake.rgb_css_color()     <span class="comment"># rgb(59,208,119</span></span><br><span class="line"><span class="comment"># 随机安全色名称</span></span><br><span class="line">fake.safe_color_name()   <span class="comment"># fuchsia</span></span><br><span class="line">fake.safe_hex_color()    <span class="comment"># #668800</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------  faker.providers.company.Provider -----------</span></span><br><span class="line"><span class="comment"># 随机公司名称</span></span><br><span class="line">fake.company()   <span class="comment"># 华远软件科技有限公司</span></span><br><span class="line"><span class="comment"># 随机信用卡过期时间</span></span><br><span class="line">fake.credit_card_expire()    <span class="comment"># 03/21</span></span><br><span class="line"><span class="comment"># 完整信用卡</span></span><br><span class="line">fake.credit_card_full()      <span class="comment"># American Express\n博 王\n344778599396849 07/28\nCID: 3995</span></span><br><span class="line"><span class="comment"># 信用卡号</span></span><br><span class="line">fake.credit_card_number()    <span class="comment"># 6011562560356696</span></span><br><span class="line"><span class="comment"># 随机 am pm</span></span><br><span class="line">fake.am_pm()     <span class="comment"># AM</span></span><br><span class="line"><span class="comment"># 随机日期  19700101 - 今天</span></span><br><span class="line">fake.date()      <span class="comment"># 2010-12-19</span></span><br><span class="line"><span class="comment"># 随机日期 30年前 - 今天</span></span><br><span class="line">fake.date_between()  <span class="comment"># 1993-05-06</span></span><br><span class="line"><span class="comment"># 随机日期 1年前 - 今天</span></span><br><span class="line">fake.date_between(start_date=<span class="string">'-1y'</span>, end_date=<span class="string">'today'</span>)    <span class="comment"># 2020-02-11</span></span><br><span class="line"><span class="comment"># 两个时间中的某个时间  Date / Datetime</span></span><br><span class="line">fake.date_between_dates(date_start=date(<span class="number">2018</span>, <span class="number">1</span>, <span class="number">1</span>))  <span class="comment"># 2020-05-03</span></span><br><span class="line">fake.date_between_dates(date(<span class="number">2010</span>, <span class="number">1</span>, <span class="number">1</span>), date(<span class="number">2015</span>, <span class="number">1</span>, <span class="number">1</span>))  <span class="comment"># 2013-01-06</span></span><br><span class="line"><span class="comment"># 某个随机年龄对应的日期</span></span><br><span class="line">fake.date_of_birth(minimum_age=<span class="number">18</span>, maximum_age=<span class="number">30</span>)   <span class="comment"># 2001-10-23</span></span><br><span class="line"><span class="comment"># 这个月的某个日期</span></span><br><span class="line">fake.date_this_month()</span><br><span class="line">fake.date_this_month(before_today=<span class="keyword">True</span>, after_today=<span class="keyword">True</span>)</span><br><span class="line"><span class="comment"># 今年的某个日期</span></span><br><span class="line">fake.date_this_year()</span><br><span class="line">fake.date_this_year(before_today=<span class="keyword">True</span>, after_today=<span class="keyword">False</span>)</span><br><span class="line"><span class="comment"># 时间 10101 - 现在</span></span><br><span class="line">fake.date_time_between() <span class="comment"># 2009-11-07 04:47:17</span></span><br><span class="line">fake.date_time_between(start_date=<span class="string">'-1y'</span>, end_date=<span class="string">'now'</span>) <span class="comment"># 2020-08-31 05:38:55</span></span><br><span class="line"><span class="comment"># 某个范围内的时间</span></span><br><span class="line">fake.date_time_between_dates()</span><br><span class="line">fake.date_time_between_dates(datetime(<span class="number">2013</span>, <span class="number">2</span>, <span class="number">8</span>, <span class="number">15</span>, <span class="number">53</span>, <span class="number">19</span>), datetime(<span class="number">2016</span>, <span class="number">6</span>, <span class="number">1</span>, <span class="number">23</span>, <span class="number">33</span>, <span class="number">57</span>))</span><br><span class="line"><span class="comment"># 一个月中的某天</span></span><br><span class="line">fake.day_of_month()  <span class="comment"># 18</span></span><br><span class="line"><span class="comment"># 某个月</span></span><br><span class="line">fake.month()  <span class="comment"># 09</span></span><br><span class="line"><span class="comment"># 某年</span></span><br><span class="line">fake.year()  <span class="comment"># 2006</span></span><br><span class="line"><span class="comment"># 某个月份名</span></span><br><span class="line">fake.month()  <span class="comment"># August</span></span><br><span class="line"><span class="comment"># 周几</span></span><br><span class="line">fake.day_of_week()   <span class="comment"># Tuesday</span></span><br><span class="line"><span class="comment"># 未来某天</span></span><br><span class="line">fake.future_date()       <span class="comment"># 2020-09-25</span></span><br><span class="line">fake.future_date(end_date=<span class="string">'+3d'</span>)     <span class="comment"># 2020-09-05</span></span><br><span class="line">fake.future_datetime(end_date=<span class="string">'+3d'</span>)     <span class="comment"># 2020-09-04 15:45:59</span></span><br><span class="line"><span class="comment"># 过去某天</span></span><br><span class="line">fake.past_date()     </span><br><span class="line">fake.past_date(start_date=<span class="string">'-3d'</span>)</span><br><span class="line">fake.past_datetime(start_date=<span class="string">'-3d'</span>)</span><br><span class="line"><span class="comment"># 随机时区</span></span><br><span class="line">fake.timezone()  <span class="comment"># Europe/Bucharest</span></span><br><span class="line"><span class="comment"># 随机时间戳</span></span><br><span class="line">fake.unix_time()</span><br><span class="line">fake.unix_time(start_datetime=datetime(<span class="number">2020</span>,<span class="number">1</span>,<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------  faker.providers.file.Provider -----------</span></span><br><span class="line"><span class="comment"># 文件后缀</span></span><br><span class="line">fake.file_extension()       <span class="comment"># pptx</span></span><br><span class="line"><span class="comment"># 文件名</span></span><br><span class="line">fake.file_name()     <span class="comment"># 价格.mp3</span></span><br><span class="line"><span class="comment"># 指定文件类型   category: audio|image|office|text|video</span></span><br><span class="line">fake.file_name(category=<span class="string">'image'</span>, extension=<span class="string">'jpeg'</span>)   <span class="comment"># 起来.jpeg</span></span><br><span class="line"><span class="comment"># 文件路径</span></span><br><span class="line">fake.file_path()     <span class="comment"># /增加/那个.html</span></span><br><span class="line">fake.file_path(depth=<span class="number">3</span>, category=<span class="string">'image'</span>, extension=<span class="string">'jpeg'</span>)  <span class="comment"># /什么/人员/详细/欢迎.jpeg</span></span><br><span class="line"><span class="comment"># 网络传输文件类型</span></span><br><span class="line">fake.mime_type()     <span class="comment"># application/xhtml+xml</span></span><br><span class="line"><span class="comment"># category – application|audio|image|message|model|multipart|text|video</span></span><br><span class="line">fake.mime_type(category=<span class="string">'image'</span>)     <span class="comment"># image/png</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------  faker.providers.company.Provider -----------</span></span><br><span class="line">fake.coordinate()    <span class="comment"># 113.507229</span></span><br><span class="line"><span class="comment"># 纬度</span></span><br><span class="line">fake.latitude()     <span class="comment"># -76.139686</span></span><br><span class="line"><span class="comment"># 经度</span></span><br><span class="line">fake.longitude()     <span class="comment"># 7.562154</span></span><br><span class="line"><span class="comment"># 纬度 + 经度</span></span><br><span class="line">fake.latlng()    <span class="comment"># (Decimal('14.9397975'), Decimal('-38.213072')</span></span><br><span class="line"><span class="comment"># 城市坐标</span></span><br><span class="line">fake.local_latlng()  <span class="comment">#('39.33427', '-76.43941', 'Middle River', 'US', 'America/New_York')</span></span><br><span class="line">fake.local_latlng(country_code=<span class="string">'CN'</span>) <span class="comment"># ('30.24706', '115.04814', 'Huangshi', 'CN', 'Asia/Shanghai'</span></span><br><span class="line"><span class="comment"># 陆地坐标</span></span><br><span class="line">fake.location_on_land()  <span class="comment"># ('41.6764', '-91.58045', 'Coralville', 'US', 'America/Chicago'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------  faker.providers.internet.Provider -----------</span></span><br><span class="line"><span class="comment"># 公司邮箱</span></span><br><span class="line">fake.company_email()     <span class="comment"># luojie@junyong.cn</span></span><br><span class="line">fake.ascii_company_email()   <span class="comment"># ihou@gangwang.cn</span></span><br><span class="line"><span class="comment"># 邮箱</span></span><br><span class="line">fake.email()     <span class="comment"># rxiao@hotmail.com</span></span><br><span class="line">fake.free_email()     <span class="comment"># xiashao@gmail.com</span></span><br><span class="line">fake.ascii_email()   <span class="comment"># ysu@hotmail.com</span></span><br><span class="line">fake.safe_email()     <span class="comment"># vchang@example.org</span></span><br><span class="line">fake.ascii_free_email()  <span class="comment"># jing12@yahoo.com</span></span><br><span class="line">fake.ascii_safe_email()  <span class="comment"># chao59@example.net</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 域名</span></span><br><span class="line">fake.domain_name()   <span class="comment"># xiuyingping.cn</span></span><br><span class="line">fake.domain_name(levels=<span class="number">2</span>)   <span class="comment"># junjing.61.net</span></span><br><span class="line">fake.safe_domain_name()   <span class="comment"># example.org</span></span><br><span class="line">fake.free_email_domain()   <span class="comment"># yahoo.com</span></span><br><span class="line">fake.hostname()   <span class="comment"># laptop-53.min.cn</span></span><br><span class="line">fake.hostname(levels=<span class="number">2</span>)   <span class="comment"># srv-04.22.sx.cn</span></span><br><span class="line"><span class="comment"># 顶级域名</span></span><br><span class="line">fake.tld()   <span class="comment"># com</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># http方法</span></span><br><span class="line">fake.http_method()   <span class="comment"># DELETE</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 图片链接</span></span><br><span class="line">fake.image_url()     <span class="comment"># https://dummyimage.com/865x559</span></span><br><span class="line">fake.image_url(width=<span class="number">640</span>, height=<span class="number">480</span>)    <span class="comment"># https://www.lorempixel.com/640/480</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ip地址</span></span><br><span class="line">fake.ipv4()  <span class="comment"># 111.229.96.116</span></span><br><span class="line">fake.ipv4(network=<span class="keyword">False</span>, address_class=<span class="string">'a'</span>, private=<span class="keyword">True</span>)    <span class="comment"># 10.158.89.21</span></span><br><span class="line">fake.ipv4_private()  <span class="comment"># 192.168.181.245</span></span><br><span class="line">fake.ipv4_public()   <span class="comment"># 159.233.210.51</span></span><br><span class="line">fake.ipv6()  <span class="comment"># cf97:ce3f:1575:abf3:735:84d0:2d59:db22</span></span><br><span class="line"><span class="comment"># mac地址</span></span><br><span class="line">fake.mac_address()   <span class="comment"># c6:d2:bb:f8:41:99</span></span><br><span class="line"><span class="comment"># 端口号</span></span><br><span class="line">fake.port_number()   <span class="comment"># 3588</span></span><br><span class="line">fake.port_number(is_system=<span class="keyword">False</span>, is_user=<span class="keyword">True</span>, is_dynamic=<span class="keyword">False</span>)   <span class="comment"># 3588</span></span><br><span class="line"><span class="comment"># url地址</span></span><br><span class="line">fake.url()   <span class="comment"># http://yang.cn/</span></span><br><span class="line">fake.uri()   <span class="comment"># https://www.leitao.cn/tags/tag/app/register/</span></span><br><span class="line"><span class="comment"># url路径</span></span><br><span class="line">fake.uri_path(deep=<span class="number">3</span>)    <span class="comment"># posts/categories/categories</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 用户名</span></span><br><span class="line">fake.user_name() <span class="comment"># xiuying06</span></span><br><span class="line"><span class="comment"># 密码</span></span><br><span class="line">fake.password()  <span class="comment"># 630Td#lM%P</span></span><br><span class="line">fake.password(length=<span class="number">10</span>, special_chars=<span class="keyword">False</span>, digits=<span class="keyword">True</span>, upper_case=<span class="keyword">True</span>, lower_case=<span class="keyword">True</span>)  <span class="comment"># H0ZAAvnq02</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------  faker.providers.lorem.Provider -----------</span></span><br><span class="line"><span class="comment"># 一段文本</span></span><br><span class="line">fake.paragraph() <span class="comment"># 相关设计工具提高你们.结果建设两个浏览.</span></span><br><span class="line">fake.paragraph(nb_sentences=<span class="number">10</span>, variable_nb_sentences=<span class="keyword">True</span>, ext_word_list=<span class="keyword">None</span>)</span><br><span class="line"><span class="comment"># 多段文本列表</span></span><br><span class="line">fake.paragraphs()</span><br><span class="line">fake.paragraphs(nb=<span class="number">10</span>, ext_word_list=<span class="keyword">None</span>)</span><br><span class="line"><span class="comment"># 一句话</span></span><br><span class="line">fake.sentence()</span><br><span class="line">fake.sentence(nb_words=<span class="number">10</span>, variable_nb_words=<span class="keyword">True</span>, ext_word_list=<span class="keyword">None</span>)</span><br><span class="line"><span class="comment"># 几句话列表</span></span><br><span class="line">fake.sentences()</span><br><span class="line">fake.sentences(nb=<span class="number">10</span>, ext_word_list=<span class="keyword">None</span>)</span><br><span class="line"><span class="comment"># 文本</span></span><br><span class="line">fake.text()</span><br><span class="line">fake.text(max_nb_chars=<span class="number">100</span>, ext_word_list=<span class="keyword">None</span>))</span><br><span class="line">fake.texts()</span><br><span class="line">fake.texts(nb_texts=<span class="number">10</span>, max_nb_chars=<span class="number">200</span>, ext_word_list=<span class="keyword">None</span>)</span><br><span class="line"><span class="comment"># 单词</span></span><br><span class="line">fake.word()</span><br><span class="line">fake.words(nb=<span class="number">10</span>, ext_word_list=<span class="keyword">None</span>, unique=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------  faker.providers.misc.Provider -----------</span></span><br><span class="line"><span class="comment"># boolean </span></span><br><span class="line">fake.boolean()   <span class="comment"># True</span></span><br><span class="line">fake.boolean(chance_of_getting_true=<span class="number">25</span>)  <span class="comment"># False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># json [(字段名, 方法名, &#123;方法参数&#125;)]</span></span><br><span class="line">fake.json(data_columns=[(<span class="string">'id'</span>, <span class="string">'pyint'</span>, &#123;<span class="string">'max_value'</span>:<span class="number">20</span>&#125;)], num_rows=<span class="number">3</span>)  <span class="comment"># [&#123;"id": 3&#125;, &#123;"id": 19&#125;, &#123;"id": 9&#125;]</span></span><br><span class="line"><span class="comment"># &#123;"id": 156, "details": &#123;"name": "min20@yangyuan.cn"&#125;&#125;</span></span><br><span class="line">fake.json(data_columns=[(<span class="string">'id'</span>, <span class="string">'pyint'</span>), (<span class="string">'details'</span>, ((<span class="string">'name'</span>, <span class="string">'email'</span>), ))], num_rows=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># &#123;"id": 6692, "details": ["\u9a6c\u5e06", "\u5510\u6d9b"]&#125;</span></span><br><span class="line">fake.json(data_columns=[(<span class="string">'id'</span>, <span class="string">'pyint'</span>), (<span class="string">'details'</span>, [(<span class="keyword">None</span>, <span class="string">'user_name'</span>), (<span class="keyword">None</span>, <span class="string">'user_name'</span>)])], num_rows=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># md5</span></span><br><span class="line">fake.md5()   <span class="comment"># 2f265a4ae94544ef1412c9983c0af282</span></span><br><span class="line">fake.md5(raw_output=<span class="keyword">True</span>)   <span class="comment"># 二进制  b'\n\x8e\x06\xa2\xe0\xbczS,\xd4j\xb9k0\r.'</span></span><br><span class="line"><span class="comment"># sha1</span></span><br><span class="line">fake.sha1()  <span class="comment"># 544667252ceb900d85034313571c45ec4ee50dca</span></span><br><span class="line">fake.sha256()  <span class="comment"># 49c96b62cc664fc26eec3e7e412c0a214130acfa41d37b57bfe7eccf5c519581</span></span><br><span class="line"><span class="comment"># uuid</span></span><br><span class="line">fake.uuid4()     <span class="comment"># b0b03cfb-420d-4bc8-a74f-0e2849b19e97</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 压缩文件</span></span><br><span class="line">fake.tar(uncompressed_size=<span class="number">256</span>, num_files=<span class="number">4</span>, min_file_size=<span class="number">32</span>))</span><br><span class="line">fake.zip(uncompressed_size=<span class="number">256</span>, num_files=<span class="number">4</span>, min_file_size=<span class="number">32</span>)</span><br><span class="line"><span class="comment"># 指定压缩格式   deflate|gzip|gz  bzip2|bz2  lzma|xz</span></span><br><span class="line">fake.zip(uncompressed_size=<span class="number">256</span>, num_files=<span class="number">32</span>, min_file_size=<span class="number">4</span>, compression=<span class="string">'bz2'</span>) </span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------  faker.providers.person.Provider -----------</span></span><br><span class="line"><span class="comment"># 名字</span></span><br><span class="line">fake.name()  <span class="comment"># 蔡淑英</span></span><br><span class="line"><span class="comment"># 女性名字</span></span><br><span class="line">fake.name_female()  <span class="comment"># 刘倩</span></span><br><span class="line"><span class="comment"># 男性名字</span></span><br><span class="line">fake.name_male()  <span class="comment"># 贺建军</span></span><br><span class="line"><span class="comment"># 姓</span></span><br><span class="line">fake.last_name()     <span class="comment"># 朱</span></span><br><span class="line"><span class="comment"># 名</span></span><br><span class="line">fake.first_name()    <span class="comment"># 斌</span></span><br><span class="line"><span class="comment"># 女性名字</span></span><br><span class="line">fake.first_name_female()     <span class="comment"># 秀兰</span></span><br><span class="line"><span class="comment"># 男性名字</span></span><br><span class="line">fake.first_name_male()     <span class="comment"># 文</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------  faker.providers.phone_number.Provider -----------</span></span><br><span class="line"><span class="comment"># 国家号码前缀</span></span><br><span class="line">fake.country_calling_code()  <span class="comment"># +86</span></span><br><span class="line"><span class="comment"># 电话号码</span></span><br><span class="line">fake.phone_number()  <span class="comment"># 18578143124</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------  faker.providers.profile.Provider -----------</span></span><br><span class="line"><span class="comment"># 个人信息</span></span><br><span class="line"><span class="comment"># &#123;'job': '市场/营销', 'company': '昂歌信息信息有限公司', 'ssn': '63220019390724127X', </span></span><br><span class="line"><span class="comment"># 'residence': '重庆市超市丰都翟街p座 693155', 'current_location': (Decimal('33.961661'),</span></span><br><span class="line"><span class="comment"># Decimal('-177.155429')), 'blood_group': 'B-', 'website': ['http://www.chaogao.cn/'],</span></span><br><span class="line"><span class="comment"># 'username': 'guiyingyao', 'name': '岳兰英', 'sex': 'F', 'address': '吉林省成都市沙湾何路m座 517600', </span></span><br><span class="line"><span class="comment"># 'mail': 'limo@yahoo.com', 'birthdate': datetime.date(2013, 4, 10)&#125;</span></span><br><span class="line">fake.profile()</span><br><span class="line"><span class="comment"># &#123;'username': 'nliu', 'name': '李燕', 'sex': 'F', 'address': '广西壮族自治区慧县萧山罗路m座 976267', </span></span><br><span class="line"><span class="comment"># 'mail': 'gang71@gmail.com', 'birthdate': datetime.date(2009, 5, 5)&#125;</span></span><br><span class="line">fake.simple_profile()</span><br><span class="line"></span><br><span class="line"><span class="comment"># -----------  faker.providers.python.Provider -----------</span></span><br><span class="line">fake.pybool()        <span class="comment"># False</span></span><br><span class="line">fake.pydecimal()     <span class="comment"># Decimal('97.4104')</span></span><br><span class="line">fake.pydict()</span><br><span class="line">fake.pyfloat()   <span class="comment"># 97.4104</span></span><br><span class="line">fake.pyfloat(left_digits=<span class="keyword">None</span>, right_digits=<span class="keyword">None</span>, positive=<span class="keyword">False</span>, min_value=<span class="keyword">None</span>, max_value=<span class="keyword">None</span>)</span><br><span class="line">fake.pyint()     <span class="comment"># 6890</span></span><br><span class="line">fake.pyint(min_value=<span class="number">0</span>, max_value=<span class="number">9999</span>, step=<span class="number">1</span>)</span><br><span class="line">fake.pyiterable()</span><br><span class="line">fake.pylist()</span><br><span class="line">fake.pyset()</span><br><span class="line">fake.pystr()</span><br><span class="line">fake.pystr_format()</span><br><span class="line">fake.pystruct()</span><br><span class="line">fake.pytuple()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 多语种</span></span><br><span class="line">fake = Faker([<span class="string">'zh_CN'</span>, <span class="string">'en_US'</span>])</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">    fake.name()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自定义数据</span></span><br><span class="line">fake = Faker()</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyProvider</span><span class="params">(BaseProvider)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">province</span><span class="params">(self)</span>:</span></span><br><span class="line">        provinces = [<span class="string">"北京市"</span>, <span class="string">"天津市"</span>, <span class="string">"河北省"</span>, <span class="string">"内蒙古"</span>, <span class="string">"山西省"</span>, <span class="string">"辽宁省"</span>,</span><br><span class="line">         <span class="string">"吉林省"</span>, <span class="string">"黑龙江省"</span>, <span class="string">"上海市"</span>, <span class="string">"江苏省"</span>, <span class="string">"山东省"</span>, <span class="string">"安徽省"</span>, <span class="string">"福建省"</span>, </span><br><span class="line">         <span class="string">"浙江省"</span>, <span class="string">"江西省"</span>, <span class="string">"广东省"</span>, <span class="string">"广西"</span>, <span class="string">"海南省"</span>, <span class="string">"重庆市"</span>, <span class="string">"四川省"</span>, </span><br><span class="line">         <span class="string">"云南省"</span>, <span class="string">"贵州省"</span>, <span class="string">"西藏"</span>, <span class="string">"河南省"</span>, <span class="string">"湖北省"</span>, <span class="string">"湖南省"</span>, <span class="string">"陕西省"</span>, </span><br><span class="line">         <span class="string">"青海省"</span>, <span class="string">"宁夏"</span>, <span class="string">"新疆"</span>, <span class="string">"甘肃省"</span>, <span class="string">"香港"</span>, <span class="string">"澳门"</span>, <span class="string">"台湾"</span>]</span><br><span class="line">        <span class="keyword">return</span> provinces[randint(<span class="number">0</span>, len(provinces) - <span class="number">1</span>)]</span><br><span class="line">fake.add_provider(MyProvider)</span><br><span class="line">fake.province()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Tonny Yi</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://codertang.com/2020/09/05/python-faker/" title="faker - 测试数据生成">http://codertang.com/2020/09/05/python-faker/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="external nofollow" target="_blank">CC BY-NC 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/数据/" rel="tag"># 数据</a>
+          
+            <a href="/tags/测试/" rel="tag"># 测试</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/02/docker/" rel="next" title="docker">
+                <i class="fa fa-chevron-left"></i> docker
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Tonny Yi">
+            
+              <p class="site-author-name" itemprop="name">Tonny Yi</p>
+              <p class="site-description motion-element" itemprop="description">Coding, Life, Zen</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">38</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tonnyyi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:tonnyemails@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java版API"><span class="nav-number">1.</span> <span class="nav-text">Java版API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python版API"><span class="nav-number">2.</span> <span class="nav-text">python版API</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tonny Yi</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>
