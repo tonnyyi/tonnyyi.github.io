@@ -145,7 +145,7 @@
   <meta name="description" content="Coding, Life, Zen">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Tonny&#39;s Blog">
-<meta property="og:url" content="http://codertang.com/categories/linux/index.html">
+<meta property="og:url" content="http://codertang.com/categories/Linux/index.html">
 <meta property="og:site_name" content="Tonny&#39;s Blog">
 <meta property="og:description" content="Coding, Life, Zen">
 <meta property="og:locale" content="zh-Hans">
@@ -158,7 +158,7 @@
 
 
 
-  <link rel="canonical" href="http://codertang.com/categories/linux/">
+  <link rel="canonical" href="http://codertang.com/categories/Linux/">
 
 
 
@@ -168,7 +168,7 @@
   };
 </script>
 
-  <title>分类: linux | Tonny's Blog</title>
+  <title>分类: Linux | Tonny's Blog</title>
   
 
 
@@ -343,7 +343,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h1>linux<small>分类</small>
+        <h1>Linux<small>分类</small>
         </h1>
       </div>
 
@@ -355,17 +355,17 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2020/06/22/nginx-config/" itemprop="url">
+            <a class="post-title-link" href="/2018/02/28/linux-hostname/" itemprop="url">
               
-                <span itemprop="name">nginx config</span>
+                <span itemprop="name">Linux之hostname那些事</span>
               
             </a>
         
       </h2>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-06-22T18:44:29+08:00" content="2020-06-22">
-          06-22
+        <time class="post-time" itemprop="dateCreated" datetime="2018-02-28T16:35:16+08:00" content="2018-02-28">
+          02-28
         </time>
       </div>
 
@@ -381,69 +381,17 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2019/01/10/shell/" itemprop="url">
+            <a class="post-title-link" href="/2016/09/02/linux-info/" itemprop="url">
               
-                <span itemprop="name">shell</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-10T08:36:03+08:00" content="2019-01-10">
-          01-10
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/12/17/perf/" itemprop="url">
-              
-                <span itemprop="name">使用perf和火焰图分析系统性能</span>
+                <span itemprop="name">Linux系统及硬件信息查看</span>
               
             </a>
         
       </h2>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-12-17T11:55:19+08:00" content="2018-12-17">
-          12-17
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/03/08/linux-commands/" itemprop="url">
-              
-                <span itemprop="name">Linux常用命令</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-03-08T15:09:41+08:00" content="2018-03-08">
-          03-08
+        <time class="post-time" itemprop="dateCreated" datetime="2016-09-02T15:34:31+08:00" content="2016-09-02">
+          09-02
         </time>
       </div>
 
@@ -503,7 +451,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-count">38</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -731,9 +679,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -996,6 +942,50 @@
     }
 
     .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>
+opy-btn,
     .highlight-wrap .copy-btn:focus {
       opacity: 1
     }
