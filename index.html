@@ -567,7 +567,7 @@ api使用
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-09-05 11:19:25" itemprop="dateModified" datetime="2020-09-05T11:19:25+08:00">2020-09-05</time>
+                <time title="修改时间：2020-09-06 15:42:47" itemprop="dateModified" datetime="2020-09-06T15:42:47+08:00">2020-09-06</time>
               
             
           </span>
@@ -620,15 +620,14 @@ api使用
       
         
           
-          镜像镜像加速器
-linux:  编辑/etc/docker/daemon.json, 写入如下内容(文件不存在时先创建). 其中, 阿里云镜像需要登录后在镜像加速器页面获取专属地址
+          镜像镜像加速器linux下编辑/etc/docker/daemon.json, 写入如下内容(文件不存在时先创建). 其中, 阿里云镜像需要登录后在镜像加速器页面获取专属地址
 12345678&#123;    "registry-mirrors":[        "https://xxxx.mirror.aliyuncs.com",	    "https://mirror.baidubce.com",    	"https://hub-mirror.c.163.com/",	    "https://reg-mirror.qiniu.com/",    ]&#125;
 之后重启应用
 12sudo systemctl daemon-reloadsudo systemctl restart docker
 验证加速器是否生效
 1docker info
 如果看到如下内容则说明配置成功
-12345678... Registry Mirrors:  https://xxxx.mirror.aliyuncs.com/  https://mirror.baidubce.com/  https
+12345678... Registry Mirrors:  https://xxxx.mirror.aliyuncs.com/  https://mirror.baidubce.com/  https://
           ...
           <!--noindex-->
           <div class="post-button text-center">
