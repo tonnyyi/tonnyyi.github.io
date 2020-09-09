@@ -15,7 +15,7 @@ date: 2019-01-10 08:36:03
 - 不能有空格, 可以使用`_`
 - 不能使用base里的关键字(使用`help`命令查看关键字)
 
-```shell
+```bash
 boo
 _var="hello"
 # 除了显示设置变量, 还可以用语句给变量赋值
@@ -30,7 +30,7 @@ echo ${your_name}
 ```
 **推荐给所有变量加上花括号**
 已定义的变量, 可以被重新赋值, 如:
-```shell
+```bash
 your_name="John"
 echo $your_name
 your_name="alibaba"
@@ -40,7 +40,7 @@ echo $your_name
 
 ## 只读变量
 使用 readonly 命令可以将变量定义为只读变量, 只读变量的值不能被改变.
-```shell
+```bash
 #!/bin/bash
 myUrl="http://www.google.com"
 readonly myUrl
@@ -53,7 +53,7 @@ myUrl="http://www.runoob.com"
 
 ## 删除变量
 使用 `unset` 命令可以删除变量
-```shell
+```bash
 #!/bin/sh
 myUrl="http://www.runoob.com"
 unset myUrl
@@ -61,7 +61,60 @@ echo $myUrl
 ```
 以上实例执行将没有任何输出
 
+## 变量替换
+
+变量替换是指可以根据变量的状态(是否为空, 是否定义等)来改变变量的值
+
+|      形式       | 说明                                                         |
+| :-------------: | :----------------------------------------------------------- |
+|     ${var}      | 变量本来的值                                                 |
+|  ${var:-word}   | 变量var如果为空或已被删除(unset), 则返回word, 但不改变变量var的值 |
+|  ${var:=word}   | 变量var如果为空或已被删除(unset), 则返回word, 同时将变量var的值设置为word |
+| ${var:?message} | 变量var如果为空或已被删除(unset), 则将message发送到标识错误输出. 若此替换出现在脚本中, 则脚本停止运行 |
+|  ${var:+word}   | 如果变量var被定义, 那么返回word, 但不改变变量var的值         |
+
+示例:
+
+```bash
+#!/bin/bash
+
+echo ${var:-"Variable is not set"}
+echo "1 - Value of var is ${var}"
+
+echo ${var:="Variable is not set"}
+echo "2 - Value of var is ${var}"
+
+unset var
+echo ${var:+"This is default value"}
+echo "3 - Value of var is $var"
+
+var="Prefix"
+echo ${var:+"This is default value"}
+echo "4 - Value of var is $var"
+
+echo ${var:?"Print this message"}
+echo "5 - Value of var is ${var}"
+```
+
+结果
+
+```
+Variable is not set
+1 - Value of var is
+Variable is not set
+2 - Value of var is Variable is not set
+
+3 - Value of var is
+This is default value
+4 - Value of var is Prefix
+Prefix
+5 - Value of var is Prefix
+```
+
+
+
 ## 变量类型
+
 * **局部变量** 局部变量在脚本或命令中定义，仅在当前shell实例中有效，其他shell启动的程序不能访问局部变量。
 * **环境变量** 所有的程序，包括shell启动的程序，都能访问环境变量，有些程序需要环境变量来保证其正常运行。必要的时候shell脚本也可以定义环境变量。
 * **shell变量** shell变量是由shell程序设置的特殊变量。shell变量中有一部分是环境变量，有一部分是局部变量，这些变量保证了shell的正常运行
@@ -70,7 +123,8 @@ echo $myUrl
 
 [linux shell 字符串操作详解 （长度，读取，替换，截取，连接，对比，删除，位置 ）](https://blog.csdn.net/dongwuming/article/details/50605911)
 [Reading output of a command into an array in Bash](https://stackoverflow.com/questions/11426529/reading-output-of-a-command-into-an-array-in-bash)
-```shell
+
+```bash
 your_name='runoob'
 str="Hello, I know you are \"$your_name\"! \n"
 echo -e $str
@@ -92,7 +146,7 @@ Hello, I know you are "runoob"!
 
 | 表达式 | 含义 |
 | :-: | :-: |
-| `{{"${#string}"}}` | `$string`的长度  |
+| `${#string}` | `$string`的长度  |
 | `${string:position}` |	在`$string`中, 从位置`$position`开始提取子串 |
 | `${string:position:length}` |	在`$string`中, 从位置`$position`开始提取长度为`$length`的子串	  |
 | `${string#substring}` |	从变量`$string`的开头, 删除最短匹配`$substring`的子串 |
@@ -104,7 +158,7 @@ Hello, I know you are "runoob"!
 | `${string/#substring/replacement}` |	如果`$string`的前缀匹配`$substring`, 那么就用`$replacement`来代替匹配到的`$substring` |
 | `${string/%substring/replacement}` |	如果`$string`的后缀匹配`$substring`, 那么就用`$replacement`来代替匹配到的`$substring` |
 
-```shell
+```bash
 # 字符串长度 ${#变量名}得到字符串长度
 hi="abcd"
 echo ${#hi} #输出 4
@@ -133,7 +187,7 @@ echo ${test//\//\\}     # c:\windows\boot.ini
 ```
 
 #### 拼接
-```shell
+```bash
 your_name="runoob"
 # 使用双引号拼接
 greeting="hello, "$your_name" !"
@@ -146,7 +200,7 @@ echo $greeting_2  $greeting_3   # hello, runoob ! hello, ${your_name} !
 ```
 
 #### 子字符串
-```shell
+```bash
 # 提取子字符串
 string="runoob is a great site"
 echo ${string:1:4} # 输出 unoo
@@ -157,7 +211,7 @@ echo `expr index "$string" io`  # 输出 4
 ```
 
 ## 数组
-```shell
+```bash
 array_name=(value0 value1 value2 value3)
 #或者
 array_name=(
@@ -187,14 +241,14 @@ lengthn=${#array_name[n]}
 ```
 
 ## 注释
-```shell
+```bash
 # 以 # 开头的行就是注释, 会被解释器忽略
 ```
 
 
 # 参数
 脚本通过`$n`获取参数
-```shell
+```bash
 #!/bin/bash
 
 echo "Shell 传递参数实例！";
@@ -230,7 +284,7 @@ Shell 传递参数实例！
 * 相同点：都是引用所有参数。
 * 不同点：只有在双引号中体现出来。假设在脚本运行时写了三个参数 1、2、3，，则 " * " 等价于 "1 2 3"（传递了一个参数），而 "@" 等价于 "1" "2" "3"（传递了三个参数）。
 
-```shell
+```bash
 echo "-- \$* 演示 ---"
 for i in "$*"; do
     echo $i
@@ -262,16 +316,17 @@ $ ./test.sh 1 2 3
 
 | 运算符 | 说明 |
 | :-: | --- |
-| + | 加法 |
-| - | 减法 |
-| * | 乘法 |
-| / | 除法, 取整 |
-| % | 取余 |
-| = | 赋值  |
-| == | 相等, 相同返回true |
-| != | 不等, 不同返回false |
+| + | 加法  \`expr $a + $b` 结果为 30 |
+| - | 减法   \`expr $a - $b` 结果为 10 |
+| * | 乘法   \`expr $a \* $b` 结果为  200 |
+| / | 除法, 取整   \`expr $b / $a` 结果为 2 |
+| % | 取余  \`expr $b % $a` 结果为 0 |
+| = | 赋值   a=$b 将把变量 b 的值赋给 a |
+| == | 相等, 相同返回true    [ $a == $b ] 返回 false |
+| != | 不等, 不同返回false   [ $a != $b ] 返回 true |
 
 **注意 :**
+
 * 条件表达式要放在方括号之间, 并且要有空格, 例如: `[$a==$b]` 是错误的, 必须写成 `[ $a == $b ]`
 * 乘号(\*)前边必须加反斜杠(\)才能实现乘法运算, 即写成`expr $a \* $b`
 *  MAC 中 shell 的 expr 语法是: `$((表达式))`, 此处表达式中的`*`不需要转义符号`\`
@@ -279,11 +334,12 @@ $ ./test.sh 1 2 3
 原生bash不支持简单的数学运算, 但可以通过一下几种方式实现:
 1. `let`
 
-    ```shell
+    ```bash
     var=1;
     let "var+=1";
     echo $var
     ```
+
     * let几乎支持所有的运算符
     * 方幂运算应使用“**”
     * 变量在表达式中直接访问，不必加$
@@ -292,7 +348,7 @@ $ ./test.sh 1 2 3
 
 2. `(())`
     `(())`的使用方法与let关键字完全相同
-    ```shell
+    ```bash
     var=1;
     ((var+=1));
     echo $var
@@ -300,7 +356,7 @@ $ ./test.sh 1 2 3
 
 3. `$[]`
 
-    ```shell
+    ```bash
     var=1;
     var=$[$var+1];
     echo $var
@@ -311,7 +367,7 @@ $ ./test.sh 1 2 3
 
 4. `expr`
 
-    ```shell
+    ```bash
     var=1;
     var=`expr $var + 1`;
     echo $var
@@ -324,7 +380,7 @@ $ ./test.sh 1 2 3
 5. `bc`
     bc是linux下的一个简单计算器，支持浮点数计算，在命令行下输入bc即进入计算器程序，而我们想在程序中直接进行浮点数计算时，利用一个简单的管道即可解决问题。
     
-    ```shell
+    ```bash
     var=1;
     var=`echo "$var+1"|bc`;
     echo $var
@@ -334,7 +390,7 @@ $ ./test.sh 1 2 3
 
 6. `awk`
 
-    ```shell
+    ```bash
     var=1;
     var=`echo "$var 1"|awk '{printf("%g",$1+$2)}'`;
     echo $var
@@ -348,15 +404,15 @@ $ ./test.sh 1 2 3
 
 | 表达式 | 含义 |
 | :-: | --- |
-| `int1 -eq int2` | 两数值相等(equal) |
-| `int1 -ne int2` | 两数值不等(not equal) |
-| `int1 -gt int2` | n1大于n2(greater than) |
-| `int1 -lt int2` | n1小于n2(less than) |
-| `int1 -ge int2` | n1大于等于n2(greater than or equal) |
-| `int1 -le int2` | n1小于等于n2(less than or equal) |
+| -eq | 两数值相等(equal)      [ $a -eq $b ] 返回 true |
+| -ne | 两数值不等(not equal)     [ $a -ne $b ] 返回 true |
+| -gt | n1大于n2(greater than)     [ $a -gt $b ] 返回 false |
+| -lt | n1小于n2(less than)      [ $a -lt $b ] 返回 true |
+| -ge | n1大于等于n2(greater than or equal)     [ $a -ge $b ] 返回 false |
+| -le | n1小于等于n2(less than or equal)         [ $a -le $b ] 返回 true |
 
 示例:
-```shell
+```bash
 a=100
 b=100
 if [ $a -eq $b ]
@@ -372,13 +428,13 @@ fi
 ## 布尔运算符
 
 | 运算符 | 说明 |
-| :-: | :-: |
-| ! | 非运算 |
-| -o | 或运算 |
-| -a | 与运算 |
+| :-: | :-- |
+| ! | 非运算     [ ! false ] 返回 true |
+| -o | 或运算     [ $a -lt 20 -o $b -gt 100 ] 返回 true |
+| -a | 与运算     [ $a -lt 20 -a $b -gt 100 ] 返回 false |
 
 示例:
-```shell
+```bash
 a=10
 b=20
 
@@ -397,16 +453,27 @@ else
    echo "$a 小于 100 且 $b 大于 15 : 返回 false"
 fi
 # 10 小于 100 且 20 大于 15 : 返回 true
+
+if [ $a -lt 5 -o $b -gt 100 ]
+then
+   echo "$a -lt 100 -o $b -gt 100 : returns true"
+else
+   echo "$a -lt 100 -o $b -gt 100 : returns false"
+fi
 ```
 
 ## 逻辑运算符
 
-| 运算符 | 说明 |
-| :-: | :-: |
-| && | AND |
-| \|\| | OR |
 
-```shell
+
+| 运算符 | 说明 |
+| :-:   |  :-: |
+| &&    | AND |
+| &vert; &vert;  | OR |
+
+示例:
+
+```bash
 a=10
 b=20
 
@@ -440,7 +507,7 @@ fi
 | `str1 > str2` | str1字母顺序是否大于str2, 若大于, 则返回true |
 | `str1 < str2` | str1字母顺序是否小于str2, 若小于, 则返回true |
 
-```shell
+```bash
 a="abc"
 b="efg"
 
@@ -505,7 +572,7 @@ fi
 | `-N file` | 文件是否存在，且自上次read后是否被modify |
 
 示例:
-```shell
+```bash
 if [ -x $file ]
 then
    echo "文件可执行"
@@ -544,7 +611,7 @@ fi
 | `file1 -ef file2` | (equal file)判断file2与file2是否为同一文件, 可用在判断hard link的判定上|
 
 示例:
-```shell
+```bash
 cd /bin
 if test -e ./bash
 then
@@ -555,7 +622,7 @@ fi
 ```
 # echo printf 命令
 echo显示换行:
-```shell
+```bash
 echo -e "OK! \n" # -e 开启转义
 echo "It is a test"
 ```
@@ -568,7 +635,7 @@ It is a test
 ```
 
 echo显示不换行:
-```shell
+```bash
 echo -e "OK! \c" # -e 开启转义 \c 不换行
 echo "It is a test"
 ```
@@ -578,7 +645,7 @@ OK! It is a test
 ```
 
 默认`printf`不会像`echo`自动添加换行符, 我们可以手动添加 `\n`
-```shell
+```bash
 $ echo "Hello, Shell"
 Hello, Shell
 $ printf "Hello, Shell\n"
@@ -586,7 +653,7 @@ Hello, Shell
 ```
 
 使用格式替换符:
-```shell
+```bash
 printf "%-10s %-8s %-4s\n" 姓名 性别 体重kg  
 printf "%-10s %-8s %-4.2f\n" 郭靖 男 66.1234
 printf "%-10s %-8s %-4.2f\n" 杨过 男 48.6543
@@ -602,7 +669,7 @@ printf "%-10s %-8s %-4.2f\n" 郭芙 女 47.9876
 `%s` `%c` `%d` `%f`都是格式替代符
 `%-10s` 指一个宽度为10个字符(`-`表示左对齐, 没有则表示右对齐), 任何字符都会被显示在10个字符宽的字符内, 如果不足则自动以空格填充, 超过也会将内容全部显示出来
 `%-4.2f` 指格式化为小数, 其中.2指保留2位小数
-```shell
+```bash
 # format-string为双引号
 printf "%d %s\n" 1 "abc"        
 #1 abc
@@ -634,7 +701,7 @@ printf "%s and %d \n"
 `test`命令用于检查某个条件是否成立, 它可以进行数字, 字符串和文件三种测试
 
 示例:
-```shell
+```bash
 # 两个整数之间的比较, 支持正负数, 但不支持小数.
 num1=100
 num2=100
@@ -664,7 +731,7 @@ fi
 ```
 
 # 各种括号的作用() (()) [] [[]]
-```shell
+```bash
 $ type [ [[ test
 [ is a shell builtin
 [[ is a shell keyword
@@ -681,14 +748,14 @@ if [ $a -ne 1 -a $a != 2 ]
 它们根据参数的个数来完成测试, 例:
 - 不带任何参数, 返回false.
 
-    ```shell
+    ```bash
     $ [  ];echo $?
     1
     ```
 
 - 只有一个参数时, 仅当参数非空是返回true
 
-    ```shell
+    ```bash
     $ test "";echo $?
     1
     $ test "a";echo $?
@@ -709,7 +776,7 @@ if [ $a -ne 1 -a $a != 2 ]
 用法与`[]`基本相同, 但要注意一下几点:
 - 当条件表达式中使用`==`或`!=`时, 该运算符的右边会被当做pattern被匹配, `==`表示能匹配成功则返回0, `!=`则相反. 但只是通配符匹配, 不支持正则. 通配符包括`*`, `?` 和 `[...]`
 
-    ```shell
+    ```bash
     $ [[ abc == a* ]];echo $?
     0
     $ [[ abc == a*d ]];echo $?
@@ -720,7 +787,7 @@ if [ $a -ne 1 -a $a != 2 ]
 
 - 当条件表达式中使用的运算符是"=~"时, 该运算符的右边会被当做正则表达式的pattern被匹配
 
-    ```shell
+    ```bash
     $ [[ abc =~ aa* ]];echo $?
     0
     $ [[ abc =~ aa.* ]];echo $?
@@ -729,7 +796,7 @@ if [ $a -ne 1 -a $a != 2 ]
 
 - 除了可以使用逻辑运算符`!`和`()`, 还可以使用`&&`, `||`, 等价于`[]`的`-a`和`-o`, 但是`[[]]`不在支持`-a`和`-o`
 
-    ```shell
+    ```bash
     $ [[ 3 -eq 3 && 5 -eq 5 ]];echo $?
     0
     ```
@@ -737,19 +804,19 @@ if [ $a -ne 1 -a $a != 2 ]
 ## 使用建议
 1. 无论是`[]`还是`[[]]`, 建议对其中的变量, 字符串使用双引号包裹. 能做字符串比对是, 不要使用数组比较.
 
-    ```shell
+    ```bash
     name="Tom Hanks"
     [ $name = "Tom Hanks" ]
     ```
     上面的语句会报错, 因为在变量替换阶段, `$name`会被替换为Tom Hanks, 但它们没有在引号内, 于是进行单词拆分, 导致等价于执行`[ Tom Hanks = "Tom Hanks" ]`. 所以应该这么写:
 
-    ```shell
+    ```bash
     [ "$name" = "Tom Hanks" ]
     ```
 
 2. 数值比对时, 建议双方都加0, 避免变量为空时报错.
 
-    ```shell
+    ```bash
     $ [ $a -eq 7 ]
     -bash: [: -eq: unary operator expected
 
@@ -759,7 +826,7 @@ if [ $a -ne 1 -a $a != 2 ]
 
 3. 在变量可能为空时, 建议在变量的基础上增加其他辅助字符串. 这比上面的方法更安全
 
-    ```shell
+    ```bash
     $ [ "a$a" = "a7" ]   # 判断a是否为7
     $ [ "a$a" = "a" ]    # 判断a是否为空
     $ [ ! -z "$a" -a "a$a" = "a7" ]  # a不为空且a=7时才为真
@@ -769,7 +836,7 @@ if [ $a -ne 1 -a $a != 2 ]
 
 ## if else
 语法格式如下:
-```shell
+```bash
 if commands1
 then
     commands2
@@ -788,7 +855,7 @@ fi
 
 ## for
 语法及示例:
-```shell
+```bash
 for bar in item1 item2 ... itemN
 do
     command1
@@ -849,7 +916,7 @@ dirs=($(ls /tmp/logs/ | grep ailegal)); for dir in ${dirs[@]}; do mkdir -p "/tmp
 ```
 
 ## while
-```shell
+```bash
 while condition
 do
     command
@@ -898,14 +965,14 @@ done
 
 ## until
 语法格式:
-```shell
+```bash
 until condition
 do
     command
 then
 ```
 `until`循环执行一系列命令, 直到`condition`为`true`时停止. 和`while`循环刚好相反.
-```shell
+```bash
 #!/bin/bash
 
 a=0
@@ -919,7 +986,7 @@ done
 
 ## case
 语法格式:
-```shell
+```bash
 case 值 in
 模式1)
     command
@@ -933,7 +1000,7 @@ case 值 in
 esac    
 ```
 示例:
-```shell
+```bash
 echo '输入 1 到 3 之间的数字:'
 echo '你输入的数字为:'
 read aNum
@@ -986,7 +1053,7 @@ esac
 - `|`分隔多个模式, 相当于`or`
 
 ## break continue
-```shell
+```bash
 while :
 do
     echo -n "输入 1 到 5 之间的数字:"
@@ -1001,7 +1068,7 @@ do
 done
 ```
 跳出多次循环时使用`break n`, n表示要跳出的循环层数, 默认为1.
-```shell
+```bash
 a=1
 while [ $a -le 5 ]
 do
@@ -1019,7 +1086,7 @@ do
 done
 ```
 continue仅跳出本次循环
-```shell
+```bash
 a=1
 for val in 1 2 3 4 5
 do
@@ -1033,7 +1100,7 @@ done
 
 # 函数
 函数定义格式如下:
-```shell
+```bash
 [function] funcName [()]
 {
     //do something
@@ -1044,7 +1111,7 @@ done
 - 可以使用`function foo()`定义, 也可以直接`foo()`定义
 - 可以加`return xx;`返回, xx的值为0-255. 如果没有return, 将以最后一条命令运行结果作为返回值.
 
-```shell
+```bash
 #!/bin/bash
 foo() {
     return $((1 + 2));
@@ -1053,7 +1120,7 @@ foo
 echo "函数返回值为 $?"
 ```
 ## 函数参数
-```shell
+```bash
 paramFunc() {
     echo "第一个参数为 $1 !"
     echo "第二个参数为 $2 !"
@@ -1078,7 +1145,7 @@ paramFunc 1 2 3 4 5 6 7 8 9 34 73
 注意: **当n>=10时, 需要使用${n}来获取参数**.
 
 当脚本有main函数, 你希望脚本运行时传递的所有命令行参数都能被main函数捕捉到, 可以这么写:
-```shell
+```bash
 #!/bin/sh
 
 main() {
@@ -1091,7 +1158,7 @@ main "${@}"
 ```
 
 执行结果: 
-```shell
+```bash
 $ ./test.sh a 12 -x
 a
 12
@@ -1099,7 +1166,7 @@ a
 ```
 
 同理, 当A函数调用B函数时, 希望把调用A时传递的所有参数都传递给B, 也可以这么写
-```shell
+```bash
 A() {
     B "${@}"
 }
@@ -1126,7 +1193,7 @@ B() {
 > 文件描述符 0 通常是标准输入(STDIN), 1 是标准输出(STDOUT), 2 是标准错误输出(STDERR)
 
 ## 实例
-```shell
+```bash
 $ who > users.txt
 $ cat users.txt
 tonnyyi  console  Dec 28 09:17
@@ -1156,35 +1223,35 @@ $ command < infile > outfile
 - 标准错误文件(stderr): 其文件描述符为**2**, Unix程序会向stderr流中写入错误信息
 
 如果希望stderr重定向到file, 可以这样写:
-```shell
+```bash
 $ command 2 > file
 ```
 如果希望将stdout和stderr合并后重定向到file, 可以这样写:
-```shell
+```bash
 $ command > file 2>$1
 ```
 ## /dev/null 文件
 `/dev/null`是一个特殊文件, 写入到它的内容都会被丢弃; 如果尝试从该文件读取内容, 则什么也读不到. 将命令的输出重定向到它, 会起到"禁止输出"的效果. 如果希望屏蔽stdout和stderr, 可以这样写:
-```shell
+```bash
 $ command > /dev/null 2>&1
 ```
 
 # 文件包含
 和其他语言一样, Shell 也可以包含外部脚本, 这样可以很方便的封装一些公用的代码作为一个独立的文件. 语法格式如下:
-```shell
+```bash
 . filename      # 点号与文件名中间有一个空格
 或
 source filename
 ```
 ## 实例
 `test1.sh`内容如下:
-```shell
+```bash
 #!/bin/bash
 
 url="http://www.baidu.com"
 ```
 `test2.sh`内容如下:
-```shell
+```bash
 #!/bin/bash
 
 . ./test1.sh   # 或者 source ./test1.sh
@@ -1194,7 +1261,7 @@ echo "百度地址: $url"
 # 其他
 ## 遍历命令结果
 字段分隔符(Internal Field Separator, `IFS`)是shell脚本中的一个重要概念, 处理文本数据的时候非常的有用, 是把单个数据流划分成不同数据元素的定界符. 系统环境默认的IFS是空白字符(换行符, 制表符或者空格)
-```shell
+```bash
 $ jps -l
 88483 ailegal-case.jar
 85666 ailegal-center.jar
@@ -1216,7 +1283,7 @@ ailegal-gateway.jar
 ```
 如果想以换行符作为分隔符, 则可以这么做:
 在Bash 4.0(`bash -version`)之前:
-```shell
+```bash
 ls -l | while read x; do echo $x; done
 #或者
 (IFS='
@@ -1228,7 +1295,7 @@ $(ls -l)
 EOF
 ```
 如果是在函数内, 可以使用`local`命令, 避免全局性的修改IFS
-```shell
+```bash
 #!/bin/sh
 test() {
    local IFS=$'\n'
@@ -1242,7 +1309,7 @@ test
 ```
 
 4.0以后可以使用`mapfile`:
-```shell
+```bash
 mapfile -t files < <(ls -l)
 for file in "${files[@]}"; do
     echo $file

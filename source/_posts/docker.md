@@ -12,50 +12,50 @@ date: 2020-09-02 09:59:13
 
 # 镜像
 
-### 镜像加速器
+## 镜像加速器
 
-- **linux**:  编辑`/etc/docker/daemon.json`, 写入如下内容(文件不存在时先创建). 其中, **阿里云镜像需要登录后在[镜像加速器](https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors)页面获取专属地址**
+linux下编辑`/etc/docker/daemon.json`, 写入如下内容(文件不存在时先创建). 其中, **阿里云镜像需要登录后在[镜像加速器](https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors)页面获取专属地址**
 
-  ```json
-  {
-      "registry-mirrors":[
-          "https://xxxx.mirror.aliyuncs.com",
-  	    "https://mirror.baidubce.com",
-      	"https://hub-mirror.c.163.com/",
-  	    "https://reg-mirror.qiniu.com/",
-      ]
-  }
-  ```
+```json
+{
+    "registry-mirrors":[
+        "https://xxxx.mirror.aliyuncs.com",
+	    "https://mirror.baidubce.com",
+    	"https://hub-mirror.c.163.com/",
+	    "https://reg-mirror.qiniu.com/",
+    ]
+}
+```
 
-  之后重启应用
+之后重启应用
 
-  ```bash
-  sudo systemctl daemon-reload
-  sudo systemctl restart docker
-  ```
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
 
-  验证加速器是否生效
+验证加速器是否生效
 
-  ```bash
-  docker info
-  ```
+```bash
+docker info
+```
 
-  如果看到如下内容则说明配置成功
+如果看到如下内容则说明配置成功
 
-  ```
-  ...
-   Registry Mirrors:
-    https://xxxx.mirror.aliyuncs.com/
-    https://mirror.baidubce.com/
-    https://hub-mirror.c.163.com/
-    https://reg-mirror.qiniu.com/
-    https://registry.docker-cn.com/
-  ....
-  ```
+```
+...
+ Registry Mirrors:
+  https://xxxx.mirror.aliyuncs.com/
+  https://mirror.baidubce.com/
+  https://hub-mirror.c.163.com/
+  https://reg-mirror.qiniu.com/
+  https://registry.docker-cn.com/
+....
+```
 
 
 
-### 获取镜像
+## 获取镜像
 
 ```bash
 docker pull centos:7
@@ -72,7 +72,7 @@ docker.io/library/centos:7
 
 
 
-### 查看镜像列表
+## 查看镜像列表
 
 ```
 $ docker images
@@ -98,7 +98,7 @@ Build Cache      0          0           0B          0B
 
 
 
-### 镜像列表过滤
+## 镜像列表过滤
 
 ```bash
 # 列出java仓库中的所有镜像
@@ -113,7 +113,7 @@ docker images -f since=centos:7
 
 
 
-### 虚悬镜像
+## 虚悬镜像
 
 在镜像列表中, 有时会看到一个特殊的镜像, 这个镜像就没有仓库名, 也没有标签, 均为`<none>`
 
@@ -137,7 +137,7 @@ $ docker image prune
 
 
 
-### 中间镜像
+## 中间镜像
 
 为了加快镜像构建, 重复利用资源, Docker会利用**中间镜像**, 默认的`docker images`只会显示顶层镜像, 如果想要显示包括中间镜像在内的所有镜像, 需要加`-a`参数:
 
@@ -149,7 +149,7 @@ $ docker image prune
 
 
 
-### 查看中间层
+## 查看中间层
 
 ```bash
 $ docker history centos:7
@@ -163,7 +163,7 @@ IMAGE        CREATED       CREATED BY                                      SIZE 
 
 
 
-### 删除镜像
+## 删除镜像
 
 ```bash
 docker image rm 标识
@@ -198,7 +198,7 @@ Deleted: sha256:613be09ab3c0860a5216936f412f09927947012f86bfa89b263dfa087a725f81
 
 
 
-### 批量删除
+## 批量删除
 
 ```bash
 $ docker rmi $(docker images -q centos)
@@ -231,7 +231,7 @@ RUN set -x; buildDeps='gcc libc6-dev make wget' \
 
 
 
-### 构建
+## 构建
 
 从标准输入中读取 Dockerfile 进行
 
@@ -249,15 +249,15 @@ $ docker build - < context.tar.gz
 
 
 
-### 指令
+## 指令
 
-#### FROM 基础镜像
+### FROM 基础镜像
 
 `FROM`必须是第一条指令, 用以指定**基础镜像**. 除了Docker Hub上的服务类和操作系统镜像外, 还有一个特殊的镜像, `scratch`, 这个镜像是虚拟的概念, 并不实际存在, 它表示一个空白的镜像.
 
 
 
-#### RUN 执行命令
+### RUN 执行命令
 
 `RUN`用来执行命令行命令的, 是最常用的指令之一, 有两种格式: 
 
@@ -266,7 +266,7 @@ $ docker build - < context.tar.gz
 
 
 
-#### CMD 启动命令
+### CMD 启动命令
 
 `CMD`用于指定默认的容器主进程的启动命令的, **只有最后一条`CMD`命令会生效**, 比如我们可以配置
 
@@ -319,7 +319,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 
 
-#### ENTRYPOINT 启动入口
+### ENTRYPOINT 启动入口
 
 `ENTRYPOINT` 的目的和 `CMD` 一样, 都是在指定容器启动程序及参数, 也分为 `exec` 格式和 `shell` 格式. `ENTRYPOINT` 在运行时也可以替代, 不过比 `CMD` 要略显繁琐, 需要通过 `docker run` 的参数 `--entrypoint` 来指定.
 
@@ -366,7 +366,7 @@ uid=0(root) gid=0(root) groups=0(root)
 
 
 
-#### ENV 环境变量
+### ENV 环境变量
 
 该指令用于设置环境变量, 无论是后面的其他指令(如`RUN`)或者是运行中的应用, 都可以使用这里定义的环境变量. 该指令有两种格式:
 
@@ -382,7 +382,7 @@ RUN xxx.sh -v $VERSION -n $NAME
 
 
 
-#### ARG 构建参数
+### ARG 构建参数
 
 和`ENV`的效果一样, `ARG`也是用来设置环境变量的. 不同的是, `ARG`设置的是**构建环境**的环境变量, 在将来容器运行时时不会存在这些环境变量的. 但不要因此就使用`ARG`保存敏感信息, 因为`docker history`还是可以看到所有值的.
 
@@ -390,7 +390,7 @@ RUN xxx.sh -v $VERSION -n $NAME
 
 
 
-#### COPY 文件复制
+### COPY 文件复制
 
 该指令用于将构建上下文目录中`源路径`的文件/目录复制到新的一层镜像内的`目的路径`位置, 比如:
 
@@ -410,7 +410,7 @@ COPY --chown=redis files* /mydir/
 
 
 
-#### ADD 高级文件复制
+### ADD 高级文件复制
 
 `ADD`指令格式和`COPY`的格式和性质基本一致, 但在`COPY`基础上多了一些高级功能.
 
@@ -420,7 +420,7 @@ COPY --chown=redis files* /mydir/
 
 
 
-#### VOLUME 匿名卷
+### VOLUME 匿名卷
 
 该指令用于将目录挂载为匿名卷, 比如`redis`容器运行时的数据文件(如:`/data`)需要保持到容器外的宿主机上, 这样容器运行时, 任何向`/data`写入的信息都不会记录进容器存储层, 而是保存到了宿主机上, 从而保证了容器存储层的无状态化.  当然, 运行时可以覆盖这个挂载设置.
 
@@ -474,7 +474,7 @@ $ docker volume prune
 
 
 
-#### EXPOSE 暴露端口
+### EXPOSE 暴露端口
 
 `EXPOSE`指令是声明运行时容器提供服务端口, 这只是一个声明, 在运行时并不会因为这个声明应用就会开启这个端口的服务. 在 Dockerfile 中写入这样的声明有两个好处, 一个是帮助镜像使用者理解这个镜像服务的守护端口, 以方便配置映射; 另一个用处则是在运行时使用随机端口映射时, 也就是每次 `docker run -P` 时, 会自动随机将宿主机的某个端口映射到 `EXPOSE` 的端口上, 但是每次的主机端口都不一样.
 
@@ -488,7 +488,7 @@ $ docker volume prune
 
 
 
-#### WORKDIR 指定工作目录
+### WORKDIR 指定工作目录
 
 `WORKDIR`指令用来指定工作目录(或称为当前目录), 以后各层的当前目录就被改为指定的目录, 如果该目录不存在, `WORKDIR`会帮你创建. 
 
@@ -505,7 +505,7 @@ RUN echo "hello" > world.txt
 
 
 
-#### USER 指定当前用户
+### USER 指定当前用户
 
 `USER`指令和`WORKDIR`指令类型, 它用来改变之后各层的执行`RUN`, `CMD` 以及 `ENTRYPOINT`这类命令的身份. **这个用户必须是实现建立好的, 否则无法切换**, `USER`只是帮助你切换到指定用户而已.
 
@@ -517,7 +517,7 @@ RUN [ "redis-server" ]
 
 
 
-#### HEALTHCHECK
+### HEALTHCHECK
 
 `HEALTHCHECK`指令用来设置检查容器健康状况的命令, 有两种格式
 
@@ -542,7 +542,7 @@ HEALTHCHECK --intervals=5s --timeout=3s CMD curl -fs http://localhost:8080/ || e
 
 
 
-#### ONBUILD
+### ONBUILD
 
 `ONBUILD` 是一个特殊的指令, 它后面跟的是其它指令, 比如 `RUN`, `COPY` 等, 而这些指令, 在当前镜像构建时并不会被执行. 只有当以当前镜像为基础镜像, 去构建下一级镜像的时候才会被执行.
 
@@ -571,7 +571,7 @@ $ docker run --name web2 -d -p 81:80 nginx:v2
 
 # 容器管理
 
-#### 启动
+## 启动
 
 ```bash
 # 启动容器, 输出Hello World, 容器终止
@@ -595,7 +595,7 @@ root@af8bae53bdd3:/#
 
  
 
-#### 启动已终止容器
+## 启动已终止容器
 
 ```bash
 docker container start ID/NAME
@@ -603,7 +603,7 @@ docker container start ID/NAME
 
 
 
-#### 守护态运行
+## 守护态运行
 
 更多时候, 需要让容器在后台运行, 而不是直接把执行命令的结果输出在当前宿主机上, 此时可以使用`-d`参数来实现
 
@@ -622,7 +622,7 @@ $ docker run -d ubuntu:18.04 /bin/sh -c "while true; do echo hello world; sleep 
 
 
 
-#### 终止
+## 终止
 
 ```bash
 docker stop ID/NAME
@@ -630,7 +630,7 @@ docker stop ID/NAME
 
 
 
-#### 重启
+## 重启
 
 ```bash
 docker restart ID/NAME
@@ -638,7 +638,7 @@ docker restart ID/NAME
 
 
 
-#### 进入容器
+## 进入容器
 
 ```bash
 docker exec -it ID/NAME bash
@@ -646,7 +646,7 @@ docker exec -it ID/NAME bash
 
 
 
-#### 导出导入
+## 导出导入
 
 将容器快照导出到本地
 
@@ -667,7 +667,7 @@ docker import http://example.com/exampleimage.tgz example/imagerepo
 
 
 
-#### 删除
+## 删除
 
 ```bash
 # 删除一个已终止的容器
@@ -679,7 +679,7 @@ docker rm -rf 1eef
 
 
 
-#### 容器网络
+## 容器网络
 
 ```bash
 # 查看网络
@@ -692,7 +692,7 @@ ca97d4ab0ef4        none                null                local
 
 
 
-### 设置固定ip
+## 设置固定ip
 
 Docke安装以后, 默认会创建下面三种网络
 
@@ -779,7 +779,7 @@ ca97d4ab0ef4        none                null                local
 
 
 
-## alpine
+# alpine
 
 ```dockerfile
 FROM alpine:3.12.0
