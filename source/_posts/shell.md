@@ -111,8 +111,6 @@ Prefix
 5 - Value of var is Prefix
 ```
 
-
-
 ## 变量类型
 
 * **局部变量** 局部变量在脚本或命令中定义，仅在当前shell实例中有效，其他shell启动的程序不能访问局部变量。
@@ -146,7 +144,7 @@ Hello, I know you are "runoob"!
 
 | 表达式 | 含义 |
 | :-: | :-: |
-| `${#string}` | `$string`的长度  |
+| `{% raw %}${#string}{% endraw %}` | `$string`的长度  |
 | `${string:position}` |	在`$string`中, 从位置`$position`开始提取子串 |
 | `${string:position:length}` |	在`$string`中, 从位置`$position`开始提取长度为`$length`的子串	  |
 | `${string#substring}` |	从变量`$string`的开头, 删除最短匹配`$substring`的子串 |
