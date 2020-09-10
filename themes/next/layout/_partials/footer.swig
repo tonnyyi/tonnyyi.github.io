@@ -34,6 +34,15 @@
   {% endif %}
 </div>
 
+{% if theme.mermaid.enable %}
+  <script src='https://unpkg.com/mermaid@{{ theme.mermaid.version }}/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({{ JSON.stringify(theme.mermaid.options) }});
+    }
+  </script>
+{% endif %}
+
 {% if theme.seo %}
   {% set nofollow = ' rel="external nofollow"' %}
 {% endif %}
