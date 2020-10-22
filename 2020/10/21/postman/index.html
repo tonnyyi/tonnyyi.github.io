@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/Han/3.3.0/han.min.css">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="基本操作请求参数 在Params标签下添加参数 在url中输入类型:param格式定义pathVariable 右击参数值, 可以对其进行转码, 点击Params右侧的Settings可以设置该请求默认进行参数值码 点击Bulk Edit可以更改参数编辑展示方式, 编辑起来更方便    响应对象查看响应对象可以按不同方式查看响应对象, 格式化后/纯文本的/预览等, 还可以查看本请求的网络信息, 请">
+<meta name="keywords" content="postman,test">
+<meta property="og:type" content="article">
+<meta property="og:title" content="postman">
+<meta property="og:url" content="http://codertang.com/2020/10/21/postman/index.html">
+<meta property="og:site_name" content="Tonny&#39;s Blog">
+<meta property="og:description" content="基本操作请求参数 在Params标签下添加参数 在url中输入类型:param格式定义pathVariable 右击参数值, 可以对其进行转码, 点击Params右侧的Settings可以设置该请求默认进行参数值码 点击Bulk Edit可以更改参数编辑展示方式, 编辑起来更方便    响应对象查看响应对象可以按不同方式查看响应对象, 格式化后/纯文本的/预览等, 还可以查看本请求的网络信息, 请">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022170836.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022171009.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022172207.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022171835.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022171918.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022172019.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022173350.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022173712.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022181220.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022181512.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022182048.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022174158.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021200103.jpg">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022175110.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022105419.jpg">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022105514.jpg">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022105613.jpg">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022105918.jpg">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022110044.jpg">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022110110.jpg">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022110429.jpg">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022110505.jpg">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022110748.jpg">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022111225.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021173020.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021175352.jpg">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021175514.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021180821.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021180353.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021192442.png">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021192909.png">
+<meta property="og:updated_time" content="2020-10-22T11:53:53.746Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="postman">
+<meta name="twitter:description" content="基本操作请求参数 在Params标签下添加参数 在url中输入类型:param格式定义pathVariable 右击参数值, 可以对其进行转码, 点击Params右侧的Settings可以设置该请求默认进行参数值码 点击Bulk Edit可以更改参数编辑展示方式, 编辑起来更方便    响应对象查看响应对象可以按不同方式查看响应对象, 格式化后/纯文本的/预览等, 还可以查看本请求的网络信息, 请">
+<meta name="twitter:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022170836.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://codertang.com/2020/10/21/postman/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>postman | Tonny's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tonny's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">莫等闲, 白了少年头, 空悲切</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://codertang.com/2020/10/21/postman/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tonny Yi">
+      <meta itemprop="description" content="Coding, Life, Zen">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tonny's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">postman
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-10-21 17:29:13" itemprop="dateCreated datePublished" datetime="2020-10-21T17:29:13+08:00">2020-10-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-22 19:53:53" itemprop="dateModified" datetime="2020-10-22T19:53:53+08:00">2020-10-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/test/" itemprop="url" rel="index"><span itemprop="name">test</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><h3 id="请求参数"><a href="#请求参数" class="headerlink" title="请求参数"></a>请求参数</h3><ul>
+<li>在<strong>Params</strong>标签下添加参数</li>
+<li>在url中输入类型<code>:param</code>格式定义pathVariable</li>
+<li>右击参数值, 可以对其进行转码, 点击<strong>Params</strong>右侧的<strong>Settings</strong>可以设置该请求默认进行参数值码</li>
+<li>点击<strong>Bulk Edit</strong>可以更改参数编辑展示方式, 编辑起来更方便</li>
+</ul>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022170836.png" alt="image-20201022170834177" style="zoom:50%;"></p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022171009.png" alt="image-20201022171007473" style="zoom:50%;"></p>
+<h3 id="响应对象"><a href="#响应对象" class="headerlink" title="响应对象"></a>响应对象</h3><h4 id="查看响应对象"><a href="#查看响应对象" class="headerlink" title="查看响应对象"></a>查看响应对象</h4><p>可以按不同方式查看响应对象, 格式化后/纯文本的/预览等, 还可以查看本请求的网络信息, 请求耗时, 响应体大小</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022172207.png" alt="image-20201022172205335" style="zoom:50%;"></p>
+<h4 id="响应示例"><a href="#响应示例" class="headerlink" title="响应示例"></a>响应示例</h4><p>可以将某次的响应内容保存起来, 作为样例(或者保存到文件), 从而能随时查看比如 正常响应/异常响应 是什么样子, 这在服务无法访问时挺有用. 另外如果在Postman里定义Mock服务的话也会用到.</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022171835.png" alt="image-20201022171834591" style="zoom:50%;"></p>
+<p>定义响应示例名称</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022171918.png" alt="image-20201022171917208" style="zoom:50%;"></p>
+<p>点击右上角查看响应示例</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022172019.png" alt="image-20201022172016936" style="zoom:50%;"></p>
+<h3 id="请求组"><a href="#请求组" class="headerlink" title="请求组"></a>请求组</h3><p>可以将多个请求保存到一个请求组(Collections)中, 好处是: 增加额外Collection变量作用域, 增加公共的PreRequest和Test脚本, 批量执行Collection下的请求, 定义Collection内请求的顺序</p>
+<p>点击左上角<strong>New</strong> &gt; <strong>Collection</strong>, 或者点击请求路径右边的<strong>Save</strong>, 保存请求的同时创建Collection</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022173350.png" alt="image-20201022173345337" style="zoom:50%;"></p>
+<p>Collection下还可以新建文件夹, 对请求进一步划分, 比如: 用户模块, 订单模块…</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022173712.png" alt="image-20201022173711403" style="zoom:50%;"></p>
+<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><p>同一个接口, 在不同的环境都有服务, 比如: 研发环境, 测试环境, 线上环境, 环境不同参数值可能有不同, 比如: 研发环境服务ip为127.0.01, 测试环境服务IP为172.31.11.12, 线上环境为<a href="http://www.test.com" target="_blank" rel="noopener">www.test.com</a>, 此时可以先定义好环境数据, 然后在不同环境下定义同名变量, 但变量值不同. 实际发送请求前, 选择不提供的环境, 这样变量值就会更新. </p>
+<p>点击左上角<strong>New</strong> &gt; <strong>Environment</strong> 新建环境, 也可以点击右上角<strong>Manager Environments</strong>新建</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022181220.png" alt="image-20201022181218873" style="zoom:50%;"></p>
+<p>设置变量值</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022181512.png" alt="image-20201022181511177" style="zoom:50%;"></p>
+<p>这里需要区分一下<strong>INITIAL VALUE</strong> 和 <strong>CURRENT VALUE</strong>, <strong>INITIAL VALUE</strong> 就是在定义该变量时赋予的初始值, 这个值会同步到Postman服务器, 而<strong>CURRENT VALUE</strong>是发送请求时实际被使用变量值, 默认与<strong>INITIAL VALUE</strong> 的值相同, 但不会同步到Postman服务. 对于一些敏感数据(比如密码)不应该设置<strong>INITIAL VALUE</strong>. </p>
+<p><strong>INITIAL VALUE用作团队合作时定义一个初始值,  CURRENT VALUE适合运行时根据实际情况去调整</strong></p>
+<p>可以点击小眼睛按钮快速查看Global和当前环境的变量列表</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022182048.png" alt="image-20201022182046452" style="zoom:50%;"></p>
+<p>调用请求时在环境选择下拉菜单中选择需要的运行环境就可以了</p>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>可以在不同作用域定义好变量后, 在某个请求中引用该变量, 从而做到变量复用和统一管理</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022174158.png" alt="image-20201022174156959" style="zoom:50%;"></p>
+<p>可以直接接url上使用变量, 也可以在请求参上使用, 格式是<code></code>, 这里变量名可以是手动定义的变量名, 也可以是动态变量名(如: <code></code>随机数字)</p>
+<h3 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h3><p>postman中变量有多个作用域, <strong>越往内的作用域优先级越高</strong>(global &lt; collection &lt; environment &lt; …), 举例来说, 如果global作用域和Environment作用域里都有一个变量叫<code>username</code>, 那么最终使用的是Environment作用域里的变量值.</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021200103.jpg" alt="Variable Scope" style="zoom:33%;"></p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022175110.png" alt="Variable Scopes" style="zoom: 80%;"></p>
+<h3 id="管理变量"><a href="#管理变量" class="headerlink" title="管理变量"></a>管理变量</h3><p>可以基于现有数据定义变量</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022105419.jpg" alt="Set as variable" style="zoom:50%;"></p>
+<p>依次点击<strong>Set as variable</strong> &gt; <strong>Set as a new variable</strong>.</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022105514.jpg" alt="Set as variable" style="zoom:50%;"></p>
+<p>输入变量名, 确认变量值, 选择作用域</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022105613.jpg" alt="Set as variable" style="zoom:50%;"></p>
+<h4 id="管理global和environment作用域变量"><a href="#管理global和environment作用域变量" class="headerlink" title="管理global和environment作用域变量"></a>管理global和environment作用域变量</h4><p>点击环境下拉菜单旁边的眼镜按钮, 在弹出层中点击edit进行编辑</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022105918.jpg" alt="Environment Quick Look" style="zoom:50%;"></p>
+<p>点击旁边的齿轮按钮, 可以创建/删除/编辑运行环境配置, 点击某个运行环境项后, 可以对其下的变量进行管理</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022110044.jpg" alt="Manage Environments" style="zoom:50%;"></p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022110110.jpg" alt="Manage Environments" style="zoom:50%;"></p>
+<h4 id="管理collection作用域的变量"><a href="#管理collection作用域的变量" class="headerlink" title="管理collection作用域的变量"></a>管理collection作用域的变量</h4><p>在左侧collections列表中, 点击collection右侧的 <strong>…</strong> &gt; <strong>Edit</strong> &gt; <strong>Variables</strong>, 然后就可以对变量进行管理了</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022110429.jpg" alt="Edit Collection" style="zoom:50%;"></p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022110505.jpg" alt="Collection Variables" style="zoom: 33%;"></p>
+<h4 id="在脚本中操作变量"><a href="#在脚本中操作变量" class="headerlink" title="在脚本中操作变量"></a>在脚本中操作变量</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 读取</span></span><br><span class="line">pm.variables.get(<span class="string">"username"</span>);	<span class="comment">// 读取变量, 依次从各个作用域查找</span></span><br><span class="line">pm.globals.get(<span class="string">"username"</span>);</span><br><span class="line">pm.collectionVariables.get(<span class="string">"username"</span>);</span><br><span class="line">pm.environment.get(<span class="string">"username"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 赋值</span></span><br><span class="line">pm.variables.set(<span class="string">"username"</span>, <span class="string">"Admin"</span>);	<span class="comment">// 临时覆盖, 优先级最高, 请求结束后失效</span></span><br><span class="line">pm.globals.set(<span class="string">"username"</span>, <span class="string">"Admin"</span>);</span><br><span class="line">pm.collectionVariables.set(<span class="string">"username"</span>, <span class="string">"Admin"</span>);</span><br><span class="line">pm.environment.set(<span class="string">"username"</span>, <span class="string">"Admin"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 清理</span></span><br><span class="line">pm.environment.unset(<span class="string">"username"</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="请求时使用变量"><a href="#请求时使用变量" class="headerlink" title="请求时使用变量"></a>请求时使用变量</h4><p>在发送请求时, 使用<code></code>的格式获取变量值, 使用动态变量的方式是<code></code></p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022110748.jpg" alt="Variables in Request" style="zoom:50%;"></p>
+<h4 id="data作用域变量操作"><a href="#data作用域变量操作" class="headerlink" title="data作用域变量操作"></a>data作用域变量操作</h4><p>点击左上角的<strong>Runner</strong>按钮, 在弹出页面中选择要执行collection, 点击<strong>Select File</strong>按钮, 注意<strong>文件必须是JSON或者CSV格式</strong>, json文件样例如下</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[&#123;</span><br><span class="line">  <span class="attr">"path"</span>: <span class="string">"post"</span>,</span><br><span class="line">  <span class="attr">"value"</span>: <span class="string">"1"</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  <span class="attr">"path"</span>: <span class="string">"post"</span>,</span><br><span class="line">  <span class="attr">"value"</span>: <span class="string">"2"</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  <span class="attr">"path"</span>: <span class="string">"post"</span>,</span><br><span class="line">  <span class="attr">"value"</span>: <span class="string">"3"</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  <span class="attr">"path"</span>: <span class="string">"post"</span>,</span><br><span class="line">  <span class="attr">"value"</span>: <span class="string">"4"</span></span><br><span class="line">&#125;]</span><br></pre></td></tr></table></figure>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022111225.png" alt="Setup Collection Run" style="zoom:50%;"></p>
+<p>另外, 在脚本里访问data文件需要使用<code>iterationData</code>对象, 脚本样例如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pm.iterationData.get(<span class="string">"value"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h2><p><a href="https://www.postmanlabs.com/postman-collection/index.html" target="_blank" rel="noopener">Postman API文档</a></p>
+<h3 id="脚本执行顺序"><a href="#脚本执行顺序" class="headerlink" title="脚本执行顺序"></a>脚本执行顺序</h3><p>执行每个请求时会依次执行如下脚本:</p>
+<ul>
+<li>Collection级别的pre-request脚本</li>
+<li>Folder级别的pre-request脚本</li>
+<li>Request级别的pre-prequest脚本</li>
+<li>Request级别的test脚本</li>
+<li>Folder级别的test脚本</li>
+<li>Collection级别的test脚本</li>
+</ul>
+<p>如果对应的脚本没有定义, 则会跳过. Collection和Folder级别的脚本在执行每个请求时都会被调用, 所以适合写一些需要复用的逻辑.</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021173020.png" alt="workflow for request in collection"></p>
+<p>Collection或Folder脚本编辑入口是点击右侧的”…”, 在弹出参数中点击”edit”</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021175352.jpg" alt="Collection Actions" style="zoom:50%;"></p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021175514.png" alt="image-20201021175511460" style="zoom:50%;"></p>
+<h3 id="Test脚本"><a href="#Test脚本" class="headerlink" title="Test脚本"></a>Test脚本</h3><p>test脚本用于对请求结果进行验证处理, 比如: 判断响应码是否为200, 保存请求结果到本地文件等</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pm.test(<span class="string">"响应码验证"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    pm.response.to.have.status(<span class="number">200</span>);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// expect语法</span></span><br><span class="line">pm.test(<span class="string">"响应码为200"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    pm.expect(pm.response.code).to.equal(<span class="number">200</span>);</span><br><span class="line">    pm.expect(pm.response).to.have.property(<span class="string">"code"</span>, <span class="number">200</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021180821.png" alt="image-20201021180816278" style="zoom:50%;"></p>
+<p>发送请求之后, 在<strong>Tests Results</strong>标签下就能看到测试结果</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021180353.png" alt="image-20201021180348328" style="zoom:50%;"></p>
+<p>Postman使用 <a href="https://www.chaijs.com/api/bdd/" target="_blank" rel="noopener">Chai Assertion Library BDD</a>库提供的 <a href="https://www.chaijs.com/api/bdd/" target="_blank" rel="noopener">断言语法</a> 进行验证</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 链式调用, 增加可读性</span></span><br><span class="line">to</span><br><span class="line">be</span><br><span class="line">been</span><br><span class="line">is</span><br><span class="line">that</span><br><span class="line">which</span><br><span class="line">and</span><br><span class="line">has</span><br><span class="line">have</span><br><span class="line"><span class="keyword">with</span></span><br><span class="line">at</span><br><span class="line"><span class="keyword">of</span></span><br><span class="line">same</span><br><span class="line">but</span><br><span class="line">does</span><br><span class="line">still</span><br><span class="line"></span><br><span class="line">expect(&#123;<span class="attr">a</span>: <span class="number">1</span>&#125;).to.not.have.property(<span class="string">'b'</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="常用测试代码"><a href="#常用测试代码" class="headerlink" title="常用测试代码"></a>常用测试代码</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">pm.test(<span class="string">"响应状态码为200"</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  pm.response.to.have.status(<span class="number">200</span>);</span><br><span class="line">  pm.expect(pm.response.code).to.eql(<span class="number">200</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// GET https://gank.io/api/v2/banners</span></span><br><span class="line">pm.test(<span class="string">"成功响应且有数据"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	pm.expect(pm.response.code).to.eql(<span class="number">200</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> respJson = pm.response.json();</span><br><span class="line">    pm.expect(respJson.data).to.length.gt(<span class="number">0</span>);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// GET https://gank.io/api/v2/data/category/GanHuo/type/iOS/page/1/count/10</span></span><br><span class="line">pm.test(<span class="string">"分页数据满页"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> respJson = pm.response.json();</span><br><span class="line">    pm.expect(respJson.data.length).to.eq(<span class="number">10</span>);</span><br><span class="line">    pm.expect(respJson.data).to.have.lengthOf(<span class="number">10</span>);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 响应数据转换</span></span><br><span class="line"><span class="comment">// json</span></span><br><span class="line"><span class="keyword">const</span> responseJson = pm.response.json();</span><br><span class="line"><span class="comment">// xml</span></span><br><span class="line"><span class="keyword">const</span> responseJson = xml2Json(pm.response.text());</span><br><span class="line"><span class="comment">// csv</span></span><br><span class="line"><span class="keyword">const</span> parse = <span class="built_in">require</span>(<span class="string">'csv-parse/lib/sync'</span>);</span><br><span class="line"><span class="keyword">const</span> responseJson = parse(pm.response.text());</span><br><span class="line"><span class="comment">// html https://cheerio.js.org</span></span><br><span class="line"><span class="keyword">const</span> $ = cheerio.load(pm.response.text());</span><br><span class="line"><span class="built_in">console</span>.log($.html());</span><br><span class="line"><span class="built_in">console</span>.log($(<span class="string">".header"</span>));</span><br><span class="line"><span class="comment">// 纯文本</span></span><br><span class="line">pm.expect(pm.response.text()).to.include(<span class="string">"customer_id"</span>);</span><br><span class="line">pm.response.to.have.body(<span class="string">"whole-body-text"</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="常用API"><a href="#常用API" class="headerlink" title="常用API"></a>常用API</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 请求体验证</span></span><br><span class="line"><span class="keyword">const</span> responseJson = pm.response.json();</span><br><span class="line">pm.expect(responseJson.name).to.eql(<span class="string">"Jane"</span>);</span><br><span class="line"><span class="comment">// 状态码</span></span><br><span class="line">pm.response.to.have.status(<span class="number">200</span>);</span><br><span class="line">pm.expect(pm.response.code).to.be.oneOf([<span class="number">200</span>,<span class="number">404</span>,<span class="number">500</span>]);</span><br><span class="line">pm.response.to.have.status(<span class="string">"OK"</span>);</span><br><span class="line"><span class="comment">// 请求头</span></span><br><span class="line">pm.response.to.have.header(<span class="string">"Content-Type"</span>);</span><br><span class="line">pm.expect(pm.response.headers.get(<span class="string">'Content-Type'</span>)).to.eql(<span class="string">'application/json'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// cookie</span></span><br><span class="line">pm.expect(pm.cookies.has(<span class="string">'JSESSIONID'</span>)).to.be.true;</span><br><span class="line">pm.expect(pm.cookies.get(<span class="string">'isLoggedIn'</span>)).to.eql(<span class="string">'1'</span>);</span><br><span class="line"><span class="comment">// 响应时间 ms</span></span><br><span class="line">pm.expect(pm.response.responseTime).to.be.below(<span class="number">200</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在脚本中发送请求</span></span><br><span class="line">pm.sendRequest(<span class="string">"https://gank.io/api/v2/banners"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, resp</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(resp.json())</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h4 id="常用断言"><a href="#常用断言" class="headerlink" title="常用断言"></a>常用断言</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> jsonData = pm.response.json();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 响应值等于某个预先定义的变量值</span></span><br><span class="line">pm.expect(jsonData.name).to.eql(pm.environment.get(<span class="string">"name"</span>));</span><br><span class="line"><span class="comment">// 值类型</span></span><br><span class="line">pm.expect(jsonData).to.be.an(<span class="string">"object"</span>);</span><br><span class="line">pm.expect(jsonData.name).to.be.a(<span class="string">"string"</span>);</span><br><span class="line">pm.expect(jsonData.age).to.be.a(<span class="string">"number"</span>);</span><br><span class="line">pm.expect(jsonData.hobbies).to.be.an(<span class="string">"array"</span>);</span><br><span class="line">pm.expect(jsonData.website).to.be.undefined;</span><br><span class="line">pm.expect(jsonData.email).to.be.null;</span><br><span class="line"><span class="comment">// 数组属性</span></span><br><span class="line">pm.expect(jsonData.errors).to.be.empty;</span><br><span class="line">pm.expect(jsonData.areas).to.include(<span class="string">"goods"</span>);</span><br><span class="line"><span class="keyword">const</span> contactSettings = jsonData.settings.find(<span class="function"><span class="params">m</span> =&gt;</span> m.type === <span class="string">"contact"</span>);</span><br><span class="line">pm.expect(contactSettings).to.be.an(<span class="string">"object"</span>, <span class="string">"找不到联系方式配置信息"</span>);</span><br><span class="line">pm.expect(contactSettings.detail).to.have.members([<span class="string">"email"</span>, <span class="string">"sms"</span>]);</span><br><span class="line"><span class="comment">// 对象</span></span><br><span class="line">pm.expect(&#123;<span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span>&#125;).to.have.all.keys(<span class="string">'a'</span>, <span class="string">'b'</span>);</span><br><span class="line">pm.expect(&#123;<span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span>&#125;).to.have.any.keys(<span class="string">'a'</span>, <span class="string">'b'</span>);</span><br><span class="line">pm.expect(&#123;<span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span>&#125;).to.not.have.any.keys(<span class="string">'c'</span>, <span class="string">'d'</span>);</span><br><span class="line">pm.expect(&#123;<span class="attr">a</span>: <span class="number">1</span>&#125;).to.have.property(<span class="string">'a'</span>);</span><br><span class="line">pm.expect(&#123;<span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span>&#125;).to.be.an(<span class="string">'object'</span>).that.has.all.keys(<span class="string">'a'</span>, <span class="string">'b'</span>);</span><br><span class="line">pm.expect(&#123;<span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span>&#125;).to.deep.include(&#123;<span class="attr">a</span>:<span class="number">1</span>&#125;);	<span class="comment">// 包含部分属性</span></span><br><span class="line"><span class="comment">// 集合</span></span><br><span class="line">pm.expect(&#123;<span class="string">"a"</span>: <span class="number">1</span>, <span class="string">"b"</span>: <span class="number">123</span>&#125;.a).to.be.oneOf([<span class="number">1</span>, <span class="number">123</span>]);</span><br></pre></td></tr></table></figure>
+<h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><h4 id="动态变量"><a href="#动态变量" class="headerlink" title="动态变量"></a>动态变量</h4><p>每次请求时, 如果希望自动生成一个值作为参数使用, 或者在脚本中使用, 这时可以使用PostMan内置的动态变量. Postman使用的是<a href="https://www.npmjs.com/package/faker" target="_blank" rel="noopener">faker.js</a>库来生成变量值, 这个库是支持生成中文随机数据的, 但是目前在Postman里支持英文随机数据.</p>
+<p>使用方式如下, 实际请求时url就变成了<code>https://gank.io/api/v2/banners?testId=107</code>: </p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021192442.png" alt="image-20201021192440620" style="zoom:50%;"></p>
+<p>在脚本中的使用方式是<code>pm.variables.replaceIn(&#39;&#39;)</code></p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201021192909.png" alt="image-20201021192907770" style="zoom:50%;"></p>
+<h5 id="通用"><a href="#通用" class="headerlink" title="通用"></a>通用</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$guid</td>
+<td>guid</td>
+<td>“611c2e81-2ccb-42d8-9ddc-2d0bfa65c1b4”</td>
+</tr>
+<tr>
+<td>$timestamp</td>
+<td>时间戳,秒</td>
+<td>1562757107</td>
+</tr>
+<tr>
+<td>$randomUUID</td>
+<td>UUID</td>
+<td>“6929bb52-3ab2-448a-9796-d6480ecad36b”</td>
+</tr>
+</tbody>
+</table>
+<h5 id="文本数字颜色"><a href="#文本数字颜色" class="headerlink" title="文本数字颜色"></a>文本数字颜色</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomAlphaNumeric</td>
+<td>单字符数字</td>
+<td>6, “y”, “z”</td>
+</tr>
+<tr>
+<td>$randomBoolean</td>
+<td>布尔</td>
+<td>true, false</td>
+</tr>
+<tr>
+<td>$randomInt</td>
+<td>数字, 1到1000</td>
+<td>78</td>
+</tr>
+<tr>
+<td>$randomColor</td>
+<td>颜色</td>
+<td>“red”, “fuchsia”, “grey”</td>
+</tr>
+<tr>
+<td>$randomHexColor</td>
+<td>颜色</td>
+<td>“#47594a”, “#431e48”</td>
+</tr>
+<tr>
+<td>$randomAbbreviation</td>
+<td>随机缩写</td>
+<td>SQL, PCI, JSON</td>
+</tr>
+</tbody>
+</table>
+<h5 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomIP</td>
+<td>ip地址</td>
+<td>241.102.234.100</td>
+</tr>
+<tr>
+<td>$randomIPV6</td>
+<td>ip地址V6</td>
+<td>dbe2:7ae6:119b:c161:1560:6dda:3a9b:90a9</td>
+</tr>
+<tr>
+<td>$randomMACAddress</td>
+<td>mac地址</td>
+<td>33:d4:68:5f:b4:c7</td>
+</tr>
+<tr>
+<td>$randomPassword</td>
+<td>密码</td>
+<td>t9iXe7COoDKv8k3, QAzNFQtvR9cg2rq</td>
+</tr>
+<tr>
+<td>$randomLocale</td>
+<td>两字符</td>
+<td>“ny”, “sr”, “si”</td>
+</tr>
+<tr>
+<td>$randomUserAgent</td>
+<td>浏览器UA</td>
+<td>Mozilla/5.0 (Macintosh; U; Intel Mac…</td>
+</tr>
+<tr>
+<td>$randomProtocol</td>
+<td>协议</td>
+<td>“http”, “https”</td>
+</tr>
+<tr>
+<td>$randomSemver</td>
+<td>随机版本号</td>
+<td>7.0.5, 2.5.8, 6.4.9</td>
+</tr>
+</tbody>
+</table>
+<h5 id="姓名"><a href="#姓名" class="headerlink" title="姓名"></a>姓名</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomFirstName</td>
+<td>名</td>
+<td>Ethan, Chandler, Megane</td>
+</tr>
+<tr>
+<td>$randomLastName</td>
+<td>姓</td>
+<td>Schaden, Schneider, Willms</td>
+</tr>
+<tr>
+<td>$randomFullName</td>
+<td>全名</td>
+<td>Sylvan Fay, Jonathon Kunze</td>
+</tr>
+<tr>
+<td>$randomNamePrefix</td>
+<td>前缀</td>
+<td>Dr., Ms., Mr.</td>
+</tr>
+<tr>
+<td>$randomNameSuffix</td>
+<td>后缀</td>
+<td>I, MD, DDS</td>
+</tr>
+</tbody>
+</table>
+<h5 id="职业"><a href="#职业" class="headerlink" title="职业"></a>职业</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomJobArea</td>
+<td>地区</td>
+<td>Mobility, Intranet, Configuration</td>
+</tr>
+<tr>
+<td>$randomJobDescriptor</td>
+<td>描述</td>
+<td>Forward, Corporate, Senior</td>
+</tr>
+<tr>
+<td>$randomJobTitle</td>
+<td>职称</td>
+<td>International Creative Liaison</td>
+</tr>
+<tr>
+<td>$randomJobType</td>
+<td>类型</td>
+<td>Supervisor, Manager, Coordinator</td>
+</tr>
+</tbody>
+</table>
+<h5 id="电话地址"><a href="#电话地址" class="headerlink" title="电话地址"></a>电话地址</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomPhoneNumber</td>
+<td>电话</td>
+<td>700-008-5275</td>
+</tr>
+<tr>
+<td>$randomPhoneNumberExt</td>
+<td>电话12位</td>
+<td>27-199-983-3864,</td>
+</tr>
+<tr>
+<td>$randomCity</td>
+<td>城市</td>
+<td>Spinkahaven, Korbinburgh</td>
+</tr>
+<tr>
+<td>$randomStreetName</td>
+<td>街道</td>
+<td>Kuhic Island, General Street</td>
+</tr>
+<tr>
+<td>$randomStreetAddress</td>
+<td>地址</td>
+<td>5742 Harvey Streets</td>
+</tr>
+<tr>
+<td>$randomCountry</td>
+<td>国家</td>
+<td>Lao People’s Democratic Republic, Austria</td>
+</tr>
+<tr>
+<td>$randomCountryCode</td>
+<td>国家代码</td>
+<td>CV, MD, TD</td>
+</tr>
+<tr>
+<td>$randomLongitude</td>
+<td>经度</td>
+<td>171.7139, -159.9757</td>
+</tr>
+<tr>
+<td>$randomLatitude</td>
+<td>纬度</td>
+<td>55.2099, 27.3644</td>
+</tr>
+</tbody>
+</table>
+<h5 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomImage</td>
+<td>图片</td>
+<td><a href="http://lorempixel.com/640/480/technics" target="_blank" rel="noopener">http://lorempixel.com/640/480/technics</a></td>
+</tr>
+<tr>
+<td>$randomAvatarImage</td>
+<td>头像</td>
+<td><a href="https://s3.amazonaws.com/uifaces/faces/twitter/johnsmithagency/128.jpg" target="_blank" rel="noopener">https://s3.amazonaws.com/uifaces/faces/twitter/johnsmithagency/128.jpg</a></td>
+</tr>
+<tr>
+<td>$randomImageUrl</td>
+<td>图片url</td>
+<td><a href="http://lorempixel.com/640/480" target="_blank" rel="noopener">http://lorempixel.com/640/480</a></td>
+</tr>
+<tr>
+<td>$randomAbstractImage</td>
+<td>图片url</td>
+<td><a href="http://lorempixel.com/640/480/abstract" target="_blank" rel="noopener">http://lorempixel.com/640/480/abstract</a></td>
+</tr>
+<tr>
+<td>$randomAnimalsImage</td>
+<td>动物图片</td>
+<td><a href="http://lorempixel.com/640/480/animals" target="_blank" rel="noopener">http://lorempixel.com/640/480/animals</a></td>
+</tr>
+<tr>
+<td>$randomBusinessImage</td>
+<td>股票业务图像</td>
+<td><a href="http://lorempixel.com/640/480/business" target="_blank" rel="noopener">http://lorempixel.com/640/480/business</a></td>
+</tr>
+<tr>
+<td>$randomCatsImage</td>
+<td>猫图片</td>
+<td><a href="http://lorempixel.com/640/480/cats" target="_blank" rel="noopener">http://lorempixel.com/640/480/cats</a></td>
+</tr>
+<tr>
+<td>$randomCityImage</td>
+<td>城市</td>
+<td><a href="http://lorempixel.com/640/480/city" target="_blank" rel="noopener">http://lorempixel.com/640/480/city</a></td>
+</tr>
+<tr>
+<td>$randomFoodImage</td>
+<td>食物</td>
+<td><a href="http://lorempixel.com/640/480/food" target="_blank" rel="noopener">http://lorempixel.com/640/480/food</a></td>
+</tr>
+<tr>
+<td>$randomNightlifeImage</td>
+<td>夜生活</td>
+<td><a href="http://lorempixel.com/640/480/nightlife" target="_blank" rel="noopener">http://lorempixel.com/640/480/nightlife</a></td>
+</tr>
+<tr>
+<td>$randomFashionImage</td>
+<td>时尚潮流</td>
+<td><a href="http://lorempixel.com/640/480/fashion" target="_blank" rel="noopener">http://lorempixel.com/640/480/fashion</a></td>
+</tr>
+<tr>
+<td>$randomPeopleImage</td>
+<td>人物图片</td>
+<td><a href="http://lorempixel.com/640/480/people" target="_blank" rel="noopener">http://lorempixel.com/640/480/people</a></td>
+</tr>
+<tr>
+<td>$randomNatureImage</td>
+<td>自然</td>
+<td><a href="http://lorempixel.com/640/480/nature" target="_blank" rel="noopener">http://lorempixel.com/640/480/nature</a></td>
+</tr>
+<tr>
+<td>$randomSportsImage</td>
+<td>体育</td>
+<td><a href="http://lorempixel.com/640/480/sports" target="_blank" rel="noopener">http://lorempixel.com/640/480/sports</a></td>
+</tr>
+<tr>
+<td>$randomTechnicsImage</td>
+<td>科技</td>
+<td><a href="http://lorempixel.com/640/480/technics" target="_blank" rel="noopener">http://lorempixel.com/640/480/technics</a></td>
+</tr>
+<tr>
+<td>$randomTransportImage</td>
+<td>运输</td>
+<td><a href="http://lorempixel.com/640/480/transport" target="_blank" rel="noopener">http://lorempixel.com/640/480/transport</a></td>
+</tr>
+<tr>
+<td>$randomImageDataUri</td>
+<td>base64</td>
+<td>data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2F<a href="http://www.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%20%20%3Ctext%20x%3D%220%22%20y%3D%2220%22%20font-size%3D%2220%22%20text-anchor%3D%22start%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%20%3C%2Fsvg%3E" target="_blank" rel="noopener">www.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%20%20%3Ctext%20x%3D%220%22%20y%3D%2220%22%20font-size%3D%2220%22%20text-anchor%3D%22start%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%20%3C%2Fsvg%3E</a></td>
+</tr>
+</tbody>
+</table>
+<h5 id="金融"><a href="#金融" class="headerlink" title="金融"></a>金融</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomBankAccount</td>
+<td>8位数字的银行账号</td>
+<td>09454073, 65653440, 75728757</td>
+</tr>
+<tr>
+<td>$randomBankAccountName</td>
+<td>银行账号名</td>
+<td>Home Loan Account, Checking Account, Auto Loan Account</td>
+</tr>
+<tr>
+<td>$randomCreditCardMask</td>
+<td>masked credit card number</td>
+<td>3622, 5815, 6257</td>
+</tr>
+<tr>
+<td>$randomBankAccountBic</td>
+<td>银行标识</td>
+<td>EZIAUGJ1, KXCUTVJ1, DIVIPLL1</td>
+</tr>
+<tr>
+<td>$randomBankAccountIban</td>
+<td>15-31位国际银行账户号码</td>
+<td>MU20ZPUN3039684000618086155TKZ</td>
+</tr>
+<tr>
+<td>$randomTransactionType</td>
+<td>交易类型</td>
+<td>invoice, payment, deposit</td>
+</tr>
+<tr>
+<td>$randomCurrencyCode</td>
+<td>3个字符的货币标识</td>
+<td>CDF, ZMK, GNF</td>
+</tr>
+<tr>
+<td>$randomCurrencyName</td>
+<td>货币名称</td>
+<td>CFP Franc, Cordoba Oro, Pound Sterling</td>
+</tr>
+<tr>
+<td>$randomCurrencySymbol</td>
+<td>货币符号</td>
+<td>$, £</td>
+</tr>
+<tr>
+<td>$randomBitcoin</td>
+<td>比特币地址</td>
+<td>3VB8JGT7Y4Z63U68KGGKDXMLLH5</td>
+</tr>
+</tbody>
+</table>
+<h5 id="商务"><a href="#商务" class="headerlink" title="商务"></a>商务</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomCompanyName</td>
+<td>公司名</td>
+<td>Johns - Kassulke, Grady LLC</td>
+</tr>
+<tr>
+<td>$randomCompanySuffix</td>
+<td>公司后缀</td>
+<td>Inc, LLC, Group</td>
+</tr>
+<tr>
+<td>$randomBs</td>
+<td>商业用语</td>
+<td>killer leverage schemas</td>
+</tr>
+<tr>
+<td>$randomBsAdjective</td>
+<td>商务用语形容词</td>
+<td>viral, 24/7, 24/365</td>
+</tr>
+<tr>
+<td>$randomBsBuzz</td>
+<td>商业流行语</td>
+<td>repurpose, harness, transition</td>
+</tr>
+<tr>
+<td>$randomBsNoun</td>
+<td>商业用词</td>
+<td>e-services, markets, interfaces</td>
+</tr>
+</tbody>
+</table>
+<h5 id="流行语"><a href="#流行语" class="headerlink" title="流行语"></a>流行语</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomCatchPhrase</td>
+<td>流行语</td>
+<td>Future-proofed heuristic open architecture</td>
+</tr>
+<tr>
+<td>$randomCatchPhraseAdjective</td>
+<td>流行语形容词</td>
+<td>Self-enabling, Business-focused, Down-sized</td>
+</tr>
+<tr>
+<td>$randomCatchPhraseDescriptor</td>
+<td>流行语描述</td>
+<td>bandwidth-monitored, needs-based, homogeneous</td>
+</tr>
+<tr>
+<td>$randomCatchPhraseNoun</td>
+<td>流行语名词</td>
+<td>secured line, superstructure,installation</td>
+</tr>
+</tbody>
+</table>
+<h5 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomDatabaseColumn</td>
+<td>字段名</td>
+<td>updatedAt, token, group</td>
+</tr>
+<tr>
+<td>$randomDatabaseType</td>
+<td>字段类型</td>
+<td>tinyint, text</td>
+</tr>
+<tr>
+<td>$randomDatabaseCollation</td>
+<td>字符集</td>
+<td>cp1250_bin, utf8_general_ci, cp1250_general_ci</td>
+</tr>
+<tr>
+<td>$randomDatabaseEngine</td>
+<td>数据库引擎</td>
+<td>MyISAM, InnoDB, Memory</td>
+</tr>
+</tbody>
+</table>
+<h5 id="日期"><a href="#日期" class="headerlink" title="日期"></a>日期</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomDateFuture</td>
+<td>未来日期</td>
+<td>Tue Mar 17 2020 13:11:50 GMT+0530 (India Standard Time)</td>
+</tr>
+<tr>
+<td>$randomDatePast</td>
+<td>过去日期</td>
+<td>Sat Mar 02 2019 09:09:26 GMT+0530 (India Standard Time)</td>
+</tr>
+<tr>
+<td>$randomDateRecent</td>
+<td>最近时间</td>
+<td>Tue Jul 09 2019 23:12:37 GMT+0530 (India Standard Time)</td>
+</tr>
+<tr>
+<td>$randomWeekday</td>
+<td>星期</td>
+<td>Thursday, Friday, Monday</td>
+</tr>
+<tr>
+<td>$randomMonth</td>
+<td>月份</td>
+<td>February, May, January</td>
+</tr>
+</tbody>
+</table>
+<h5 id="网站"><a href="#网站" class="headerlink" title="网站"></a>网站</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomDomainName</td>
+<td>域名</td>
+<td>gracie.biz, armando.biz, trevor.info</td>
+</tr>
+<tr>
+<td>$randomDomainSuffix</td>
+<td>顶级域名</td>
+<td>org, net, com</td>
+</tr>
+<tr>
+<td>$randomDomainWord</td>
+<td>非法域名</td>
+<td>gwen, jaden, donnell</td>
+</tr>
+<tr>
+<td>$randomEmail</td>
+<td>邮箱</td>
+<td><a href="mailto:Pablo62@gmail.com" target="_blank" rel="noopener">Pablo62@gmail.com</a>, <a href="mailto:Ruthe42@hotmail.com" target="_blank" rel="noopener">Ruthe42@hotmail.com</a></td>
+</tr>
+<tr>
+<td>$randomExampleEmail</td>
+<td>“example”域名的邮箱</td>
+<td><a href="mailto:Talon28@example.com" target="_blank" rel="noopener">Talon28@example.com</a>, <a href="mailto:Quinten_Kerluke45@example.net" target="_blank" rel="noopener">Quinten_Kerluke45@example.net</a></td>
+</tr>
+<tr>
+<td>$randomUserName</td>
+<td>用户名</td>
+<td>Jarrell.Gutkowski, Lottie.Smitham24, Alia99</td>
+</tr>
+<tr>
+<td>$randomUrl</td>
+<td>URL</td>
+<td><a href="https://anais.net" target="_blank" rel="noopener">https://anais.net</a>, <a href="https://tristin.net" target="_blank" rel="noopener">https://tristin.net</a>, <a href="http://jakob.name" target="_blank" rel="noopener">http://jakob.name</a></td>
+</tr>
+</tbody>
+</table>
+<h5 id="文件目录"><a href="#文件目录" class="headerlink" title="文件目录"></a>文件目录</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomFileName</td>
+<td>文件名(包括不常见的文件类型)</td>
+<td>neural_sri_lanka_rupee_gloves.gdoc</td>
+</tr>
+<tr>
+<td>$randomFileType</td>
+<td>文件类型(包括不常见的)</td>
+<td>model, application, video</td>
+</tr>
+<tr>
+<td>$randomFileExt</td>
+<td>文件后缀(包括不常见的)</td>
+<td>war, book, fsc</td>
+</tr>
+<tr>
+<td>$randomCommonFileName</td>
+<td>文件名(常见的文件类型)</td>
+<td>well_modulated.mpg4</td>
+</tr>
+<tr>
+<td>$randomCommonFileType</td>
+<td>常见的文件类型</td>
+<td>application, audio</td>
+</tr>
+<tr>
+<td>$randomCommonFileExt</td>
+<td>常见的文件后缀</td>
+<td>m2v, wav, png</td>
+</tr>
+<tr>
+<td>$randomFilePath</td>
+<td>文件路径</td>
+<td>/home/programming_chicken.cpio,</td>
+</tr>
+<tr>
+<td>$randomDirectoryPath</td>
+<td>目录路径</td>
+<td>/usr/bin, /root, /usr/local/bin</td>
+</tr>
+<tr>
+<td>$randomMimeType</td>
+<td>MIME类型</td>
+<td>audio/vnd.vmx.cvsd</td>
+</tr>
+</tbody>
+</table>
+<h5 id="商店"><a href="#商店" class="headerlink" title="商店"></a>商店</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomPrice</td>
+<td>价格, 100.00 到 999.00</td>
+<td>531.55, 488.76, 511.56</td>
+</tr>
+<tr>
+<td>$randomProduct</td>
+<td>商品</td>
+<td>Towels, Pizza, Pants</td>
+</tr>
+<tr>
+<td>$randomProductAdjective</td>
+<td>随机的产品形容词</td>
+<td>Unbranded, Incredible, Tasty</td>
+</tr>
+<tr>
+<td>$randomProductMaterial</td>
+<td>产品材料</td>
+<td>Steel, Plastic, Frozen</td>
+</tr>
+<tr>
+<td>$randomProductName</td>
+<td>商品名</td>
+<td>Handmade Concrete Tuna, Refined Rubber Hat</td>
+</tr>
+<tr>
+<td>$randomDepartment</td>
+<td>商业分类</td>
+<td>Tools, Movies, Electronics</td>
+</tr>
+</tbody>
+</table>
+<h5 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomNoun</td>
+<td>名词</td>
+<td>matrix, bus, bandwidth</td>
+</tr>
+<tr>
+<td>$randomVerb</td>
+<td>动词</td>
+<td>parse, quantify, navigate</td>
+</tr>
+<tr>
+<td>$randomIngverb</td>
+<td>现在进行时 “-ing”</td>
+<td>synthesizing, navigating, backing up</td>
+</tr>
+<tr>
+<td>$randomAdjective</td>
+<td>形容词</td>
+<td>auxiliary, multi-byte, back-end</td>
+</tr>
+<tr>
+<td>$randomWord</td>
+<td>单词</td>
+<td>withdrawal, infrastructures, IB</td>
+</tr>
+<tr>
+<td>$randomWords</td>
+<td>多个单词</td>
+<td>Samoa Synergistic sticky copying Grocery</td>
+</tr>
+<tr>
+<td>$randomPhrase</td>
+<td>一句话</td>
+<td>You can’t program the monitor without navigating the mobile XML program!</td>
+</tr>
+</tbody>
+</table>
+<h5 id="乱数假文"><a href="#乱数假文" class="headerlink" title="乱数假文"></a>乱数假文</h5><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$randomLoremWord</td>
+<td>一个假词</td>
+<td>est</td>
+</tr>
+<tr>
+<td>$randomLoremWords</td>
+<td>多个假词</td>
+<td>vel repellat nobis</td>
+</tr>
+<tr>
+<td>$randomLoremSentence</td>
+<td>一句胡话</td>
+<td>Molestias consequuntur nisi non quod.</td>
+</tr>
+<tr>
+<td>$randomLoremSentences</td>
+<td>2-6句胡话</td>
+<td>Et sint voluptas similique iure amet perspiciatis vero sequi atque. Ut porro sit et hic. Neque aspernatur vitae fugiat ut dolore et veritatis. Ab iusto ex delectus animi. Voluptates nisi iusto. Impedit quod quae voluptate qui.</td>
+</tr>
+<tr>
+<td>$randomLoremParagraph</td>
+<td>一段胡话</td>
+<td>Ab aliquid odio iste quo voluptas voluptatem dignissimos velit. Recusandae facilis qui commodi ea magnam enim nostrum quia quis. Nihil est suscipit assumenda ut voluptatem sed. Esse ab voluptas odit qui molestiae. Rem est nesciunt est quis ipsam expedita consequuntur.</td>
+</tr>
+<tr>
+<td>$randomLoremParagraphs</td>
+<td>3段胡话</td>
+<td>Voluptatem rem magnam aliquam ab id aut quaerat. Placeat provident possimus voluptatibus dicta velit non aut quasi. Mollitia et aliquam expedita sunt dolores nam consequuntur. Nam dolorum delectus ipsam repudiandae et ipsam ut voluptatum totam. Nobis labore labore recusandae ipsam quo.</td>
+</tr>
+<tr>
+<td>$randomLoremText</td>
+<td>一堆胡话</td>
+<td>Quisquam asperiores exercitationem ut ipsum. Aut eius nesciunt. Et reiciendis aut alias eaque. Nihil amet laboriosam pariatur eligendi. Sunt ullam ut sint natus ducimus. Voluptas harum aspernatur soluta rem nam.</td>
+</tr>
+<tr>
+<td>$randomLoremSlug</td>
+<td>假url</td>
+<td>eos-aperiam-accusamus, beatae-id-molestiae, qui-est-repellat</td>
+</tr>
+<tr>
+<td>$randomLoremLines</td>
+<td>1-5行胡话</td>
+<td>Ducimus in ut mollitia.\nA itaque non.\nHarum temporibus nihil voluptas.\nIste in sed et nesciunt in quaerat sed.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="pm对象"><a href="#pm对象" class="headerlink" title="pm对象"></a>pm对象</h4><h5 id="variable属性"><a href="#variable属性" class="headerlink" title="variable属性"></a>variable属性</h5><p><code>pm.variables</code>用来对变量进行管理</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">pm.variables.has(<span class="string">"username"</span>);</span><br><span class="line">pm.variables.get(<span class="string">"username"</span>);</span><br><span class="line">pm.variables.set(<span class="string">"username"</span>, <span class="string">"Admin"</span>);</span><br><span class="line">pm.variables.replaceIn(<span class="string">"Hi, my name is &#123;&#123;$randomFirstName&#125;&#125;"</span>); <span class="comment">// 访问动态变量</span></span><br><span class="line">pm.variables.toObject();	<span class="comment">// 合并后的所有变量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// pm.globals pm.collectionVariables pm.environment pm.iterationData 都有下列API</span></span><br><span class="line">pm.collectionVariables.has(<span class="string">"username"</span>);</span><br><span class="line">pm.collectionVariables.get(<span class="string">"username"</span>);</span><br><span class="line">pm.collectionVariables.set(<span class="string">"username"</span>, <span class="string">"Admin"</span>);</span><br><span class="line">pm.collectionVariables.unset(<span class="string">"username"</span>);</span><br><span class="line">pm.collectionVariables.clear()</span><br><span class="line">pm.collectionVariables.replaceIn(<span class="string">"hi &#123;&#123;username&#125;&#125;"</span>);	<span class="comment">// 访问变量</span></span><br></pre></td></tr></table></figure>
+<h5 id="request-response-cookies属性"><a href="#request-response-cookies属性" class="headerlink" title="request response cookies属性"></a>request response cookies属性</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ------------ request对象 --------------</span></span><br><span class="line">pm.request.url; 	<span class="comment">// Url对象, 包含: 协议, 主机, 路径, 参数, 变量</span></span><br><span class="line">pm.request.headers;		<span class="comment">// Header数组</span></span><br><span class="line">pm.request.method;		<span class="comment">// "GET"</span></span><br><span class="line">pm.request.body;		<span class="comment">// 请求体对象</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加请求头</span></span><br><span class="line">pm.request.headers.add(&#123;</span><br><span class="line">  key: <span class="string">"client-id"</span>,</span><br><span class="line">  value: <span class="string">"abcdef"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ------------ response对象 --------------</span></span><br><span class="line">pm.response.code;		<span class="comment">// 响应码(数字) </span></span><br><span class="line">pm.response.status; 	<span class="comment">// "OK"</span></span><br><span class="line">pm.response.headers;	<span class="comment">// 响应头数组</span></span><br><span class="line">pm.response.responseTime;	<span class="comment">// 响应时间ms</span></span><br><span class="line">pm.response.responseSize;	<span class="comment">// 响应体大小</span></span><br><span class="line">pm.response.text();			<span class="comment">// 响应体转字符串格式</span></span><br><span class="line">pm.response.json();			<span class="comment">// 响应体转json格式</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ------------ cookies对象 --------------</span></span><br><span class="line">pm.cookies.has(<span class="string">"test"</span>);</span><br><span class="line">pm.cookies.get(<span class="string">"test"</span>);		<span class="comment">// 获取cookie值(字符串)</span></span><br><span class="line">pm.cookies.toObject();</span><br><span class="line"><span class="comment">// 设置cookie的作用域名</span></span><br><span class="line"><span class="keyword">const</span> jar = pm.cookies.jar();</span><br><span class="line">jar.set(<span class="string">"baidu.com"</span>, <span class="string">"username"</span>, <span class="string">"Admin"</span>, (error, cookie) =&gt; &#123;&#125;);</span><br><span class="line">jar.set(<span class="string">"baidu.com"</span>, &#123;<span class="string">"name"</span>:<span class="string">"username"</span>, <span class="string">"value"</span>:<span class="string">"Admin"</span>, <span class="attr">httpOnly</span>:<span class="literal">false</span>&#125;,</span><br><span class="line">        (error, cookie) =&gt; &#123;&#125;);</span><br><span class="line">jar.get(<span class="string">"baidu.com"</span>, <span class="string">"username"</span>, (error, value) =&gt; &#123;&#125;);</span><br><span class="line">jar.getAll(<span class="string">"baidu.com"</span>, (error, cookies) =&gt; &#123;&#125;);</span><br><span class="line">jar.unset(<span class="string">"baidu.com"</span>, <span class="string">"username"</span>, (error) =&gt; &#123;&#125;);</span><br><span class="line">jar.clear(<span class="string">"baidu.com"</span>, (error) =&gt; &#123;&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ------------ info对象 --------------</span></span><br><span class="line">pm.info.eventName;		<span class="comment">// "prerequest" "test"</span></span><br><span class="line">pm.info.iteration;		<span class="comment">// run collection时的第几次循环</span></span><br><span class="line">pm.info.iterationCount;	<span class="comment">// 总计划循环次数</span></span><br><span class="line">pm.info.requestName;	<span class="comment">// 本次请求的保存名称</span></span><br><span class="line">pm.info.requestId;		<span class="comment">// 本次请求的唯一标识GUID</span></span><br></pre></td></tr></table></figure>
+<h5 id="脚本里发送请求"><a href="#脚本里发送请求" class="headerlink" title="脚本里发送请求"></a>脚本里发送请求</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">pm.sendRequest(<span class="string">'https://postman-echo.com/get'</span>, (error, response) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (error) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(response);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Example with a full-fledged request</span></span><br><span class="line"><span class="keyword">const</span> postRequest = &#123;</span><br><span class="line">  url: <span class="string">'https://postman-echo.com/post'</span>,</span><br><span class="line">  method: <span class="string">'POST'</span>,</span><br><span class="line">  header: &#123;</span><br><span class="line">    <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,</span><br><span class="line">    <span class="string">'X-Foo'</span>: <span class="string">'bar'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  body: &#123;</span><br><span class="line">    mode: <span class="string">'raw'</span>,</span><br><span class="line">    raw: <span class="built_in">JSON</span>.stringify(&#123; <span class="attr">key</span>: <span class="string">'this is json'</span> &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">pm.sendRequest(postRequest, (error, response) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(error ? error : response.json());</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Example containing a test</span></span><br><span class="line">pm.sendRequest(<span class="string">'https://postman-echo.com/get'</span>, (error, response) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (error) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  pm.test(<span class="string">'response should be okay to process'</span>, () =&gt; &#123;</span><br><span class="line">    pm.expect(error).to.equal(<span class="literal">null</span>);</span><br><span class="line">    pm.expect(response).to.have.property(<span class="string">'code'</span>, <span class="number">200</span>);</span><br><span class="line">    pm.expect(response).to.have.property(<span class="string">'status'</span>, <span class="string">'OK'</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>在<strong>Runner</strong>中运行collection下的请求时, 可以通过<code>postman.setNextRequest(请求名)</code> 或者 <code>postman.setNextRequest(请求id)</code>来指定下一个请求, 这样可以构建起一个调用工作流, 比如先请求数据列表接口, 然后从响应中获取数据id, 再请求数据详情接口.</p>
+<h5 id="使用外部库"><a href="#使用外部库" class="headerlink" title="使用外部库"></a>使用外部库</h5><p>使用<code>require</code>方法能够使用postman内置库, 包括:</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/ajv" target="_blank" rel="noopener">ajv</a></li>
+<li><a href="https://www.npmjs.com/package/atob" target="_blank" rel="noopener">atob</a></li>
+<li><a href="https://www.npmjs.com/package/btoa" target="_blank" rel="noopener">btoa</a></li>
+<li><a href="http://chaijs.com/" target="_blank" rel="noopener">chai</a></li>
+<li><a href="https://cheerio.js.org/" target="_blank" rel="noopener">cheerio</a></li>
+<li><a href="https://www.npmjs.com/package/crypto-js" target="_blank" rel="noopener">crypto-js</a></li>
+<li><a href="http://csv.adaltas.com/parse" target="_blank" rel="noopener">csv-parse/lib/sync</a></li>
+<li><a href="https://lodash.com/" target="_blank" rel="noopener">lodash</a></li>
+<li><a href="http://momentjs.com/docs/" target="_blank" rel="noopener">moment</a></li>
+<li><a href="http://www.postmanlabs.com/postman-collection/" target="_blank" rel="noopener">postman-collection</a></li>
+<li><a href="https://github.com/geraintluff/tv4" target="_blank" rel="noopener">tv4</a></li>
+<li><a href="https://www.npmjs.com/package/uuid" target="_blank" rel="noopener">uuid</a></li>
+<li><a href="https://www.npmjs.com/package/xml2js" target="_blank" rel="noopener">xml2js</a></li>
+</ul>
+<p>除此之外, 一些NodeJS的模块可以使用:</p>
+<ul>
+<li><a href="https://nodejs.org/api/path.html" target="_blank" rel="noopener">path</a></li>
+<li><a href="https://nodejs.org/api/assert.html" target="_blank" rel="noopener">assert</a></li>
+<li><a href="https://nodejs.org/api/buffer.html" target="_blank" rel="noopener">buffer</a></li>
+<li><a href="https://nodejs.org/api/util.html" target="_blank" rel="noopener">util</a></li>
+<li><a href="https://nodejs.org/api/url.html" target="_blank" rel="noopener">url</a></li>
+<li><a href="https://nodejs.org/api/punycode.html" target="_blank" rel="noopener">punycode</a></li>
+<li><a href="https://nodejs.org/api/querystring.html" target="_blank" rel="noopener">querystring</a></li>
+<li><a href="https://nodejs.org/api/string_decoder.html" target="_blank" rel="noopener">string-decoder</a></li>
+<li><a href="https://nodejs.org/api/stream.html" target="_blank" rel="noopener">stream</a></li>
+<li><a href="https://nodejs.org/api/timers.html" target="_blank" rel="noopener">timers</a></li>
+<li><a href="https://nodejs.org/api/events.html" target="_blank" rel="noopener">events</a></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 外部库调用示例</span></span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</span><br><span class="line"><span class="keyword">const</span> myURL = url.parse(<span class="string">'https://sub.example.com:8080/p/a/t/h?query=string'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(myURL.protocol, myURL.host, myURL.path);</span><br></pre></td></tr></table></figure>
+<h2 id="Mock服务"><a href="#Mock服务" class="headerlink" title="Mock服务"></a>Mock服务</h2>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Tonny Yi</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://codertang.com/2020/10/21/postman/" title="postman">http://codertang.com/2020/10/21/postman/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="external nofollow" target="_blank">CC BY-NC 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/postman/" rel="tag"># postman</a>
+          
+            <a href="/tags/test/" rel="tag"># test</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/05/python-faker/" rel="next" title="faker - 测试数据生成">
+                <i class="fa fa-chevron-left"></i> faker - 测试数据生成
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Tonny Yi">
+            
+              <p class="site-author-name" itemprop="name">Tonny Yi</p>
+              <p class="site-description motion-element" itemprop="description">Coding, Life, Zen</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">52</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tonnyyi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:tonnyemails@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本操作"><span class="nav-number">1.</span> <span class="nav-text">基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#请求参数"><span class="nav-number">1.1.</span> <span class="nav-text">请求参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#响应对象"><span class="nav-number">1.2.</span> <span class="nav-text">响应对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看响应对象"><span class="nav-number">1.2.1.</span> <span class="nav-text">查看响应对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#响应示例"><span class="nav-number">1.2.2.</span> <span class="nav-text">响应示例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求组"><span class="nav-number">1.3.</span> <span class="nav-text">请求组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#环境"><span class="nav-number">1.4.</span> <span class="nav-text">环境</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量"><span class="nav-number">2.</span> <span class="nav-text">变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变量作用域"><span class="nav-number">2.1.</span> <span class="nav-text">变量作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理变量"><span class="nav-number">2.2.</span> <span class="nav-text">管理变量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#管理global和environment作用域变量"><span class="nav-number">2.2.1.</span> <span class="nav-text">管理global和environment作用域变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#管理collection作用域的变量"><span class="nav-number">2.2.2.</span> <span class="nav-text">管理collection作用域的变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在脚本中操作变量"><span class="nav-number">2.2.3.</span> <span class="nav-text">在脚本中操作变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#请求时使用变量"><span class="nav-number">2.2.4.</span> <span class="nav-text">请求时使用变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#data作用域变量操作"><span class="nav-number">2.2.5.</span> <span class="nav-text">data作用域变量操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#脚本"><span class="nav-number">3.</span> <span class="nav-text">脚本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本执行顺序"><span class="nav-number">3.1.</span> <span class="nav-text">脚本执行顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Test脚本"><span class="nav-number">3.2.</span> <span class="nav-text">Test脚本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常用测试代码"><span class="nav-number">3.2.1.</span> <span class="nav-text">常用测试代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用API"><span class="nav-number">3.2.2.</span> <span class="nav-text">常用API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用断言"><span class="nav-number">3.2.3.</span> <span class="nav-text">常用断言</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API"><span class="nav-number">3.3.</span> <span class="nav-text">API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#动态变量"><span class="nav-number">3.3.1.</span> <span class="nav-text">动态变量</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#通用"><span class="nav-number">3.3.1.1.</span> <span class="nav-text">通用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文本数字颜色"><span class="nav-number">3.3.1.2.</span> <span class="nav-text">文本数字颜色</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#网络"><span class="nav-number">3.3.1.3.</span> <span class="nav-text">网络</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#姓名"><span class="nav-number">3.3.1.4.</span> <span class="nav-text">姓名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#职业"><span class="nav-number">3.3.1.5.</span> <span class="nav-text">职业</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#电话地址"><span class="nav-number">3.3.1.6.</span> <span class="nav-text">电话地址</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#图片"><span class="nav-number">3.3.1.7.</span> <span class="nav-text">图片</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#金融"><span class="nav-number">3.3.1.8.</span> <span class="nav-text">金融</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#商务"><span class="nav-number">3.3.1.9.</span> <span class="nav-text">商务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#流行语"><span class="nav-number">3.3.1.10.</span> <span class="nav-text">流行语</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据库"><span class="nav-number">3.3.1.11.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#日期"><span class="nav-number">3.3.1.12.</span> <span class="nav-text">日期</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#网站"><span class="nav-number">3.3.1.13.</span> <span class="nav-text">网站</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文件目录"><span class="nav-number">3.3.1.14.</span> <span class="nav-text">文件目录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#商店"><span class="nav-number">3.3.1.15.</span> <span class="nav-text">商店</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#语法"><span class="nav-number">3.3.1.16.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#乱数假文"><span class="nav-number">3.3.1.17.</span> <span class="nav-text">乱数假文</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pm对象"><span class="nav-number">3.3.2.</span> <span class="nav-text">pm对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#variable属性"><span class="nav-number">3.3.2.1.</span> <span class="nav-text">variable属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#request-response-cookies属性"><span class="nav-number">3.3.2.2.</span> <span class="nav-text">request response cookies属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#脚本里发送请求"><span class="nav-number">3.3.2.3.</span> <span class="nav-text">脚本里发送请求</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用外部库"><span class="nav-number">3.3.2.4.</span> <span class="nav-text">使用外部库</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mock服务"><span class="nav-number">4.</span> <span class="nav-text">Mock服务</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tonny Yi</span>
+
+  
+
+  
+</div>
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>
