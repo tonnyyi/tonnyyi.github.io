@@ -229,3 +229,65 @@ sudo -u nobody jmap -dump:format=b,file=xx.bin
 # 每隔3秒打印GC内存情况
 jstat -gcutil pid 3s
 ```
+
+
+
+### jcmd
+
+- 查看JVM进程内存分布
+
+  增加JVM参数`-XX:NativeMemoryTracking=summary`, 启动后执行
+
+  ```bash
+  $ jcmd 29522 VM.native_memory summary
+  29522:
+  
+  Native Memory Tracking:
+  
+  Total: reserved=2598660KB, committed=2536964KB
+  -                 Java Heap (reserved=2097152KB, committed=2097152KB)
+                              (mmap: reserved=2097152KB, committed=2097152KB)
+  
+  -                     Class (reserved=122308KB, committed=64708KB)
+                              (classes #11692)
+                              (malloc=1476KB #20250)
+                              (mmap: reserved=120832KB, committed=63232KB)
+  
+  -                    Thread (reserved=65524KB, committed=65524KB)
+                              (thread #83)
+                              (stack: reserved=65168KB, committed=65168KB)
+                              (malloc=259KB #428)
+                              (arena=97KB #165)
+  
+  -                      Code (reserved=138968KB, committed=138968KB)
+                              (malloc=5848KB #7597)
+                              (mmap: reserved=133120KB, committed=133120KB)
+  
+  -                        GC (reserved=140938KB, committed=140938KB)
+                              (malloc=30346KB #8883)
+                              (mmap: reserved=110592KB, committed=110592KB)
+  
+  -                  Compiler (reserved=213KB, committed=213KB)
+                              (malloc=82KB #266)
+                              (arena=131KB #3)
+  
+  -                  Internal (reserved=11497KB, committed=11497KB)
+                              (malloc=11465KB #38118)
+                              (mmap: reserved=32KB, committed=32KB)
+  
+  -                    Symbol (reserved=14611KB, committed=14611KB)
+                              (malloc=12493KB #123906)
+                              (arena=2118KB #1)
+  
+  -    Native Memory Tracking (reserved=3136KB, committed=3136KB)
+                              (malloc=13KB #153)
+                              (tracking overhead=3123KB)
+  
+  -               Arena Chunk (reserved=218KB, committed=218KB)
+                              (malloc=218KB)
+  
+  -                   Unknown (reserved=4096KB, committed=0KB)
+                              (mmap: reserved=4096KB, committed=0KB)
+  ```
+
+  

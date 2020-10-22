@@ -14,7 +14,7 @@ date: 2016-09-02 15:34:31
 ### 服务器
 ### 命令
 - `dmidecode | grep "Product Name"`: 查看服务器型号(使用root执行)
-    
+  
     ```
     [root@cluster143 mcc]# dmidecode | grep "Product Name"
     Product Name: PowerEdge R720
@@ -57,29 +57,31 @@ date: 2016-09-02 15:34:31
     NUMA 节点1 CPU：    1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31
     ```
 - `cat /proc/cpuinfo`
-    - `cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c`: 查看物理cpu信息
+    - CPU型号
 
+        ```bash
+        $ cat /proc/cpuinfo | grep 'model name' | sort | uniq
+        model name	: Intel(R) Xeon(R) Gold 6140 CPU @ 2.30GHz
         ```
-        [mcc@localhost ~]$ cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c
-         32  Intel(R) Xeon(R) CPU E5-2640 v2 @ 2.00GHz 
-        ```
-    - `cat /proc/cpuinfo | grep 'physical id' | uniq -c`: 查看物理CPU个数及每个物理CPU上的逻辑CPU个数
         
+    - CPU数量
+      
+        ```bash
+        $ cat /proc/cpuinfo | grep 'physical id' | sort | uniq | wc -l
+        2
         ```
-        [mcc@localhost ~]$ cat /proc/cpuinfo | grep 'physical id' | uniq -c
-          16 physical id	: 0
-          16 physical id	: 1
+        
+- 单颗CPU物理核数
+    
+        ```bash
+        $ cat /proc/cpuinfo | grep "cores" | uniq
+        cpu cores	: 18
         ```
-    - `cat /proc/cpuinfo |grep "cores"|uniq  `: 查看每个CPU的核数, 如果`逻辑CPU个数` \* `核数` = `2 * 逻辑CPU个数`则说明CPU支持并开启了超线程技术
-
-        ```
-        [root@localhost mcc]# cat /proc/cpuinfo |grep "cores"|uniq
-        cpu cores	: 8
-        ```
+        
     - `getconf LONG_BIT `: 查看当前CPU运行模式是32位还是64位
     
-        ```
-        [root@cluster143 mcc]# getconf LONG_BIT
+        ```bash
+        $ getconf LONG_BIT
         64
         ```
     
@@ -154,7 +156,7 @@ date: 2016-09-02 15:34:31
 
 ### 磁盘
 `smartctl -a /dev/sda`: 查看硬盘型号
-  
+
 ```
 [root@localhost mcc]# smartctl -a /dev/sda
 smartctl 6.2 2013-07-26 r3841 [x86_64-linux-3.10.0-123.el7.x86_64] (local build)
@@ -177,7 +179,7 @@ SMART support is:     Unavailable - device lacks SMART capability.
 Error Counter logging not supported
     
 Device does not support Self Test logging
-    ```
+```
 
 #### 命令
 - `lsblk`: 查看硬盘以及分区
@@ -233,13 +235,20 @@ Device does not support Self Test logging
     ```
 - `du -sh <目录名>`: 查看指定命令的大小
 
-    ```
+    ```bash
     [root@localhost mcc]# du -sh /tmp/
     2.3G	/tmp/
+    
+    # 查看目录下文件/文件夹占用空间
+$ du -sh /home/*
+    12K	/home/centos
+    9.1M	/home/elastic
+    1.3G	/home/git
+    114M	/home/iflytek
     ```
     
-
-        
+    
+    ​    
 ### 网卡
 #### 命令
 - `lspci | grep -i 'eth'` 或 `dmesg | grep -i eth`: 查看网卡硬件信息
@@ -364,7 +373,7 @@ netstat -lntp          # 查看所有监听端口
 netstat -antp          # 查看所有已经建立的连接
 netstat -s             # 查看网络统计信息
 
-```    
+```
 
 -----
 ### 参考
