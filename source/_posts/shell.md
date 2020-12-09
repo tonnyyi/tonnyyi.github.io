@@ -9,8 +9,68 @@ categories:
 date: 2019-01-10 08:36:03
 ---
 
+# 基本语法
+
+## echo 命令
+
+脚本中会大量用到echo命令输出执行日志
+
+```bash
+# 单行
+$ echo hello world
+hello world
+
+# 多行
+$ echo "hello
+world
+"
+```
+
+## 常用参数
+
+### `-n`
+
+默认情况下，`echo`输出的文本末尾会有一个回车符。`-n`参数可以取消末尾的回车符，使得下一个提示符紧跟在输出内容的后面。
+
+```bash
+$ echo -n hello world
+hello world$
+
+$ echo a;echo b
+a
+b
+
+$ echo -n a;echo b
+ab
+```
+
+`-n`参数可以让两个`echo`命令的输出连在一起，出现在同一行。
+
+## `-e`
+
+`-e`参数会解释引号（双引号和单引号）里面的特殊字符（比如换行符`\n`）。如果不使用`-e`参数，即默认情况下，引号会让特殊字符变成普通字符，`echo`不解释它们，原样输出。
+
+```bash
+$ echo "Hello\nWorld"
+Hello\nWorld
+
+$ echo -e "Hello\nWorld"
+Hello
+World
+
+$ echo -e 'Hello\nWorld'
+Hello
+World
+```
+
+
+
 # 变量
+
+## 声明变量
+
 变量声明方式: `变量名=变量值`, `=`左右不要有空格. 变量名命名规则:
+
 - 只能使用数字, 大小写字母, 下划线, 首字符不能为数字
 - 不能有空格, 可以使用`_`
 - 不能使用base里的关键字(使用`help`命令查看关键字)
@@ -29,7 +89,15 @@ echo $your_name
 echo ${your_name}
 ```
 **推荐给所有变量加上花括号**
+
+```bash
+your="Tom"
+echo $your_name   # 找不到变量 your_name
+echo ${your}_name  # 输出拼接字符串 Tom_name
+```
+
 已定义的变量, 可以被重新赋值, 如:
+
 ```bash
 your_name="John"
 echo $your_name
@@ -38,7 +106,10 @@ echo $your_name
 ```
 第二次赋值的时候不能写\$your_name="alibaba", **使用变量的时候才加美元符（$）**
 
+
+
 ## 只读变量
+
 使用 readonly 命令可以将变量定义为只读变量, 只读变量的值不能被改变.
 ```bash
 #!/bin/bash
@@ -65,13 +136,13 @@ echo $myUrl
 
 变量替换是指可以根据变量的状态(是否为空, 是否定义等)来改变变量的值
 
-|      形式       | 说明                                                         |
-| :-------------: | :----------------------------------------------------------- |
-|     ${var}      | 变量本来的值                                                 |
-|  ${var:-word}   | 变量var如果为空或已被删除(unset), 则返回word, 但不改变变量var的值 |
-|  ${var:=word}   | 变量var如果为空或已被删除(unset), 则返回word, 同时将变量var的值设置为word |
-| ${var:?message} | 变量var如果为空或已被删除(unset), 则将message发送到标识错误输出. 若此替换出现在脚本中, 则脚本停止运行 |
-|  ${var:+word}   | 如果变量var被定义, 那么返回word, 但不改变变量var的值         |
+|     形式     | 说明                                                         |
+| :----------: | :----------------------------------------------------------- |
+|    ${var}    | 变量本来的值                                                 |
+| ${var:+word} | 如果变量var被定义, 那么返回word, 但不改变变量var的值         |
+| ${var:-word} | 变量var如果为空或已被删除(unset), 则返回word, 但不改变变量var的值 |
+| ${var:=word} | 变量var如果为空或已被删除(unset), 则返回word, 同时将变量var的值设置为word |
+| ${var:?msg}  | 变量var如果为空或已被删除(unset), 则将msg发送到标识错误输出. 若此替换出现在脚本中, 则脚本停止运行 |
 
 示例:
 
@@ -79,37 +150,35 @@ echo $myUrl
 #!/bin/bash
 
 echo ${var:-"Variable is not set"}
-echo "1 - Value of var is ${var}"
+echo "1 - Value of var is ${var}"	
+# Variable is not set
+# 1 - Value of var is
 
 echo ${var:="Variable is not set"}
 echo "2 - Value of var is ${var}"
+# Variable is not set
+# 2 - Value of var is Variable is not set
 
 unset var
 echo ${var:+"This is default value"}
 echo "3 - Value of var is $var"
+# 
+# 3 - Value of var is
+
 
 var="Prefix"
 echo ${var:+"This is default value"}
 echo "4 - Value of var is $var"
+# This is default value
+# 4 - Value of var is Prefix
 
 echo ${var:?"Print this message"}
 echo "5 - Value of var is ${var}"
+# Prefix
+# 5 - Value of var is Prefix
 ```
 
-结果
 
-```
-Variable is not set
-1 - Value of var is
-Variable is not set
-2 - Value of var is Variable is not set
-
-3 - Value of var is
-This is default value
-4 - Value of var is Prefix
-Prefix
-5 - Value of var is Prefix
-```
 
 ## 变量类型
 

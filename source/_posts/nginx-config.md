@@ -69,6 +69,11 @@ location / {
 访问 http://xxx/a 时
 ```nginx
 location /a {
+    root /data/www/html;
+    add_header Cache-Control no-store;
+    proxy_set_header Host $proxy_host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
     proxy_pass http://192.168.1.100:80;
 }
 ```
@@ -80,6 +85,42 @@ location /a/ {
 }
 ```
 则转到了 http://192.168.1.100:80/, 注意**规则里的两个`/`**
+
+
+
+```nginx
+location /proxy/ {
+    proxy_pass http://test.com/;
+}
+
+http://test.com/proxy/index.html  ->  http://test.com/index.html
+```
+
+```nginx
+location /proxy/ {
+    proxy_pass http://test.com;
+}
+
+http://test.com/proxy/index.html  ->  http://test.com/proxy/index.html
+```
+
+```nginx
+location /proxy/ {
+    proxy_pass http://test.com/test/;
+}
+
+http://test.com/proxy/index.html  ->  http://test.com/test/index.html
+```
+
+```nginx
+location /proxy/ {
+    proxy_pass http://test.com/test;
+}
+
+http://test.com/proxy/index.html  ->  http://test.com/testindex.html
+```
+
+
 
 ## 负载均衡配置
 ```nginx

@@ -251,24 +251,294 @@ history | less
 less -N file    # 加行号
 ```
 
-### sed
+
+
+### sed 基于正则的流处理器
+
 sed是一种在线编辑器, 每次处理一行内容. 处理时, 把当前行存储在临时缓冲区中, 称为"模式空间"(pattern space), 接着sed命令处理缓冲区中的内容. 处理完成后, 将缓冲区内容输出到屏幕. 然后接着处理下一行, 直至文件结束.
+
+##### 打印   p参数
+
 ```bash
-# a:新增  c:替换  d:删除  i:插入  p:打印  s:取代
-nl file | sed '2,5d'        # 删除2,5行
-nl file | sed '2,$d'        # 从第2行删除到最后
-nl file | sed '2a test'     # 在第2行后加上一行, 内容是test
-nl file | sed '2i test'     # 在第2行前加一行, 内容是test
-nl file | sed '2,4c Hello World'    # 2到4行替换为Hello World, 就一行
-sed -n '2,5p' file      # 显示2 - 5行内容
-nl file | sed '/root/d'     # 删除包含root的行
-nl file | sed 's/^.*test/hello/g'   # sed 's/待替换字符/替换字符/g'
-sed -i 's/\.$/\!/g' file    # 直接修改文件内容, 将行末.替换为!
+# 匹配fish并输出, 但是匹配到的行被输出了2遍, 这是因为sed会把待处理的信息也输出了
+sed '/fish/p' input.txt
+
+# 使用-n参数只输出匹配到的行
+sed -n '/fish/p' input.txt
+# 输出匹配 fish 或者 dog 的行
+sed -n '/fish/,/dog/p' input.txt
+
+# 从第一行打印到匹配fish的那一行
+sed -n '1,/fish/p' input.txt
+
+# 打印匹配到dog后的3行
+sed -n '/dog/,+3p' input.txt
 ```
 
-### awk
-```bash
+##### 文本替换  s参数
 
+```bash
+# 把一行上的每个(/g)单词 my 都替换成 your, 所有行都处理
+# 但不会改动input.txt, 只是会输出每一行的内容(即使该行没被处理也输出)
+sed 's/my/your/g' input.txt
+
+# 如果想用处理后的内容覆盖原文件, 则需要加 -i 参数
+sed -i 's/my/your/g' input.txt
+
+# 在每行前面增加 # 
+sed -i 's/^/#/g' input.txt
+# 在每行后面增加 ===
+sed -i 's/$/===/g' input.txt
+
+# 指定处理的行范围(第3到6行)
+sed -i '3,6s/my/your/g' input.txt
+# 从匹配到的行开始后面连续3行, 在行首加#
+sed -i '/my/,+3s/^/#/g' input.txt
+
+# 只替换每行的第一个a
+sed -i 's/a/A/1' input.txt
+# 替换每行的第二个a
+sed -i 's/a/A/2' input.txt
+# 替换每行的第三个以后的所有a
+sed -i 's/a/A/3g' input.txt
+
+# 可以一次匹配多个模式, 先把第一到第三行的my替换成your, 再把第三行以后的This替换成That
+sed '1,3s/my/your/g; 3,$s/This/That/g' input.txt
+sed -e '1,3s/my/your/g' -e '3,$s/This/That/g' input.txt
+
+# 可以使用&表示被匹配到的变量, 将单词my用[]包裹起来
+sed 's/my/[&]/g' input.txt
+
+# 使用正则中的分组功能, 圆括号定义分组, \1, \2表示匹配到的分组变量
+sed 's/my (\w+)/\1/g' input.txt  # 输出my后面跟着的字符
+
+# N命令可以把下一行内容当成缓冲区做匹配, 效果就是隔行处理
+sed 'N;s/\n/,/' input.txt  # 把1,2  3,4  5,6 合并成一行, 用,分隔
+```
+
+##### 在行前插入一行   i参数
+
+```bash
+# 在第一行前插入一行 This is a test line
+sed '1 i This is a test line' input.txt  
+```
+
+##### 在行后插入一行   a参数
+
+```bash
+# 在第一行后插入一行 This is a test line
+sed '1 a This is a test line' input.txt  
+
+# 匹配到fish就在这一行后面追加一行
+sed '/fish/a This is a test line' input.txt
+```
+
+##### 替换匹配行    c参数
+
+```bash
+# 替换第二行
+sed '2 c This is a test line' input.txt   
+```
+
+##### 删除匹配行   d参数
+
+```bash
+# 删除1到3行
+sed '1,3d' input.txt
+# 从第2行到最后全部删除
+sed '2,$d' input.txt
+
+# 删除含有fish的行
+sed '/fish/d' input.txt
+```
+
+##### 命令打包
+
+```bash
+# 对3到6行, 匹配到This就删除这一行
+sed '3,6 {/This/d}' input.txt
+
+# 对3到6行, 匹配This后再匹配fish, 匹配到之后删除这一行
+sed '3,6 {/This/{/fish/d}}' input.txt
+
+# 从第一行到最后, 如果匹配到This则删除, 如果前面有空格则去除空格
+sed '1,$ {/This/d; s/^ *//g}' input.txt
+```
+
+
+
+### awk 格式化流处理器
+
+```bash
+# 打印第1列和第3列   $0表示整行
+cat '{print $1, $4}' input.txt
+
+# 格式化打印
+awk '{printf "%-8s %-8s %-8s %-18s %-22s %-15s\n",$1,$2,$3,$4,$5,$6}' input.txt
+
+#从file文件中找出长度大于80的行
+awk 'length>80' file
+
+#按连接数查看客户端IP
+netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr
+
+#打印99乘法表
+seq 9 | sed 'H;g' | awk -v RS='' '{for(i=1;i<=NF;i++)printf("%dx%d=%d%s", i, NR, i*NR, i==NR?"\n":"\t")}' 
+```
+
+##### 过滤记录
+
+```bash
+# 第3列等于0 且 第6列等于LISTEN  还有 !=  <  <=  >  >=
+awk '%3==0 && $6=="LISTEN"' input.txt
+
+# 过滤后只输出第7列
+awk '$3==0 && $6=="LISTEN" {print $7}' input.txt
+
+# 同时输出表头, 引入内建变量NR
+awk '%3==0 && $6=="LISTEN" || NR==1' input.txt
+# 再加上格式化输出
+awk '%3==0 && $6=="LISTEN" || NR==1 {printf "%-20s %-20s %s\n",$4,$5,$6}' input.txt
+```
+
+##### 内建变量
+
+| 变量名   | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| $0       | 当前记录, 即整行内容                                         |
+| $1 ~ $n  | 当前记录的第n个字段, 字段间由FS分隔                          |
+| FS       | 输入字段分隔符, 默认是空格或Tab                              |
+| NF       | 当前记录的字段个数, 即有多少列                               |
+| NR       | 已经读出的记录数, 即行号, 从1开始, 如果有多个文件, 该值会不断累加 |
+| FNR      | 当前记录数, 与NR不同的是, 该值是各个文件自己的行号           |
+| RS       | 输入的记录分隔符, 默认为换行符                               |
+| OFS      | 输入字段分隔符, 默认为空格                                   |
+| ORS      | 输出记录分隔符, 默认为换行符                                 |
+| FILENAME | 当前输入文件的名称                                           |
+
+```bash
+awk '$1=="tcp6" && $6=="LISTEN" {printf "%s %-20s %s\n", NR,$4,$5}' input.txt
+```
+
+##### 指定分隔符
+
+```bash
+awk 'BEGIN{FS=":"} {print $1,$3,$6}' /etc/passwd
+# 等价于
+awk -F: '{print $1,$3,$6}' /etc/passwd
+# 指定多个分隔符
+awk -F '[;:]'  '{print $1,$3,$6}' /etc/passwd
+
+# 指定输出分隔符
+awk -F: '{print $1,$3,$6}' OFS="\t" /etc/passwd
+```
+
+##### 字符串匹配
+
+```bash
+# 过滤第6列匹配WAIT   ~ 表示模式开始   //中是模式
+awk '$6 ~ /WAIT/ || NR==1 {print NR,$4,$5,$6}' OFS="\t" input.txt
+# 条件 或
+awk '$6 ~ /WAIT|FIN/ || NR==1 {print NR,$4,$5,$6}' OFS="\t" input.txt
+# 取反
+awk '$6 !~ /WAIT/ || NR==1 {print NR,$4,$5,$6}' OFS="\t" input.txt
+```
+
+##### 拆分文件
+
+```bash
+# 按第6列分隔文件   NR!=1表示不处理第一行
+awk 'NR!=1{print > $6}' input.txt
+# 只输出指定列到文件
+awk 'NR!=1{print $4,$5 > $6}' input.txt
+
+# awk就是个脚本解释器
+awk 'NR!=1{if($6 ~ /TIME|ESTABLISHED/) print > "1.txt"; 
+else if($6 ~ /LISTEN/) print > "2.txt";
+else print > "3.txt"}' input.txt
+```
+
+##### 统计
+
+```bash
+# 计算文件大小总和
+ls -l *.cpp *.c *.h | awk '{sum+=$5} END {print sum}'
+
+# 统计每个用户的进程占用多少内存
+ps aux | awk 'NR!=1{a[$1]+=$6;} END { for(i in a) print i ", " a[i]"KB"; }'
+```
+
+##### awk脚本
+
+语法如下:
+
+- BEGIN{ 这里面放的是执行前的语句 }
+- {这里面放的是处理每一行时要执行的语句}
+- END {这里面放的是处理完所有的行后要执行的语句 }
+
+示例
+
+```bash
+$ cat score.txt
+Marry   2143 78 84 77
+Jack    2321 66 78 45
+Tom     2122 48 77 71
+Mike    2537 87 97 95
+Bob     2415 40 57 62
+
+$ cat cal.awk
+#!/bin/awk -f
+#运行前
+BEGIN {
+    math = 0
+    english = 0
+    computer = 0
+    printf "NAME    NO.   MATH  ENGLISH  COMPUTER   TOTAL\n"
+    printf "---------------------------------------------\n"
+}
+#运行中
+{
+    math+=$3
+    english+=$4
+    computer+=$5
+    printf "%-6s %-6s %4d %8d %8d %8d\n", $1, $2, $3,$4,$5, $3+$4+$5
+}
+#运行后
+END {
+    printf "---------------------------------------------\n"
+    printf "  TOTAL:%10d %8d %8d \n", math, english, computer
+    printf "AVERAGE:%10.2f %8.2f %8.2f\n", math/NR, english/NR, computer/NR
+}
+
+$ awk -f cal.awk score.txt
+NAME    NO.   MATH  ENGLISH  COMPUTER   TOTAL
+---------------------------------------------
+Marry  2143     78       84       77      239
+Jack   2321     66       78       45      189
+Tom    2122     48       77       71      196
+Mike   2537     87       97       95      279
+Bob    2415     40       57       62      159
+---------------------------------------------
+  TOTAL:       319      393      350
+AVERAGE:     63.80    78.60    70.00
+```
+
+##### 环境变量
+
+使用`-v`和`ENVIRON`与环境变量交互, 使用`ENVIRON`的环境变量需要**export**
+
+```bash
+$ x=5
+$ y=10
+$ export y
+$ echo $x $y
+5 10
+$ awk -v val=$x '{print $1, $2, $3, $4+val, $5+ENVIRON["y"]}' OFS="\t" score.txt
+Marry   2143    78      89      87
+Jack    2321    66      83      55
+Tom     2122    48      82      81
+Mike    2537    87      102     105
+Bob     2415    40      62      72
 ```
 
 
@@ -990,6 +1260,8 @@ crontab -r
 
 # 每分钟执行一次
 * * * * * myCommand
+# 每小时执行一次
+* */1 * * *  myCommand
 
 # 每隔两天在上午8点到11的第3和第15分钟执行
 3,15 8-11 */2  *  * myCommand
@@ -1001,7 +1273,11 @@ crontab -r
 0 6-12/3 * 12 * myCommand
 ```
 
+crontab的日志文件是`/var/log/cron`   查看cron服务状态`systemctl status crond`
+
 **注意**
+
+- 命令中`%`是特殊字符, 需要加反斜线`\`转义
 
 - 脚本涉及到的文件路径要写全局路径
 
@@ -1572,7 +1848,7 @@ lsof -i@172.31.46.2:6379,3306 -r 3
 ```
 
 
-### ping
+### ping 测试网络通断与延迟
 
 ```bash
 ping www.baidu.com
@@ -1580,6 +1856,37 @@ ping -c 10 192.168.1.101    # 指定次数
 ping -c 10 -i 0.5 192.168.1.101     # 指定次数和间隔(秒)
 ping -i 3 -s 1024 -t 255 192.168.1.101  # -s 发送包大小为1024字节 -t TTL为255
 ```
+
+### Tcpping
+
+ping命令是基于ICMP协议, 遇到某些主机会禁用ICMP协议导致Ping命令失效, 这时可以使用基于tcp协议的工具, 比如: tcpping, tcping, psping, hping, paping等
+
+tcpping安装步骤如下:
+
+```bash
+# 1. tcpping 脚本依赖 tcptraceroute 组件, 所以必须先安装 tcptraceroute
+yum install -y tcptraceroute
+# 2. 下载tcpping文件
+wget http://www.vdberg.org/~richard/tcpping
+# 3. 将 tcpping 文件移动到 /usr/bin 下并授权
+mv tcpping /usr/bin/
+cd /usr/bin
+chmod 755 tcpping
+# 4. -d:打印时间戳  -c:结果输出在一列  -C:调整输出格式  -r n:输出间隔为n秒(默认1) -x n:重复n次
+tcpping www.baidu.com
+```
+
+hping是一个命令行下使用的 TCP/IP 数据包组装/分析工具, 它不仅能发送 ICMP 回应请求, 它还可以支持 TCP、UDP、ICMP 和 RAW-IP 协议
+
+```bash
+# 安装
+yum install hping3
+# 发送
+hping3 -S -p 80 -c 3 www.baidu.com
+```
+
+
+
 
 
 ### free 查询可用内存
@@ -1627,7 +1934,9 @@ $ du -sh *
 339M	jdk1.8.0_71
 ```
 
-### 
+### iftop 带宽使用监控
+
+
 
 
 
