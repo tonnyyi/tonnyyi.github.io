@@ -155,13 +155,8 @@
 <meta property="og:image" content="http://codertang.com/2019/09/02/spring-ioc-structure/beanfactory.png">
 <meta property="og:image" content="http://codertang.com/2019/09/02/spring-ioc-structure/beandefinition.png">
 <meta property="og:image" content="http://codertang.com/2019/09/02/spring-ioc-structure/beandefinitionreader.png">
-<meta property="og:image" content="http://codertang.com/2019/09/02/spring-ioc-structure/resource.png">
-<meta property="og:image" content="http://codertang.com/2019/09/02/spring-ioc-structure/resource-loader.png">
-<meta property="og:image" content="http://codertang.com/2019/09/02/spring-ioc-structure/beanfactory.png">
-<meta property="og:image" content="http://codertang.com/2019/09/02/spring-ioc-structure/beandefinition.png">
-<meta property="og:image" content="http://codertang.com/2019/09/02/spring-ioc-structure/beandefinitionreader.png">
 <meta property="og:image" content="https://pic.superbed.cn/item/5d86e337451253d178fa4723.png">
-<meta property="og:updated_time" content="2020-09-05T03:19:25.499Z">
+<meta property="og:updated_time" content="2020-12-09T06:49:37.441Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spring ioc 体系结构">
 <meta name="twitter:description" content="1. Resouce 体系org.springframework.core.io.Resource是对资源的抽象, 不同实现类代表了对不同资源的访问策略.  2. ResourceLoader 体系org.springframework.core.io.ResourceLoader统一处理资源加载过程. 3. BeanFactory 体系org.springframework.beans.fact">
@@ -406,7 +401,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-09-05 11:19:25" itemprop="dateModified" datetime="2020-09-05T11:19:25+08:00">2020-09-05</time>
+                <time title="修改时间：2020-12-09 14:49:37" itemprop="dateModified" datetime="2020-12-09T14:49:37+08:00">2020-12-09</time>
               
             
           </span>
@@ -486,33 +481,13 @@
 <li>继承<code>org.springframework.context.ApplicationEventPublisher</code>接口, 提供了应用事件机制</li>
 <li>扩展<code>ResourceLoader</code>, 可以加载多种<code>Resource</code>, 灵活访问不同的资源</li>
 </ol>
-<hr>
-<p>title: spring ioc 体系结构<br>tags:</p>
-<ul>
-<li>spring ioc</li>
-<li>java<br>categories:</li>
-<li>spring</li>
-<li>source code</li>
-<li>java<br>date: 2019-09-02 10:46:55</li>
-</ul>
-<hr>
-<h2 id="1-Resouce-体系-1"><a href="#1-Resouce-体系-1" class="headerlink" title="1. Resouce 体系"></a>1. Resouce 体系</h2><p><code>org.springframework.core.io.Resource</code>是对资源的抽象, 不同实现类代表了对不同资源的访问策略.</p>
-<p><img src="resource.png" alt="resource"></p>
-<h2 id="2-ResourceLoader-体系-1"><a href="#2-ResourceLoader-体系-1" class="headerlink" title="2. ResourceLoader 体系"></a>2. ResourceLoader 体系</h2><p><code>org.springframework.core.io.ResourceLoader</code>统一处理资源加载过程.<br><img src="resource-loader.png" alt="resource-loade"></p>
-<h2 id="3-BeanFactory-体系-1"><a href="#3-BeanFactory-体系-1" class="headerlink" title="3. BeanFactory 体系"></a>3. BeanFactory 体系</h2><p><code>org.springframework.beans.factory.BeanFactory</code>是底层的 IOC 容器, 负责管理<code>BeanDefinition</code>以及 Bean 实例, 默认使用的最终实现类是<code>org.springframework.beans.factory.support.DefaultListableBeanFactory</code>.</p>
-<p><img src="beanfactory.png" alt="beanfactory"></p>
-<h2 id="4-BeanDefinition-体系-1"><a href="#4-BeanDefinition-体系-1" class="headerlink" title="4. BeanDefinition 体系"></a>4. BeanDefinition 体系</h2><p><code>org.springframework.beans.factory.config.BeanDefinition</code>是对 Bean 的抽象</p>
-<p><img src="beandefinition.png" alt="beandefinition"></p>
-<h2 id="5-BeanDefinitionReader-体系-1"><a href="#5-BeanDefinitionReader-体系-1" class="headerlink" title="5. BeanDefinitionReader 体系"></a>5. BeanDefinitionReader 体系</h2><p><code>org.springframework.beans.factory.xml.XmlBeanDefinitionReader</code>负责读取 spring 配置文件内容, 从中解析出    <code>BeanDefinition</code> 对象.</p>
-<p><img src="beandefinitionreader.png" alt="beandefinitionreade"></p>
-<h2 id="6-ApplicationContext-体系-1"><a href="#6-ApplicationContext-体系-1" class="headerlink" title="6. ApplicationContext 体系"></a>6. ApplicationContext 体系</h2><p><code>org.springframework.context.ApplicationContext</code>叫做应用上下文, 是应用层的容器, 内部其实依赖了底层容器<code>BeanFactory</code>去管理 Bean. 相比后者, <code>ApplicationContext</code>做了如下的增强:</p>
-<ol>
-<li>继承<code>org.springframework.context.MessageSource</code>接口, 提供国际化能力</li>
-<li>继承<code>org.springframework.context.ApplicationEventPublisher</code>接口, 提供了应用事件机制</li>
-<li>扩展<code>ResourceLoader</code>, 可以加载多种<code>Resource</code>, 灵活访问不同的资源</li>
-</ol>
 <p><img src="https://pic.superbed.cn/item/5d86e337451253d178fa4723.png" alt="applicationcontext"></p>
-
+<h2 id="应用扩展点"><a href="#应用扩展点" class="headerlink" title="应用扩展点"></a>应用扩展点</h2><h3 id="BeanPostProcessor"><a href="#BeanPostProcessor" class="headerlink" title="BeanPostProcessor"></a>BeanPostProcessor</h3><p>包含两个方法, 用于在bean初始化之前/之后(此时bean已经实例化完成)对bean进行自定义处理, 或者直接替换bean(AOP就是在这里对bean进行包装, 进而提供增强能力). 最好实现<code>Ordered</code>接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Object <span class="title">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> bean;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">Object <span class="title">postProcessAfterInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> bean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="BeanFactoryPostProcessor"><a href="#BeanFactoryPostProcessor" class="headerlink" title="BeanFactoryPostProcessor"></a>BeanFactoryPostProcessor</h3><p>仅包含一个方法, 用于在bean实例化之前, 对bean的元数据进行自定义配置(BeanFactoryPostProcessor实例除外). 最好实现<code>Ordered</code>接口. <code>PropertySourcesPlaceholderConfigurer</code>就是一个实现类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">postProcessBeanFactory</span><span class="params">(ConfigurableListableBeanFactory beanFactory)</span> <span class="keyword">throws</span> BeansException</span>;</span><br></pre></td></tr></table></figure>
+<p>虽然技术上可以通过<code>BeanFactoryPostProcessor</code>接口对bean实例进行替换, 但这会导致bean提取实例化, 违反了标准的容器生命周期, 推荐使用<code>BeanPostProcessor</code>接口.</p>
+<h2 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h2>
       
     </div>
 
@@ -943,7 +918,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Resouce-体系"><span class="nav-number">1.</span> <span class="nav-text">1. Resouce 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ResourceLoader-体系"><span class="nav-number">2.</span> <span class="nav-text">2. ResourceLoader 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-BeanFactory-体系"><span class="nav-number">3.</span> <span class="nav-text">3. BeanFactory 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-BeanDefinition-体系"><span class="nav-number">4.</span> <span class="nav-text">4. BeanDefinition 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-BeanDefinitionReader-体系"><span class="nav-number">5.</span> <span class="nav-text">5. BeanDefinitionReader 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-ApplicationContext-体系"><span class="nav-number">6.</span> <span class="nav-text">6. ApplicationContext 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Resouce-体系-1"><span class="nav-number">7.</span> <span class="nav-text">1. Resouce 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ResourceLoader-体系-1"><span class="nav-number">8.</span> <span class="nav-text">2. ResourceLoader 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-BeanFactory-体系-1"><span class="nav-number">9.</span> <span class="nav-text">3. BeanFactory 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-BeanDefinition-体系-1"><span class="nav-number">10.</span> <span class="nav-text">4. BeanDefinition 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-BeanDefinitionReader-体系-1"><span class="nav-number">11.</span> <span class="nav-text">5. BeanDefinitionReader 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-ApplicationContext-体系-1"><span class="nav-number">12.</span> <span class="nav-text">6. ApplicationContext 体系</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Resouce-体系"><span class="nav-number">1.</span> <span class="nav-text">1. Resouce 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ResourceLoader-体系"><span class="nav-number">2.</span> <span class="nav-text">2. ResourceLoader 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-BeanFactory-体系"><span class="nav-number">3.</span> <span class="nav-text">3. BeanFactory 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-BeanDefinition-体系"><span class="nav-number">4.</span> <span class="nav-text">4. BeanDefinition 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-BeanDefinitionReader-体系"><span class="nav-number">5.</span> <span class="nav-text">5. BeanDefinitionReader 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-ApplicationContext-体系"><span class="nav-number">6.</span> <span class="nav-text">6. ApplicationContext 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用扩展点"><span class="nav-number">7.</span> <span class="nav-text">应用扩展点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BeanPostProcessor"><span class="nav-number">7.1.</span> <span class="nav-text">BeanPostProcessor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BeanFactoryPostProcessor"><span class="nav-number">7.2.</span> <span class="nav-text">BeanFactoryPostProcessor</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Environment"><span class="nav-number">8.</span> <span class="nav-text">Environment</span></a></li></ol></div>
             
 
           </div>
