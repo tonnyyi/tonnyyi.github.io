@@ -159,6 +159,25 @@ sort -n -t : -k 3nr -k 2 file   # 以:分隔列, 先按第3列倒叙排, 相同�
 sort -n -k 2.2,3.1 file    # 以第2列的第3个字符到第3列的第1个字符排序
 ```
 
+### uniq
+
+```bash
+uniq -c     # 显示重复次数
+uniq -U     # 仅显示出现一次的列
+uniq -d 	# 仅显示重复的列
+```
+
+## wc
+
+```bash
+wc -l	# 统计行数
+wc -c	# 统计字节数
+wc -m	# 统计字符数， 不能与 -c 一起用
+wc -w	# 统计字数，由空白、空格或换行符分隔
+```
+
+
+
 ### realpath
 
 ### readlink
@@ -248,7 +267,8 @@ head -n 20 file | tail -n 10    # 查看前20行中的后10行
 # ctrl + F :前移1屏   ctrl + B :后移1屏   ctrl + D :前移半屏    ctrl + U :后移半屏
 # j :前移1行  k :后移1行   G :移动到最后1行  g :移动到首行  q :退出
 history | less
-less -N file    # 加行号
+less -N xxx.txt    # 显示行号
+less -m xxx.txt    # 显示百分比
 ```
 
 
@@ -316,18 +336,30 @@ sed 's/my (\w+)/\1/g' input.txt  # 输出my后面跟着的字符
 sed 'N;s/\n/,/' input.txt  # 把1,2  3,4  5,6 合并成一行, 用,分隔
 ```
 
+##### 地址表示法
+
+| 表达式      | 说明                                                 |
+| ----------- | ---------------------------------------------------- |
+| n           | 行号                                                 |
+| $           | 最后一行                                             |
+| /regexp/    | 所有匹配该正则的文本行                               |
+| addr1,addr2 | 从addr1到addr2范围内的文本行, 包含addr2              |
+| first~step  | 从first行开始, 每个step的文本行, 例: 1~2值每个奇数行 |
+| addr1,+n    | 从addr1开始到后面的n行                               |
+| addr!       | 除了addr之外的其他文本行                             |
+
 ##### 在行前插入一行   i参数
 
 ```bash
 # 在第一行前插入一行 This is a test line
-sed '1 i This is a test line' input.txt  
+sed '1 i This is a test line' input.txt
 ```
 
 ##### 在行后插入一行   a参数
 
 ```bash
 # 在第一行后插入一行 This is a test line
-sed '1 a This is a test line' input.txt  
+sed '1 a This is a test line' input.txt
 
 # 匹配到fish就在这一行后面追加一行
 sed '/fish/a This is a test line' input.txt
@@ -337,7 +369,7 @@ sed '/fish/a This is a test line' input.txt
 
 ```bash
 # 替换第二行
-sed '2 c This is a test line' input.txt   
+sed '2 c This is a test line' input.txt
 ```
 
 ##### 删除匹配行   d参数
@@ -383,7 +415,7 @@ awk 'length>80' file
 netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr
 
 #打印99乘法表
-seq 9 | sed 'H;g' | awk -v RS='' '{for(i=1;i<=NF;i++)printf("%dx%d=%d%s", i, NR, i*NR, i==NR?"\n":"\t")}' 
+seq 9 | sed 'H;g' | awk -v RS='' '{for(i=1;i<=NF;i++)printf("%dx%d=%d%s", i, NR, i*NR, i==NR?"\n":"\t")}'
 ```
 
 ##### 过滤记录
@@ -453,7 +485,7 @@ awk 'NR!=1{print > $6}' input.txt
 awk 'NR!=1{print $4,$5 > $6}' input.txt
 
 # awk就是个脚本解释器
-awk 'NR!=1{if($6 ~ /TIME|ESTABLISHED/) print > "1.txt"; 
+awk 'NR!=1{if($6 ~ /TIME|ESTABLISHED/) print > "1.txt";
 else if($6 ~ /LISTEN/) print > "2.txt";
 else print > "3.txt"}' input.txt
 ```
@@ -723,7 +755,9 @@ ip link set eth0 txqueuelen 1200
 # 设置网卡最大传输单元MTU
 ip link set eth0 mtu 1500
 
-# 显示网卡ip信息
+# 显示网卡信息
+ip a
+ip address show
 ip addr show
 
 # 设置/删除网卡IP地址
@@ -845,9 +879,9 @@ ss src 192.168.1.230
 ss dport = :3306   # 连接到3306端口的
 ss sport = :http   # 从80端发起连接的
 # <= or le    >= or ge    == or eq    != or ne    < or gt     > or lt
-ss dport \> :1024
-ss sport \> :1024
-ss sport \< :32000
+ss dport > :1024
+ss sport > :1024
+ss sport < :32000
 ss sport eq :22
 ss dport != :22
 
@@ -1137,6 +1171,36 @@ find . -type f "*.java" -print0 | xargs -0 wc -l   # 统计文件行数
 find . -maxdepth 1 ! -name "." -print0 | xargs -0 du -b | sort -nr | head -10 | nl   # 找到文件大小前10的, 文件名不为'.'的文件, nl可以为输出列加上编号
 # find后执行xargs提示xargs: argument line too long解决方法
 find . -type f -atime +0 -print0 | xargs -0 -l1 -t rm -f    # -1l是一次处理一个, -t是处理前打印命令
+```
+
+
+
+## seq 生成连续的数字序列
+
+```bash
+# 输出1到5
+$ seq 5
+# 或者
+$ seq 1 5
+1
+2
+3
+4
+5
+
+# 输出1到5，步长为2
+$ seq 1 2 5
+1
+3
+5
+
+# 序列在单行，用指定分隔符进行分隔
+$ seq -s " " 1 2 5
+1 3 5
+
+# 使用指定字符补齐长度
+$ seq -s " " -f "%04g" 1 2 5
+0001 0003 0005
 ```
 
 
@@ -1935,6 +1999,54 @@ $ du -sh *
 ```
 
 ### iftop 带宽使用监控
+
+
+
+### tcpdump 抓包
+
+抓取经过eth0接口请求8080端口的tcp请求
+
+```bash
+tcpdump tcp -i eth0 -s 0 -nn -vvv and dst port 8080 -w 8080dump.cap
+```
+
+- 类型: `host` `net` `port`  
+- 方向: `src` `dst` `src or dst` `src and dst`
+- 协议：`ip` `tcp` `udp` `arp` `icmp`....
+
+```bash
+# 监听特定网卡
+tcpdump -i eth0
+
+# 监听特定主机  监听与172.31.46.2主机间的通信，出入的包都会被监听
+tcpdump host 172.31.46.2
+
+tcpdump src host 172.31.46.2
+tcpdump dst host 172.31.46.2
+
+# 监听特定端口
+tcpdump port 8080
+
+# 监听来自172.31.46.2的请求本机8080端口的tcp通信
+tcpdump tcp port 8080 and src host 172.31.46.2
+```
+
+```bash
+tcpdump tcp -i eth0 -t -s 0 -c 100 -n and dst port ! 22 and src net 192.168.1.0/24 -w tcpdump.cap
+```
+
+- `tcp` : tcp udp ip icmp arp等这些选项都要放到第一个参数的位置，用来过滤数据报的类型
+- `-i eth0`：只抓取接口eth0的包
+- `-t`：不显示时间戳
+- **`-s 0`**：默认只抓取68字节，加上`-s 0`后可以抓取完整的数据包
+- `-c 100`：只抓取100个数据包
+- `-n`：将地址以数字形式显示，否则显示为主机名
+- **`-nn`**：除了有`-n`的作用，还把端口显示为数值，否则显示为端口服务名
+- `dst port ! 22`：不抓取目标端口是22的数据包
+- `src net 192.168.1.0/24`：数据包的源网络地址为192.168.1.0/24
+- `-w tcpdump.cap`：抓取结果写入文件
+- **`-X`**：以16进制和ASCII码显示包数据，**现场分析数据包内容必备**
+- `-v` `-vv` `-vvv` ：输出结果详细程度递增
 
 
 

@@ -1,10 +1,10 @@
 ---
 title: Linux系统及硬件信息查看
 tags:
-  - Linux
+  - linux
   - command
 categories:
-  - Linux
+  - linux
   - Hardware
 date: 2016-09-02 15:34:31
 ---
@@ -21,6 +21,36 @@ date: 2016-09-02 15:34:31
     Product Name: 068CDY
     ```
 <!-- more -->
+
+`hostnamectl`是systemd的一部分, 可用于查询和更改系统主机名和相关设置
+
+```bash
+$ hostnamectl
+   Static hostname: localhost.localdomain
+         Icon name: computer-server
+           Chassis: server
+        Machine ID: 688adf6374604cd19edf34943d350fc1
+           Boot ID: 7b21be9fca42471ab3405cf111a9fb08
+  Operating System: Kylin Linux Advanced Server V10 (Azalea)
+       CPE OS Name: cpe:/o:kylin:enterprise_linux:V10:GA:server
+            Kernel: Linux 4.19.90-11.ky10.aarch64
+      Architecture: arm64
+
+$ hostnamectl
+   Static hostname: jzcpx-ocr
+Transient hostname: jzcpx-no.01.novalocal
+         Icon name: computer-server
+           Chassis: server
+        Machine ID: 374becb2f4034c0a92ed8a6dcfcf3d76
+           Boot ID: 380d45e18482430cad8ce0b8fc264290
+  Operating System: CentOS Linux 7 (Core)
+       CPE OS Name: cpe:/o:centos:centos:7
+            Kernel: Linux 3.10.0-514.el7.x86_64
+      Architecture: x86-64
+```
+
+
+
 ### CPU
 #### 概念
 - **物理CPU**: 实际插槽上的CPU个数, 可以通过查看`cat /proc/cpuinfo`中不重复的*physical id*个数确定
@@ -35,27 +65,28 @@ date: 2016-09-02 15:34:31
     Architecture:          x86_64                       # CPU架构
     CPU op-mode(s):        32-bit, 64-bit
     Byte Order:            Little Endian                # 小端
-    CPU(s):                32                           # 逻辑CPU个数
-    On-line CPU(s) list:   0-31
+    CPU(s):                72                           # 逻辑CPU个数
+    On-line CPU(s) list:   0-71
     Thread(s) per core:    2                            # 每个cpu核能支持2个线程，即支持超线程
-    Core(s) per socket:    8                            # 每个cpu有8个核
+    Core(s) per socket:    18                           # 每个cpu有18个物理核
     座：                 2                               # 共2个物理CPU
     NUMA 节点：         2
     厂商 ID：           GenuineIntel                     # CPU产商为Intel
     CPU 系列：          6
-    型号：              62
-    型号名称：        Intel(R) Xeon(R) CPU E5-2640 v2 @ 2.00GHz
+    型号：              85
+    型号名称：        Intel(R) Xeon(R) Gold 6140 CPU @ 2.30GHz
     步进：              4
-    CPU MHz：             1200.390
-    BogoMIPS：            4004.86
+    CPU MHz：             2803.394
+    BogoMIPS：            4604.79
     虚拟化：           VT-x                             # 支持CPU虚拟化技术
     L1d 缓存：          32K
     L1i 缓存：          32K
-    L2 缓存：           256K
-    L3 缓存：           20480K
-    NUMA 节点0 CPU：    0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30
-    NUMA 节点1 CPU：    1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31
+    L2 缓存：           1024K
+    L3 缓存：           25344K
+    NUMA 节点0 CPU：    0-17,36-53
+    NUMA 节点1 CPU：    18-35,54-71
     ```
+    
 - `cat /proc/cpuinfo`
     - CPU型号
 
@@ -70,21 +101,34 @@ date: 2016-09-02 15:34:31
         $ cat /proc/cpuinfo | grep 'physical id' | sort | uniq | wc -l
         2
         ```
-        
-- 单颗CPU物理核数
     
-        ```bash
-        $ cat /proc/cpuinfo | grep "cores" | uniq
-        cpu cores	: 18
-        ```
-        
+- `arch` 机器架构信息, 输出结果有：i386、i486、i586、alpha、sparc、arm、m68k、mips、ppc、i686等。
+  
+    ```bash
+    $ arch
+    x86_64
+    ```
+    
+- 单颗CPU中物理核数
+  
+    ```bash
+    $ cat /proc/cpuinfo | grep "cores" | uniq
+    cpu cores	: 18
+    ```
+    
     - `getconf LONG_BIT `: 查看当前CPU运行模式是32位还是64位
     
         ```bash
         $ getconf LONG_BIT
         64
         ```
-    
+
+- 查看总的逻辑核数
+	```bash
+	$ cat /proc/cpuinfo| grep "processor"| wc -l
+	72
+	```
+
 ### 内存
 #### 命令
 - `free -h`: 查看内存的概要使用信息

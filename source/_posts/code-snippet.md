@@ -98,3 +98,19 @@ public ResponseEntity<FileSystemResource> download() throws Exception {
     return new ResponseEntity<>(new FileSystemResource(file), headers, status);
 }
 ```
+
+
+
+### 获取当前类文件的绝对路径
+
+```java
+MyClass.class.getProtectionDomain().getCodeSource().getLocation().getPath()
+```
+
+### 获取当前jar包位置
+
+```java
+return new File(MyClass.class.getProtectionDomain().getCodeSource().getLocation()
+    .toURI()).getPath();
+```
+
