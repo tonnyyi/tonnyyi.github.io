@@ -227,8 +227,8 @@ grep -o "is.*good"   # 只打印匹配上的字符串, 而不是打印整行内�
 # -v :verbose  -f :file
 
 # 创建压缩文件
-tar cvf xxx.tar dirname/
-tar cvf xxx.tar file1 file2
+tar cvf xxx.tar dirname/	   # 压缩文件夹
+tar cvf xxx.tar file1 file2	   # 压缩多个文件
 tar cvzf xxx.tar.gz dirname/   # gzip压缩
 tar cvjf xxx.tar.bz2 dirname/  # bzip2压缩
 tar cavf xxx.tar.yy file  # 根据文件后缀yy自动选择压缩程序
@@ -241,6 +241,7 @@ tar xavf xxx.tar.yy   # 根据文件后缀yy自动选择压缩程序
 tar xvf xxx.tar /path/to/file  #从压缩文件中解压出file文件
 tar xvf xxx.tar /path/to/dir1/ /path/to/dir2/  #从压缩文件中解压出dir1, dir2两个目录
 tar xvf xxx.tar --wildcards "*.txt"  # 只解压出压缩文件中的txt文件
+tar xvf xxx.tar -C path/dir		# 解压到指定文件夹
 
 # 往tar文件中添加文件, 不可以往gz/bz2文件中添加
 tar rvf xxx.tar newfile
@@ -266,6 +267,7 @@ head -n 20 file | tail -n 10    # 查看前20行中的后10行
 # more只能往后看, less可以看后翻页
 # ctrl + F :前移1屏   ctrl + B :后移1屏   ctrl + D :前移半屏    ctrl + U :后移半屏
 # j :前移1行  k :后移1行   G :移动到最后1行  g :移动到首行  q :退出
+# /xxx :向前查找， 按n/N查找下/上一个结果       ?xxx :后查找
 history | less
 less -N xxx.txt    # 显示行号
 less -m xxx.txt    # 显示百分比
@@ -422,15 +424,15 @@ seq 9 | sed 'H;g' | awk -v RS='' '{for(i=1;i<=NF;i++)printf("%dx%d=%d%s", i, NR,
 
 ```bash
 # 第3列等于0 且 第6列等于LISTEN  还有 !=  <  <=  >  >=
-awk '%3==0 && $6=="LISTEN"' input.txt
+awk '$3==0 && $6=="LISTEN"' input.txt
 
 # 过滤后只输出第7列
 awk '$3==0 && $6=="LISTEN" {print $7}' input.txt
 
 # 同时输出表头, 引入内建变量NR
-awk '%3==0 && $6=="LISTEN" || NR==1' input.txt
+awk '$3==0 && $6=="LISTEN" || NR==1' input.txt
 # 再加上格式化输出
-awk '%3==0 && $6=="LISTEN" || NR==1 {printf "%-20s %-20s %s\n",$4,$5,$6}' input.txt
+awk '$3==0 && $6=="LISTEN" || NR==1 {printf "%-20s %-20s %s\n",$4,$5,$6}' input.txt
 ```
 
 ##### 内建变量
@@ -638,7 +640,7 @@ Swap:  2096440k total,    59020k used,  2037420k free,   194376k cached
     1 root      20   0 51236  27m  536 S  0.0  0.7   0:03.28 init
 ```
 前5行为信息统计区:
-1. **16:41:15** - 系统当前时间;  **up 58 days,  4:44** - 运行时长, 期间没有重启过; **1user** - 当前有1个用户登录; **load average: 0.18, 0.23, 0.22** - 系统在过去*1*分钟, *5*分钟, *15*分钟的负载情况
+1. **16:41:15** - 系统当前时间;  **up 58 days,  4:44** - 运行时长, 期间没有重启过; **1user** - 当前有1个用户登录; **load average: 0.18, 0.23, 0.22** - 系统在过去***1*分钟**, ***5*分钟**, ***15*分钟**的负载情况
 2. 系统当前有137个进程, 1个在运行, 136个在休眠, 0个停止, 0个僵尸态
 3. *1.3%us* - 用户空间占用CPU的百分比; *0.6%sy* - 内核空间占用CPU的百分比; *0.0%ni* - 改变过优先级的进程占用CPU的百分比; *97.5%id* - 空闲CPU百分比;  *0.4%wa* - IO等待占用CPU百分比; *0.0%hi* - 硬中断(Hardware Interrunpt)占用CPU百分比; *0.2%st* - 软中断占用CPU百分比
 4. *3918972k total* - 物理内存总容量(4G); *3714896k used* - 使用中的内存容量; *204076k free* - 空闲的内存容量; *9192k buffers* - 缓存的内存容量
@@ -667,20 +669,20 @@ Swap:  2096440k total,    59020k used,  2037420k free,   194376k cached
 
 #### 查看线程
 ```bash
-top -H -p
+top -H -p 1234
 ```
 
 #### 交互操作
 `q` 退出top命令
 `<Space>` 立即刷新
 `s` 设置刷新时间间隔
-`c` 显示命令完全模式
+**`c`** 显示命令完全模式
 `t` 显示或隐藏进程和CPU状态信息
 `m` 显示或隐藏内存状态信息
 `l` 显示或隐藏uptime信息
 `f` 增加或减少进程显示标志
 `S` 累计模式，会把已完成或退出的子进程占用的CPU时间累计到父进程的MITE+
-`P` 按%CPU使用率排行
+**`P`** 按%CPU使用率排行
 `T` 按MITE+排行
 `M` 按%MEM排行
 `u` 指定显示用户进程
@@ -711,6 +713,47 @@ ps axjf  # 显示线程信息
 
 
 ## 网络
+
+
+
+### ping 测试网络通断与延迟
+
+```bash
+ping www.baidu.com
+ping -c 10 192.168.1.101    # 指定次数
+ping -c 10 -i 0.5 192.168.1.101     # 指定次数和间隔(秒)
+ping -i 3 -s 1024 -t 255 192.168.1.101  # -s 发送包大小为1024字节 -t TTL为255
+```
+
+### Tcpping
+
+ping命令是基于ICMP协议, 遇到某些主机会禁用ICMP协议导致Ping命令失效, 这时可以使用基于tcp协议的工具, 比如: tcpping, tcping, psping, hping, paping等
+
+tcpping安装步骤如下:
+
+```bash
+# 1. tcpping 脚本依赖 tcptraceroute 组件, 所以必须先安装 tcptraceroute
+yum install -y tcptraceroute
+# 2. 下载tcpping文件
+wget http://www.vdberg.org/~richard/tcpping
+# 3. 将 tcpping 文件移动到 /usr/bin 下并授权
+mv tcpping /usr/bin/
+cd /usr/bin
+chmod 755 tcpping
+# 4. -d:打印时间戳  -c:结果输出在一列  -C:调整输出格式  -r n:输出间隔为n秒(默认1) -x n:重复n次
+tcpping www.baidu.com
+```
+
+hping是一个命令行下使用的 TCP/IP 数据包组装/分析工具, 它不仅能发送 ICMP 回应请求, 它还可以支持 TCP、UDP、ICMP 和 RAW-IP 协议
+
+```bash
+# 安装
+yum install hping3
+# 发送
+hping3 -S -p 80 -c 3 www.baidu.com
+```
+
+
 
 ### ifconfig  网络管理
 
@@ -793,8 +836,11 @@ ip route get 8.8.8.8
 ### netstat
 
 ```bash
-netstat -nau | grep 3306    
+netstat -natp | grep 3306    
 lsof -i :8080
+
+# 各种tcp连接状态数量统计
+netstat -tna | awk '{print $6}' | sort | uniq -c
 ```
 
 我们常说的丢包有三种：
@@ -820,7 +866,7 @@ $ watch netstat -st
 查看全队列配置情况
 
 ```bash
-$ netstat -st |grep SYN
+$ netstat -st | grep SYN
 
 $ netstat -st | grep overflowed
 $ netstat -st | grep dropped
@@ -828,7 +874,7 @@ $ netstat -st | grep dropped
 
 如果`xx times the listen queue of a socket overflowed` 和 `xx SYNs to LISTEN sockets dropped`出现持续的增长, 说明服务器的全队列过小, 全队列发生溢出, 后续的请求就会被丢弃, 服务端出现请求数量上不去的现象.
 
-查看接收buffer情况
+查看所有端口的统计信息，`-st`/`-su`：统计TCP/UDP	
 
 ```bash
 $ netstat -s
@@ -904,6 +950,62 @@ ss -ntp | grep 6379
 
 
 
+### lsof 一切皆文件
+
+用于查看打开文件的进程, 进程打开了哪些文件, 端口等. 由于lsof命令需要访问核心内存和各种文件, 所以需要root用户执行.
+
+```bash
+$ lsof /iflytek/server/jdk1.8.0_71/bin/java
+COMMAND   PID USER  FD   TYPE DEVICE SIZE/OFF      NODE NAME
+java     5401 root txt    REG 253,17     7734 805307256 /iflytek/server/jdk1.8.0_71/bin/java
+```
+
+`COMMAND`  : 进程名称   `PID` : 进程id   `USER` :  进程所有者   `FD` : 文件描述符  `TYPE` : 文件类型  `DEVICE`:  磁盘名称  `SIZE` : 文件大小  `NODE` :  索引节点(文件在磁盘上的标识)  `NAME` : 被打开文件的确切名称
+
+```bash
+# 查询某个用户打开的文件
+lsof -u username
+
+# 列出指定进程打开的文件
+lsof -p PID
+
+# 列出打开文件的进程
+lsof FILENAME
+
+# 显示打开80端口的进程
+lsof -i :80
+# 所有TCP连接
+lsof -i tcp
+# 列出所有IPv4连接
+lsof -i 4
+# 连接到指定主机的连接
+lsof -i @172.31.47.13
+# 连接到指定主机端口的连接
+lsof -i @172.31.47.13:8085
+
+# 列出正在等待连接的端口
+lsof -i -sTCP:LISTEN
+lsof -i | grep LISTEN
+
+# 杀死用户运行的所有进程
+kill -9 `lsof -t -u daniel`
+
+# 根据文件描述列出对应的文件信息
+lsof -d 5 | grep nginx
+COMMAND     PID           USER   FD      TYPE             DEVICE  SIZE/OFF      NODE NAME
+nginx      4072           root    5w      REG             253,17 141778115 808976418 /iflytek/server/nginx-1.10.2/logs/access.log
+
+# 列出被指定进程号打开的所有IPv4网络文件
+lsof -i 4 -nap 20531
+java    20531 root   40u  IPv4 627722714      0t0  TCP 172.31.46.2:40646->172.31.46.2:mysql (ESTABLISHED)
+java    20531 root   41u  IPv4 627761916      0t0  TCP 172.31.46.2:9890->172.31.46.111:34202 (ESTABLISHED)
+
+# 列出指定主机上的指定端口相关的所有文件信息, 3秒刷新一次
+lsof -i@172.31.46.2:6379,3306 -r 3
+```
+
+
+
 ### ethtool 网卡信息查看
 
 ```bash
@@ -976,6 +1078,163 @@ baidu.com.		549	IN	A	220.181.38.148
 
 
 
+### tcpdump 抓包
+
+抓取经过eth0接口请求8080端口的tcp请求
+
+```bash
+tcpdump tcp -i eth0 -s 0 -nn -vvv and dst port 8080 -w 8080dump.cap
+```
+
+- 类型: `host` `net` `port`  
+- 方向: `src` `dst` `src or dst` `src and dst`
+- 协议：`ip` `tcp` `udp` `arp` `icmp`....
+
+```bash
+# 监听特定网卡
+tcpdump -i eth0
+
+# 监听特定主机  监听与172.31.46.2主机间的通信，出入的包都会被监听
+tcpdump host 172.31.46.2
+
+tcpdump src host 172.31.46.2
+tcpdump dst host 172.31.46.2
+
+# 监听特定端口
+tcpdump port 8080
+
+# 监听来自172.31.46.2的请求本机8080端口的tcp通信
+tcpdump tcp port 8080 and src host 172.31.46.2
+```
+
+```bash
+tcpdump tcp -i eth0 -t -s 0 -c 100 -n and dst port ! 22 and src net 192.168.1.0/24 -w tcpdump.cap
+```
+
+- `tcp` : tcp udp ip icmp arp等这些选项都要放到第一个参数的位置，用来过滤数据报的类型
+- `-i eth0`：只抓取接口eth0的包
+- `-t`：不显示时间戳
+- **`-s 0`**：默认只抓取68字节，加上`-s 0`后可以抓取完整的数据包
+- `-c 100`：只抓取100个数据包
+- `-n`：将地址以数字形式显示，否则显示为主机名
+- **`-nn`**：除了有`-n`的作用，还把端口显示为数值，否则显示为端口服务名
+- `dst port ! 22`：不抓取目标端口是22的数据包
+- `src net 192.168.1.0/24`：数据包的源网络地址为192.168.1.0/24
+- `-w tcpdump.cap`：抓取结果写入文件
+- **`-X`**：以16进制和ASCII码显示包数据，**现场分析数据包内容必备**
+- `-v` `-vv` `-vvv` ：输出结果详细程度递增
+
+
+
+### wget 文件下载
+
+```bash
+wget -O file www.xx.com		# 保存到指定文件
+wget -i urls.txt -P path/dic   # 从文件读取链接, 下载到指定目录
+
+wget www.xxx.com/test.html	# 获取网页内容并保存到test.html文件
+wget -a file www.yy.com     # 追加到文件
+wget -o log www.xx.com      # 下载记录保存到log文件
+wget -t 40 www.xx.com       # 最多重试40次(默认20)
+wget -S www.xx.com/sdf      # 测试链接是否正确
+wget --limit-rate=300k www.xx.com   # 限速下载
+wget -b www.xx.com			# 后台下载
+wget -c www.xx.com			# 断点续传
+wget --limit-rate=300K      # 限速下载
+wget --reject=gif www.xx.com    # 不下载gif文件
+wget -r -A pdf www.xx.com   # 只下载pdf文件
+wget --user=username --password=password https://example.com   # auth验证
+```
+
+### curl
+
+```bash
+# GET www.xx.com/search?a=aa&b=bb
+curl -G -d 'a=aa' -d 'b=bb' www.xx.com/search
+# URL 编码
+curl -G --data-urlencode 's=kk a' www.xx.com
+
+# POST 
+# 加 -d 后会自动加上请求头 Content-Type : application/x-www-form-urlencoded, 且请求转为 POST
+curl -d '@data.txt' www.xx.com      # 读取文件内容作为请求体发送 
+curl -d 'name=bob' www.xx.com/form  # post提交表单
+curl -X POST --data "key=value" www.xx.com  # post发送参数
+curl -X POST --date-urlencode "a=aa" www.xx.com        # 自动将发送的数据进行URL 编码
+curl -d '{"a":"aa"}' -H 'Content-Type: application/json' www.xx.com   # 发送json请求
+# 上传文件和其他参数 --form会导致请求类型为 multipart/form-data
+curl -X POST '172.31.46.2:7777' \
+--form 'file=@"/tmp/opencv-test/000136.jpg"' \
+--form 'flags="2"' \
+--form 'borderMode="1"'
+
+#上传
+# -F 用来上传二进制文件, 会自动加上请求头Content-Type: multipart/form-data
+curl -F 'file=@photo.png' www.xx.com
+# 指定MIME类型, 默认是application/octet-stream
+curl -F 'file=@photo.png;type=image/png' www.xx.com
+curl -F 'file=@photo.png;filename=test.png' www.xx.com
+# 下载
+curl -O www.xx.com            # 以服务器上的名称保存
+curl -o file www.xx.com       # 下载链接内容到指定文件
+curl -O www.xx.com/pic[1-5].jpg     # 循环下载(pic1.jpg...pic5.jpg)
+curl -o #1_#2.jpg ww.xxcom/{user,goods}/pic[1-5].jpg    # 循环下载并重命名
+curl -# -O www.xx.com/pic.jpg       # 显示下载进度条
+curl -C -O www.xx.com/pic.jpg       # 断点续传
+# 分块下载
+curl -r 0-100 -o pic_part1.jpg www.xx.com/pic.jpg
+curl -r 100-200 -o pic_part2.jpg www.xx.com/pic.jpg
+curl -r 200- -o pic_part3.jpg www.xx.com/pic.jpg
+cat pic_part* > pic.jpg
+
+# 发送HEAD请求
+curl -I www.xx.com
+curl --head www.xx.com
+
+# 设置请求头
+curl -H 'My-Header: 123' -X PUT www.xx.com      # 增加请求头, 指定方法, 等于--header
+
+# 跳过SSL检测
+curl -k https://www.xx.com
+
+# cookie
+curl --cookie "name=xxx" www.xx.com     # 设置cookie
+curl -b cookie.txt www.xx.com       # 带上cookie访问
+curl -b 'a=aa,b=bb' www.xx.com   
+curl -c cookie.txt www.xx.com       # 将服务器设置的cookie信息保存到文件
+curl -D header.txt www.xx.com       # 保存响应头到文件
+curl -A "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.0)" http://www.linux.com
+
+curl www.xx.com         # 打印html内容
+curl -i www.xx.com      # 打印内容和响应头
+curl -I www.xx.com      # 只显示响应头信息
+curl --refere www.yy.com www.xx.com     # 设置来源
+curl -L www.xx.com      # 自动跳转, 遇到301响应时
+curl -s www.xx.com      # 不输出错误和进度信息 但会显示正常结果
+curl -s -o /dev/null www.xx.com   # 不显示任何信息
+curl -u 'admin:12345' www.xx.com  # 认证
+curl -o /dev/null -s -w %{http_code} www.linux.com  # 测试网页响应code
+curl -v www.xx.com      # 显示http通信完整过程, 包括端口和头信息, 用于调试
+curl --trace output.txt www.xxx.com     # 更详细的信息
+curl -x admin:12345@localhost:7890 www.xx.com  # 走代理
+```
+
+
+
+### scp 远程拷贝
+
+```bash
+# 从远程拷贝回本地
+$ scp root@10.6.159.147:/opt/soft/demo.tar /opt/soft/
+
+# 递归复制整个目录
+$ scp -r root@10.6.159.147:/opt/soft/test /opt/soft/
+
+# 上传到远程
+$ scp /opt/soft/demo.tar root@10.6.159.147:/opt/soft/scptest
+```
+
+
+
 ### mount 磁盘挂载
 
 ```bash
@@ -1026,19 +1285,19 @@ date -d last-month +%Y%m    # 上个月
 ### yum
 
 ```bash
-yum check-update   # 列出所有可更新的软件清单
-yum update     # 更新所有软件
-yum update xxx   # 更新指定软件 
-yum install -y xxx    # 安装
-yum list    # 列出可安装的软件列表
-yum remove -y  xxx    # 卸载
-yum search xxx   # 查找
-yum info xxx   #显示指定的rpm软件包的描述信息和概要信息
-yum resovledep xx #显示rpm软件包的依赖关系
-yum localinstall xx   #安装本地的rpm软件包
-yum deplist xxx  #显示rpm软件包的所有依赖关系
+yum check-update	# 列出所有可更新的软件清单
+yum update			# 更新所有软件
+yum update xxx		# 更新指定软件 
+yum install -y xxx	# 安装
+yum list			# 列出可安装的软件列表
+yum remove -y xxx	# 卸载
+yum search xxx		# 查找
+yum info xxx		#显示指定的rpm软件包的描述信息和概要信息
+yum resovledep xx	#显示rpm软件包的依赖关系
+yum localinstall xx	#安装本地的rpm软件包
+yum deplist xxx		#显示rpm软件包的所有依赖关系
 
-yum search pam*   # 通配符查找
+yum search pam*		# 通配符查找
 # 检查 MySQL 是否已安装
 yum list installed | grep mysql
 yum list installed mysql*
@@ -1134,15 +1393,19 @@ rpm -e unzip-6.0-16.el7.x86_64
 
 
 
+### service
 
 
-service
 
-systemctl
+### systemctl
 
-init.d
 
-journalctl
+
+### init.d
+
+
+
+### journalctl
 
 
 
@@ -1175,7 +1438,7 @@ find . -type f -atime +0 -print0 | xargs -0 -l1 -t rm -f    # -1l是一次处理
 
 
 
-## seq 生成连续的数字序列
+### seq 生成连续的数字序列
 
 ```bash
 # 输出1到5
@@ -1205,115 +1468,13 @@ $ seq -s " " -f "%04g" 1 2 5
 
 
 
-### wget 文件下载
-
-```bash
-wget www.xxx.com/test.html   # 获取网页内容并保存到test.html文件
-wget -O file www.xx.com     # 保存到指定文件
-wget -a file www.yy.com     # 追加到文件
-wget -o log www.xx.com      # 下载记录保存到log文件
-wget -i urls.txt -P path/dic   # 从文件读取链接, 下载到指定目录
-wget -t 40 www.xx.com       # 最多重试40次(默认20)
-wget -S www.xx.com/sdf      # 测试链接是否正确
-wget --limit-rate=300k www.xx.com   # 限速下载
-wget -b www.xx.com       # 后台下载
-wget -c www.xx.com     # 断点续传
-wget --limit-rate=300K      # 限速下载
-wget --reject=gif www.xx.com    # 不下载gif文件
-wget -r -A pdf www.xx.com   # 只下载pdf文件
-wget --user=username --password=password https://example.com   # auth验证
-```
-
-### curl
-```bash
-# GET www.xx.com/search?a=aa&b=bb
-curl -G -d 'a=aa' -d 'b=bb' www.xx.com/search
-# URL 编码
-curl -G --data-urlencode 'a=a bb' www.xx.com
-
-# POST 
-# 加 -d 后会自动加上请求头 Content-Type : application/x-www-form-urlencoded, 且请求转为 POST
-curl -d '@data.txt' www.xx.com      # 读取文件内容作为请求体发送 
-curl -d 'name=bob' www.xx.com/form  # post提交表单
-curl -X POST --data "key=value" www.xx.com  # post发送参数
-curl -X POST --date-urlencode "a=aa" www.xx.com        # 自动将发送的数据进行URL 编码
-curl -d '{"a":"aa"}' -H 'Content-Type: application/json' www.xx.com   # 发送json请求
-
-#上传
-# -F 用来上传二进制文件, 会自动加上请求头Content-Type: multipart/form-data
-curl -F 'file=@photo.png' www.xx.com
-# 指定MIME类型, 默认是application/octet-stream
-curl -F 'file=@photo.png;type=image/png' www.xx.com
-curl -F 'file=@photo.png;filename=test.png' www.xx.com
-# 下载
-curl -O www.xx.com            # 以服务器上的名称保存
-curl -o file www.xx.com       # 下载链接内容到指定文件
-curl -O www.xx.com/pic[1-5].jpg     # 循环下载(pic1.jpg...pic5.jpg)
-curl -o #1_#2.jpg ww.xxcom/{user,goods}/pic[1-5].jpg    # 循环下载并重命名
-curl -# -O www.xx.com/pic.jpg       # 显示下载进度条
-curl -C -O www.xx.com/pic.jpg       # 断点续传
-# 分块下载
-curl -r 0-100 -o pic_part1.jpg www.xx.com/pic.jpg
-curl -r 100-200 -o pic_part2.jpg www.xx.com/pic.jpg
-curl -r 200- -o pic_part3.jpg www.xx.com/pic.jpg
-cat pic_part* > pic.jpg
-
-# 发送HEAD请求
-curl -I www.xx.com
-curl --head www.xx.com
-
-# 设置请求头
-curl -H 'My-Header: 123' -X PUT www.xx.com      # 增加请求头, 指定方法, 等于--header
-
-# 跳过SSL检测
-curl -k https://www.xx.com
-
-# cookie
-curl --cookie "name=xxx" www.xx.com     # 设置cookie
-curl -b cookie.txt www.xx.com       # 带上cookie访问
-curl -b 'a=aa,b=bb' www.xx.com   
-curl -c cookie.txt www.xx.com       # 将服务器设置的cookie信息保存到文件
-curl -D header.txt www.xx.com       # 保存响应头到文件
-curl -A "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.0)" http://www.linux.com
-
-curl www.xx.com         # 打印html内容
-curl -i www.xx.com      # 打印内容和响应头
-curl -I www.xx.com      # 只显示响应头信息
-curl --refere www.yy.com www.xx.com     # 设置来源
-curl -L www.xx.com      # 自动跳转, 遇到301响应时
-curl -s www.xx.com      # 不输出错误和进度信息 但会显示正常结果
-curl -s -o /dev/null www.xx.com   # 不显示任何信息
-curl -u 'admin:12345' www.xx.com  # 认证
-curl -o /dev/null -s -w %{http_code} www.linux.com  # 测试网页响应code
-curl -v www.xx.com      # 显示http通信完整过程, 包括端口和头信息, 用于调试
-curl --trace output.txt www.xxx.com     # 更详细的信息
-curl -x admin:12345@localhost:7890 www.xx.com  # 走代理
-```
-
-
-
-### scp 远程拷贝
-
-```bash
-# 从远程拷贝回本地
-$ scp root@10.6.159.147:/opt/soft/demo.tar /opt/soft/
-
-# 递归复制整个目录
-$ scp -r root@10.6.159.147:/opt/soft/test /opt/soft/
-
-# 上传到远程
-$ scp /opt/soft/demo.tar root@10.6.159.147:/opt/soft/scptest
-```
-
-
-
 ### crontab 定时任务
 
 `-u user` :  对指定用户的crontab服务进行处理
 
 ```bash
 *   *   *   *   *
-分  时   天  月  周(1-6 0)
+分  时  天   月  周(1-6 0)
 
 # 列出crontab文件
 crontab -l
@@ -1333,7 +1494,7 @@ crontab -r
 3,15 8-11 * * 1 myCommand
 # 每周六,周日的1:10重启smb
 10 1 * * 6,0 /etc/init.d/smb restart
-# 每天早上6点到12点, 每隔3个小时的0分钟执行
+# 12月每天早上6点到12点, 每隔3个小时的0分钟执行
 0 6-12/3 * 12 * myCommand
 ```
 
@@ -1372,13 +1533,13 @@ crontab的日志文件是`/var/log/cron`   查看cron服务状态`systemctl stat
 
 ### nohup
 
-nohup 是 no hang up 的缩写，就是不挂断的意思。该命令可以在你退出帐户/关闭终端之后继续运行相应的进程。在缺省情况下该作业的所有输出都被重定向到当前目录的nohup.out的文件中, 如果当前目录的 nohup.out 文件不可写，输出重定向到 $HOME/nohup.out 文件中。
+nohup 是 no hang up 的缩写，就是不挂断的意思。该命令可以在你退出帐户/关闭终端时忽略SIGHUP信号，从而继续运行相应的进程。在缺省情况下该作业的所有输出都被重定向到当前目录的nohup.out的文件中, 如果当前目录的 nohup.out 文件不可写，输出重定向到 $HOME/nohup.out 文件中。
 
 ```bash
 nohup java -jar xxx.jar > /dev/null 2>&1 &
 ```
 
-`&` 在后台运行,  `2>&1` 是将标准出错重定向到标准输, `/dev/null 2>&1` 将标准输出和错误输出全部重定向到/dev/null中,也就是将产生的所有信息丢弃
+`&` 在后台运行，但是关闭shell后，对应的服务也会关闭，因为对SIGHUP信号不免疫。此时配合nohup可以让应用继续运行。  `2>&1` 是将标准出错重定向到标准输, `/dev/null 2>&1` 将标准输出和错误输出全部重定向到/dev/null中,也就是将产生的所有信息丢弃
 
 
 
@@ -1388,7 +1549,7 @@ nohup java -jar xxx.jar > /dev/null 2>&1 &
 
 ### mpstat  - cpu监控
 
-每隔1s打印所有cpu使用情况, 打印10次
+每隔1s打印所有cpu使用情况, 间隔1s，打印10次
 
 ```bash
 [root@demo ~]# mpstat -P ALL 1 10
@@ -1448,6 +1609,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
   - **sy** 系统进程执行时间
   - **id** 空闲时间, 包括IO等待时间
   - **wa** 等待IO时间
+  - **st** 管理程序(hypervisor 虚拟化)为另一个虚拟进程提供服务而等待虚拟 CPU 的百分比
 
 
 ### iostat IO监控
@@ -1484,7 +1646,7 @@ disk属性
 
 ```bash
 # 显示更详细的io信息
-$ iostat -x
+$ iostat -x 1 3
 ...
 Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util
 vda               0.00     0.12    0.02    4.74     0.84    53.32    22.76     0.04    7.76   14.59    7.73   1.36   0.65
@@ -1501,6 +1663,8 @@ vda               0.00     0.12    0.02    4.74     0.84    53.32    22.76     0
 `avgrq-sz` 平均每次设备I/O操作的数据大小 (扇区)。
 `avgqu-sz` 平均I/O队列长度。
 `await` 平均每次设备I/O操作的等待时间 (毫秒)。
+`r_await` 平均每次设备读I/O操作的等待时间 (毫秒)。
+`w_await` 平均每次设备写I/O操作的等待时间 (毫秒)。
 `svctm` 平均每次设备I/O操作的服务时间 (毫秒)。
 `%util` 一秒中有百分之多少的时间用于 I/O 操作，即被io消耗的cpu百分比
 
@@ -1615,6 +1779,17 @@ $ pidstat -t -p 4846
 ```bash
 sar -o sarfile.log -u 1 3
 ```
+
+- `u` cpu使用率
+- `q` cpu负载
+- `B` 内存使用率
+- `R` 内存页
+- `S` swap使用率
+- `b` io
+- `n`  网络
+- `d ` 块设备
+- `F` 挂载设备
+- `m` 电源管理
 
 #### CPU使用率
 
@@ -1855,104 +2030,6 @@ strace -o straceout.txt -T -tt -e trace=all -p 1234
 
 
 
-
-
-### lsof 一切皆文件
-
-用于查看打开文件的进程, 进程打开了哪些文件, 端口等. 由于lsof命令需要访问核心内存和各种文件, 所以需要root用户执行.
-
-```bash
-$ lsof /iflytek/server/jdk1.8.0_71/bin/java
-COMMAND   PID USER  FD   TYPE DEVICE SIZE/OFF      NODE NAME
-java     5401 root txt    REG 253,17     7734 805307256 /iflytek/server/jdk1.8.0_71/bin/java
-```
-
-`COMMAND`  : 进程名称   `PID` : 进程id   `USER` :  进程所有者   `FD` : 文件描述符  `TYPE` : 文件类型  `DEVICE`:  磁盘名称  `SIZE` : 文件大小  `NODE` :  索引节点(文件在磁盘上的标识)  `NAME` : 被打开文件的确切名称
-
-```bash
-# 查询某个用户打开的文件
-lsof -u username
-
-# 列出指定进程打开的文件
-lsof -p PID
-
-# 列出打开文件的进程
-lsof FILENAME
-
-# 显示打开80端口的进程
-lsof -i :80
-# 所有TCP连接
-lsof -i tcp
-# 列出所有IPv4连接
-lsof -i 4
-# 连接到指定主机的连接
-lsof -i @172.31.47.13
-# 连接到指定主机端口的连接
-lsof -i @172.31.47.13:8085
-
-# 列出正在等待连接的端口
-lsof -i -sTCP:LISTEN
-lsof -i | grep LISTEN
-
-# 杀死用户运行的所有进程
-kill -9 `lsof -t -u daniel`
-
-# 根据文件描述列出对应的文件信息
-lsof -d 5 | grep nginx
-COMMAND     PID           USER   FD      TYPE             DEVICE  SIZE/OFF      NODE NAME
-nginx      4072           root    5w      REG             253,17 141778115 808976418 /iflytek/server/nginx-1.10.2/logs/access.log
-
-# 列出被指定进程号打开的所有IPv4网络文件
-lsof -i 4 -nap 20531
-java    20531 root   40u  IPv4 627722714      0t0  TCP 172.31.46.2:40646->172.31.46.2:mysql (ESTABLISHED)
-java    20531 root   41u  IPv4 627761916      0t0  TCP 172.31.46.2:9890->172.31.46.111:34202 (ESTABLISHED)
-
-# 列出指定主机上的指定端口相关的所有文件信息, 3秒刷新一次
-lsof -i@172.31.46.2:6379,3306 -r 3
-```
-
-
-### ping 测试网络通断与延迟
-
-```bash
-ping www.baidu.com
-ping -c 10 192.168.1.101    # 指定次数
-ping -c 10 -i 0.5 192.168.1.101     # 指定次数和间隔(秒)
-ping -i 3 -s 1024 -t 255 192.168.1.101  # -s 发送包大小为1024字节 -t TTL为255
-```
-
-### Tcpping
-
-ping命令是基于ICMP协议, 遇到某些主机会禁用ICMP协议导致Ping命令失效, 这时可以使用基于tcp协议的工具, 比如: tcpping, tcping, psping, hping, paping等
-
-tcpping安装步骤如下:
-
-```bash
-# 1. tcpping 脚本依赖 tcptraceroute 组件, 所以必须先安装 tcptraceroute
-yum install -y tcptraceroute
-# 2. 下载tcpping文件
-wget http://www.vdberg.org/~richard/tcpping
-# 3. 将 tcpping 文件移动到 /usr/bin 下并授权
-mv tcpping /usr/bin/
-cd /usr/bin
-chmod 755 tcpping
-# 4. -d:打印时间戳  -c:结果输出在一列  -C:调整输出格式  -r n:输出间隔为n秒(默认1) -x n:重复n次
-tcpping www.baidu.com
-```
-
-hping是一个命令行下使用的 TCP/IP 数据包组装/分析工具, 它不仅能发送 ICMP 回应请求, 它还可以支持 TCP、UDP、ICMP 和 RAW-IP 协议
-
-```bash
-# 安装
-yum install hping3
-# 发送
-hping3 -S -p 80 -c 3 www.baidu.com
-```
-
-
-
-
-
 ### free 查询可用内存
 
 ```bash
@@ -1999,54 +2076,6 @@ $ du -sh *
 ```
 
 ### iftop 带宽使用监控
-
-
-
-### tcpdump 抓包
-
-抓取经过eth0接口请求8080端口的tcp请求
-
-```bash
-tcpdump tcp -i eth0 -s 0 -nn -vvv and dst port 8080 -w 8080dump.cap
-```
-
-- 类型: `host` `net` `port`  
-- 方向: `src` `dst` `src or dst` `src and dst`
-- 协议：`ip` `tcp` `udp` `arp` `icmp`....
-
-```bash
-# 监听特定网卡
-tcpdump -i eth0
-
-# 监听特定主机  监听与172.31.46.2主机间的通信，出入的包都会被监听
-tcpdump host 172.31.46.2
-
-tcpdump src host 172.31.46.2
-tcpdump dst host 172.31.46.2
-
-# 监听特定端口
-tcpdump port 8080
-
-# 监听来自172.31.46.2的请求本机8080端口的tcp通信
-tcpdump tcp port 8080 and src host 172.31.46.2
-```
-
-```bash
-tcpdump tcp -i eth0 -t -s 0 -c 100 -n and dst port ! 22 and src net 192.168.1.0/24 -w tcpdump.cap
-```
-
-- `tcp` : tcp udp ip icmp arp等这些选项都要放到第一个参数的位置，用来过滤数据报的类型
-- `-i eth0`：只抓取接口eth0的包
-- `-t`：不显示时间戳
-- **`-s 0`**：默认只抓取68字节，加上`-s 0`后可以抓取完整的数据包
-- `-c 100`：只抓取100个数据包
-- `-n`：将地址以数字形式显示，否则显示为主机名
-- **`-nn`**：除了有`-n`的作用，还把端口显示为数值，否则显示为端口服务名
-- `dst port ! 22`：不抓取目标端口是22的数据包
-- `src net 192.168.1.0/24`：数据包的源网络地址为192.168.1.0/24
-- `-w tcpdump.cap`：抓取结果写入文件
-- **`-X`**：以16进制和ASCII码显示包数据，**现场分析数据包内容必备**
-- `-v` `-vv` `-vvv` ：输出结果详细程度递增
 
 
 
