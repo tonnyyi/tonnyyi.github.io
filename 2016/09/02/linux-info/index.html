@@ -143,14 +143,14 @@
 
 
   <meta name="description" content="物理服务器型号: Dell R720  服务器命令 dmidecode | grep &amp;quot;Product Name&amp;quot;: 查看服务器型号(使用root执行)   123[root@cluster143 mcc]# dmidecode | grep &amp;quot;Product Name&amp;quot;Product Name: PowerEdge R720Product Name: 0">
-<meta name="keywords" content="Linux,command">
+<meta name="keywords" content="linux,command">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux系统及硬件信息查看">
 <meta property="og:url" content="http://codertang.com/2016/09/02/linux-info/index.html">
 <meta property="og:site_name" content="Tonny&#39;s Blog">
 <meta property="og:description" content="物理服务器型号: Dell R720  服务器命令 dmidecode | grep &amp;quot;Product Name&amp;quot;: 查看服务器型号(使用root执行)   123[root@cluster143 mcc]# dmidecode | grep &amp;quot;Product Name&amp;quot;Product Name: PowerEdge R720Product Name: 0">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-12-09T06:49:37.430Z">
+<meta property="og:updated_time" content="2021-02-25T02:34:36.469Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux系统及硬件信息查看">
 <meta name="twitter:description" content="物理服务器型号: Dell R720  服务器命令 dmidecode | grep &amp;quot;Product Name&amp;quot;: 查看服务器型号(使用root执行)   123[root@cluster143 mcc]# dmidecode | grep &amp;quot;Product Name&amp;quot;Product Name: PowerEdge R720Product Name: 0">
@@ -394,7 +394,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-12-09 14:49:37" itemprop="dateModified" datetime="2020-12-09T14:49:37+08:00">2020-12-09</time>
+                <time title="修改时间：2021-02-25 10:34:36" itemprop="dateModified" datetime="2021-02-25T10:34:36+08:00">2021-02-25</time>
               
             
           </span>
@@ -411,14 +411,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/Hardware/" itemprop="url" rel="index"><span itemprop="name">Hardware</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/Hardware/" itemprop="url" rel="index"><span itemprop="name">Hardware</span></a></span>
 
                 
                 
@@ -461,14 +461,18 @@
 </li>
 </ul>
 <a id="more"></a>
+<p><code>hostnamectl</code>是systemd的一部分, 可用于查询和更改系统主机名和相关设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ hostnamectl</span><br><span class="line">   Static hostname: localhost.localdomain</span><br><span class="line">         Icon name: computer-server</span><br><span class="line">           Chassis: server</span><br><span class="line">        Machine ID: 688adf6374604cd19edf34943d350fc1</span><br><span class="line">           Boot ID: 7b21be9fca42471ab3405cf111a9fb08</span><br><span class="line">  Operating System: Kylin Linux Advanced Server V10 (Azalea)</span><br><span class="line">       CPE OS Name: cpe:/o:kylin:enterprise_linux:V10:GA:server</span><br><span class="line">            Kernel: Linux 4.19.90-11.ky10.aarch64</span><br><span class="line">      Architecture: arm64</span><br><span class="line"></span><br><span class="line">$ hostnamectl</span><br><span class="line">   Static hostname: jzcpx-ocr</span><br><span class="line">Transient hostname: jzcpx-no.01.novalocal</span><br><span class="line">         Icon name: computer-server</span><br><span class="line">           Chassis: server</span><br><span class="line">        Machine ID: 374becb2f4034c0a92ed8a6dcfcf3d76</span><br><span class="line">           Boot ID: 380d45e18482430cad8ce0b8fc264290</span><br><span class="line">  Operating System: CentOS Linux 7 (Core)</span><br><span class="line">       CPE OS Name: cpe:/o:centos:centos:7</span><br><span class="line">            Kernel: Linux 3.10.0-514.el7.x86_64</span><br><span class="line">      Architecture: x86-64</span><br></pre></td></tr></table></figure>
 <h3 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h3><h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><ul>
 <li><strong>物理CPU</strong>: 实际插槽上的CPU个数, 可以通过查看<code>cat /proc/cpuinfo</code>中不重复的<em>physical id</em>个数确定</li>
 <li><strong>逻辑CPU</strong>: 一颗CPU可能有多个核, 如果CPU支持Intel的超线程(HT)则核又多出一倍, 所以<code>逻辑CPU个数</code> = <code>物理CPU个数</code> * <code>单颗CPU的核数 [* 2 (如果CPU支持并开启HT)]</code><br>使用<code>top</code>命令看到的就是逻辑cpu个数</li>
 </ul>
 <h4 id="命令-1"><a href="#命令-1" class="headerlink" title="命令"></a>命令</h4><ul>
 <li><p><code>lscpu</code>: 查看cpu统计信息</p>
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[mcc@localhost ~]$ lscpu</span><br><span class="line">Architecture:          x86_64                       <span class="comment"># CPU架构</span></span><br><span class="line">CPU op-mode(s):        32-bit, 64-bit</span><br><span class="line">Byte Order:            Little Endian                <span class="comment"># 小端</span></span><br><span class="line">CPU(s):                32                           <span class="comment"># 逻辑CPU个数</span></span><br><span class="line">On-line CPU(s) list:   0-31</span><br><span class="line">Thread(s) per core:    2                            <span class="comment"># 每个cpu核能支持2个线程，即支持超线程</span></span><br><span class="line">Core(s) per socket:    8                            <span class="comment"># 每个cpu有8个核</span></span><br><span class="line">座：                 2                               <span class="comment"># 共2个物理CPU</span></span><br><span class="line">NUMA 节点：         2</span><br><span class="line">厂商 ID：           GenuineIntel                     <span class="comment"># CPU产商为Intel</span></span><br><span class="line">CPU 系列：          6</span><br><span class="line">型号：              62</span><br><span class="line">型号名称：        Intel(R) Xeon(R) CPU E5-2640 v2 @ 2.00GHz</span><br><span class="line">步进：              4</span><br><span class="line">CPU MHz：             1200.390</span><br><span class="line">BogoMIPS：            4004.86</span><br><span class="line">虚拟化：           VT-x                             <span class="comment"># 支持CPU虚拟化技术</span></span><br><span class="line">L1d 缓存：          32K</span><br><span class="line">L1i 缓存：          32K</span><br><span class="line">L2 缓存：           256K</span><br><span class="line">L3 缓存：           20480K</span><br><span class="line">NUMA 节点0 CPU：    0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30</span><br><span class="line">NUMA 节点1 CPU：    1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31</span><br></pre></td></tr></table></figure>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[mcc@localhost ~]$ lscpu</span><br><span class="line">Architecture:          x86_64                       <span class="comment"># CPU架构</span></span><br><span class="line">CPU op-mode(s):        32-bit, 64-bit</span><br><span class="line">Byte Order:            Little Endian                <span class="comment"># 小端</span></span><br><span class="line">CPU(s):                72                           <span class="comment"># 逻辑CPU个数</span></span><br><span class="line">On-line CPU(s) list:   0-71</span><br><span class="line">Thread(s) per core:    2                            <span class="comment"># 每个cpu核能支持2个线程，即支持超线程</span></span><br><span class="line">Core(s) per socket:    18                           <span class="comment"># 每个cpu有18个物理核</span></span><br><span class="line">座：                 2                               <span class="comment"># 共2个物理CPU</span></span><br><span class="line">NUMA 节点：         2</span><br><span class="line">厂商 ID：           GenuineIntel                     <span class="comment"># CPU产商为Intel</span></span><br><span class="line">CPU 系列：          6</span><br><span class="line">型号：              85</span><br><span class="line">型号名称：        Intel(R) Xeon(R) Gold 6140 CPU @ 2.30GHz</span><br><span class="line">步进：              4</span><br><span class="line">CPU MHz：             2803.394</span><br><span class="line">BogoMIPS：            4604.79</span><br><span class="line">虚拟化：           VT-x                             <span class="comment"># 支持CPU虚拟化技术</span></span><br><span class="line">L1d 缓存：          32K</span><br><span class="line">L1i 缓存：          32K</span><br><span class="line">L2 缓存：           1024K</span><br><span class="line">L3 缓存：           25344K</span><br><span class="line">NUMA 节点0 CPU：    0-17,36-53</span><br><span class="line">NUMA 节点1 CPU：    18-35,54-71</span><br></pre></td></tr></table></figure>
 </li>
+</ul>
+<ul>
 <li><p><code>cat /proc/cpuinfo</code></p>
 <ul>
 <li><p>CPU型号</p>
@@ -481,14 +485,23 @@
 
     <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat /proc/cpuinfo | grep <span class="string">'physical id'</span> | sort | uniq | wc -l</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
 </code></pre><ul>
-<li><p>单颗CPU物理核数</p>
-<pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat /proc/cpuinfo | grep <span class="string">"cores"</span> | uniq</span><br><span class="line">cpu cores	: 18</span><br></pre></td></tr></table></figure>
-</code></pre></li>
+<li><p><code>arch</code> 机器架构信息, 输出结果有：i386、i486、i586、alpha、sparc、arm、m68k、mips、ppc、i686等。</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ arch</span><br><span class="line">x86_64</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>单颗CPU中物理核数</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat /proc/cpuinfo | grep <span class="string">"cores"</span> | uniq</span><br><span class="line">cpu cores	: 18</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <pre><code>- `getconf LONG_BIT `: 查看当前CPU运行模式是32位还是64位
 
     <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ getconf LONG_BIT</span><br><span class="line">64</span><br></pre></td></tr></table></figure>
-</code></pre><h3 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h3><h4 id="命令-2"><a href="#命令-2" class="headerlink" title="命令"></a>命令</h4><ul>
+</code></pre><ul>
+<li>查看总的逻辑核数  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat /proc/cpuinfo| grep <span class="string">"processor"</span>| wc -l</span><br><span class="line">72</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h3><h4 id="命令-2"><a href="#命令-2" class="headerlink" title="命令"></a>命令</h4><ul>
 <li><p><code>free -h</code>: 查看内存的概要使用信息</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]# free -h</span><br><span class="line">             total       used       free     shared    buffers     cached</span><br><span class="line">Mem:           62G        62G       654M       2.9G         0B        37G</span><br><span class="line">-/+ buffers/cache:        24G        38G</span><br><span class="line">Swap:          97G       560M        97G</span><br></pre></td></tr></table></figure>
 </li>
@@ -581,7 +594,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Linux/" rel="tag"># Linux</a>
+            <a href="/tags/linux/" rel="tag"># linux</a>
           
             <a href="/tags/command/" rel="tag"># command</a>
           
@@ -684,7 +697,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-count">40</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -920,9 +933,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">52</span>
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -998,7 +1009,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
