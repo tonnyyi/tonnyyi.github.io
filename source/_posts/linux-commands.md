@@ -714,6 +714,248 @@ ps axjf  # 显示线程信息
 
 ## 网络
 
+### iptables 防火墙
+
+**语法**
+
+```shell
+iptables(选项)(参数)
+```
+
+**选项**
+
+```ini
+-t, --table table 对指定的表 table 进行操作， table 必须是 raw， nat，filter，mangle 中的一个。如果不指定此选项，默认的是 filter 表。
+
+# 通用匹配：源地址目标地址的匹配
+-p：指定要匹配的数据包协议类型；
+-s, --source [!] address[/mask] ：把指定的一个／一组地址作为源地址，按此规则进行过滤。当后面没有 mask 时，address 是一个地址，比如：192.168.1.1；当 mask 指定时，可以表示一组范围内的地址，比如：192.168.1.0/255.255.255.0。
+-d, --destination [!] address[/mask] ：地址格式同上，但这里是指定地址为目的地址，按此进行过滤。
+-i, --in-interface [!] <网络接口name> ：指定数据包的来自来自网络接口，比如最常见的 eth0 。注意：它只对 INPUT，FORWARD，PREROUTING 这三个链起作用。如果没有指定此选项， 说明可以来自任何一个网络接口。同前面类似，"!" 表示取反。
+-o, --out-interface [!] <网络接口name> ：指定数据包出去的网络接口。只对 OUTPUT，FORWARD，POSTROUTING 三个链起作用。
+
+# 查看管理命令
+-L, --list [chain] 列出链 chain 上面的所有规则，如果没有指定链，列出表上所有链的所有规则。
+
+# 规则管理命令
+-A, --append chain rule-specification 在指定链 chain 的末尾插入指定的规则，也就是说，这条规则会被放到最后，最后才会被执行。规则是由后面的匹配来指定。
+-I, --insert chain [rulenum] rule-specification 在链 chain 中的指定位置插入一条或多条规则。如果指定的规则号是1，则在链的头部插入。这也是默认的情况，如果没有指定规则号。
+-D, --delete chain rule-specification -D, --delete chain rulenum 在指定的链 chain 中删除一个或多个指定规则。
+-R num：Replays替换/修改第几条规则
+
+# 链管理命令（这都是立即生效的）
+-P, --policy chain target ：为指定的链 chain 设置策略 target。注意，只有内置的链才允许有策略，用户自定义的是不允许的。
+-F, --flush [chain] 清空指定链 chain 上面的所有规则。如果没有指定链，清空该表上所有链的所有规则。
+-N, --new-chain chain 用指定的名字创建一个新的链。
+-X, --delete-chain [chain] ：删除指定的链，这个链必须没有被其它任何规则引用，而且这条上必须没有任何规则。如果没有指定链名，则会删除该表中所有非内置的链。
+-E, --rename-chain old-chain new-chain ：用指定的新名字去重命名指定的链。这并不会对链内部造成任何影响。
+-Z, --zero [chain] ：把指定链，或者表中的所有链上的所有计数器清零。
+
+-j, --jump target <指定目标> ：即满足某条件时该执行什么样的动作。target 可以是内置的目标，比如 ACCEPT，也可以是用户自定义的链。
+-h：显示帮助信息；
+```
+
+**基本参数**
+
+|    参数     | 作用                                           |
+| :---------: | :--------------------------------------------- |
+|     -P      | 设置默认策略:iptables -P INPUT (DROP           |
+|     -F      | 清空规则链                                     |
+|     -L      | 查看规则链                                     |
+|     -A      | 在规则链的末尾加入新规则                       |
+|     -I      | num 在规则链的头部加入新规则                   |
+|     -D      | num 删除某一条规则                             |
+|     -s      | 匹配来源地址IP/MASK，加叹号"!"表示除这个IP外。 |
+|     -d      | 匹配目标地址                                   |
+|     -i      | 网卡名称 匹配从这块网卡流入的数据              |
+|     -o      | 网卡名称 匹配从这块网卡流出的数据              |
+|     -p      | 匹配协议,如tcp,udp,icmp                        |
+| --dport num | 匹配目标端口号                                 |
+| --sport num | 匹配来源端口号                                 |
+
+**命令选项输入顺序**
+
+```shell
+iptables -t 表名 <-A/I/D/R> 规则链名 [规则号] <-i/o 网卡名> -p 协议名 <-s 源IP/源子网> --sport 源端口 <-d 目标IP/目标子网> --dport 目标端口 -j 动作
+```
+
+**工作机制**
+
+规则链名包括(也被称为五个钩子函数（hook functions）)：
+
+- **INPUT链** ：处理输入数据包。
+- **OUTPUT链** ：处理输出数据包。
+- **FORWARD链** ：处理转发数据包。
+- **PREROUTING链** ：用于目标地址转换（DNAT），内到外。
+- **POSTOUTING链** ：用于源地址转换（SNAT），外到内。
+
+**防火墙策略**
+
+防火墙策略一般分为两种，一种叫`通`策略，一种叫`堵`策略，通策略，默认门是关着的，必须要定义谁能进。堵策略则是，大门是洞开的，但是你必须有身份认证，否则不能进。所以我们要定义，让进来的进来，让出去的出去，`所以通，是要全通，而堵，则是要选择`。当我们定义的策略的时候，要分别定义多条功能，其中：定义数据包中允许或者不允许的策略，filter过滤的功能，而定义地址转换的功能的则是nat选项。为了让这些功能交替工作，我们制定出了“表”这个定义，来定义、区分各种不同的工作功能和处理方式。
+
+现在用的比较多个功能有3个：
+1. filter 定义允许或者不允许的，只能做在3个链上：INPUT ，FORWARD ，OUTPUT
+2. nat 定义地址转换的，也只能做在3个链上：PREROUTING ，OUTPUT ，POSTROUTING
+3. mangle功能:修改报文原数据，是5个链都可以做：PREROUTING，INPUT，FORWARD，OUTPUT，POSTROUTING
+
+我们修改报文原数据就是来修改TTL的。能够实现将数据包的元数据拆开，在里面做标记/修改内容的。而防火墙标记，其实就是靠mangle来实现的。
+
+**表名包括**：
+
+- **raw** ：RAW表只使用在PREROUTING链和OUTPUT链上,因为优先级最高，从而可以对收到的数据包在连接跟踪前进行处理。一但用户使用了RAW表,在某个链上,RAW表处理完后,将跳过NAT表和ip_conntrack处理,即不再做地址转换和数据包的链接跟踪处理了.
+- **mangle** ：拥有prerouting、FORWARD、postrouting三个规则链，除了进行网址转译工作会改写封包外，在某些特殊应用可能也必须去改写封包(ITL、TOS)或者是设定MARK(将封包作记号，以进行后续的过滤)这时就必须将这些工作定义在mangles规则表中
+- **nat** ：拥有prerouting和postrouting两个规则链， 主要功能为进行一对一、一对多、多对多等网址转译工作（SNATDNAT）用于网关路由器。
+- **filter** ：预设规则表，拥有 INPUT、FORWARD 和 OUTPUT 三个规则链，这个规则表顾名思义是用来进行封包过滤的理动作
+
+4个表的优先级由高到低：raw-->mangle-->nat-->filter
+
+
+
+**动作包括**：
+
+- **ACCEPT** ：接收数据包。
+
+- **DROP** ：丢弃数据包。
+
+- **REDIRECT** ：重定向、映射、透明代理。
+
+- **SNAT** ：源地址转换。
+
+- **DNAT** ：目标地址转换。
+
+- **MASQUERADE** ：IP伪装（NAT），用于ADSL。
+
+- **LOG** ：日志记录。
+
+- **SEMARK** : 添加SEMARK标记以供网域内强制访问控制（MAC）
+
+  ![iptables](https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Netfilter-packet-flow.svg/2880px-Netfilter-packet-flow.svg.png)
+
+#### 实例
+
+**清空当前的所有规则和计数**
+
+```shell
+iptables -F  # 清空所有的防火墙规则
+iptables -X  # 删除用户自定义的空链
+iptables -Z  # 清空计数
+```
+
+**配置允许ssh端口连接**
+
+```shell
+iptables -A INPUT -s 192.168.1.0/24 -p tcp --dport 22 -j ACCEPT
+# 22为你的ssh端口， -s 192.168.1.0/24表示允许这个网段的机器来连接，其它网段的ip地址是登陆不了你的机器的。 -j ACCEPT表示接受这样的请求
+```
+
+**允许本地回环地址可以正常使用**
+
+```shell
+iptables -A INPUT -i lo -j ACCEPT
+#本地圆环地址就是那个127.0.0.1，是本机上使用的,它进与出都设置为允许
+iptables -A OUTPUT -o lo -j ACCEPT
+```
+
+**设置默认的规则**
+
+```sh
+iptables -P INPUT DROP # 配置默认的不让进
+iptables -P FORWARD DROP # 默认的不允许转发
+iptables -P OUTPUT ACCEPT # 默认的可以出去
+```
+
+**配置白名单**
+
+```sh
+iptables -A INPUT -p all -s 192.168.1.0/24 -j ACCEPT  # 允许机房内网机器可以访问
+iptables -A INPUT -p all -s 192.168.140.0/24 -j ACCEPT  # 允许机房内网机器可以访问
+iptables -A INPUT -p tcp -s 183.121.3.7 --dport 3380 -j ACCEPT # 允许183.121.3.7访问本机的3380端口
+```
+
+**开启相应的服务端口**
+
+```sh
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT # 开启80端口，因为web对外都是这个端口
+iptables -A INPUT -p icmp --icmp-type 8 -j ACCEPT # 允许被ping
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT # 已经建立的连接得让它进来
+```
+
+**保存规则到配置文件中**
+
+```sh
+# 任何改动之前先备份，请保持这一优秀的习惯
+cp /etc/sysconfig/iptables /etc/sysconfig/iptables.bak 
+
+iptables-save > /etc/sysconfig/iptables
+cat /etc/sysconfig/iptables
+```
+
+**列出已设置的规则**
+
+```sh
+iptables -L -t nat                  # 列出 nat 上面的所有规则
+#            ^ -t 参数指定，必须是 raw， nat，filter，mangle 中的一个
+iptables -L -t nat  --line-numbers  # 规则带编号
+iptables -L INPUT
+
+iptables -L -nv  # 查看，这个列表看起来更详细
+
+-n：以数字的方式显示ip，它会将ip直接显示出来，如果不加-n，则会将ip反向解析成主机名。
+-v：显示详细信息
+-vv
+-vvv :越多越详细
+-x：在计数器上显示精确值，不做单位换算
+--line-numbers : 显示规则的行号
+-t nat：显示所有的关卡的信息
+```
+
+**删除已添加的规则**
+
+```sh
+# 添加一条规则
+iptables -A INPUT -s 192.168.1.5 -j DROP
+# 将所有iptables以序号标记显示
+iptables -L -n --line-numbers
+# 删除INPUT里序号为8的规则
+iptables -D INPUT 8
+```
+
+**开放指定的端口**
+
+```sh
+iptables -A INPUT -s 127.0.0.1 -d 127.0.0.1 -j ACCEPT     #允许本地回环接口(即运行本机访问本机)
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT  #允许已建立的或相关连的通行
+iptables -A OUTPUT -j ACCEPT         #允许所有本机向外的访问
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT    #允许访问22端口
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT    #允许访问80端口
+iptables -A INPUT -j reject       #禁止其他未允许的规则访问
+iptables -A FORWARD -j REJECT     #禁止其他未允许的规则访问
+```
+
+**屏蔽IP**
+
+```sh
+iptables -A INPUT -p tcp -m tcp -s 192.168.0.8 -j DROP  # 屏蔽恶意主机（比如，192.168.0.8
+iptables -I INPUT -s 123.45.6.7 -j DROP       #屏蔽单个IP的命令
+iptables -I INPUT -s 123.0.0.0/8 -j DROP      #封整个段即从123.0.0.1到123.255.255.254
+```
+
+**指定数据包出去的网络接口**
+
+```sh
+# 只对 OUTPUT，FORWARD，POSTROUTING 三个链起作用
+iptables -A FORWARD -o eth0
+```
+
+**端口映射**
+
+```sh
+# 本机的 2222 端口映射到内网 虚拟机的22 端口
+iptables -t nat -A PREROUTING -d 210.14.67.127 -p tcp --dport 2222  -j DNAT --to-dest 192.168.188.115:22
+```
+
+
+
 
 
 ### ping 测试网络通断与延迟
@@ -841,7 +1083,20 @@ lsof -i :8080
 
 # 各种tcp连接状态数量统计
 netstat -tna | awk '{print $6}' | sort | uniq -c
+
+netstat -n| awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
 ```
+
+>- -a (all)显示所有选项，默认不显示 LISTEN 相关
+>- -t (tcp)仅显示 tcp 相关选项
+>- -u (udp)仅显示 udp 相关选项
+>- -n 拒绝显示别名，能显示数字的全部转化成数字。
+>- -l 仅列出有在 Listen (监听) 的服務状态
+>- -p 显示建立相关链接的程序名
+>- -r 显示路由信息，路由表
+>- -e 显示扩展信息，例如 uid 等
+>- -s 按各个协议进行统计
+>- -c 每隔一个固定时间，执行该 netstat 命令。
 
 我们常说的丢包有三种：
 
@@ -999,6 +1254,16 @@ nginx      4072           root    5w      REG             253,17 141778115 80897
 lsof -i 4 -nap 20531
 java    20531 root   40u  IPv4 627722714      0t0  TCP 172.31.46.2:40646->172.31.46.2:mysql (ESTABLISHED)
 java    20531 root   41u  IPv4 627761916      0t0  TCP 172.31.46.2:9890->172.31.46.111:34202 (ESTABLISHED)
+
+# 查看指定进程的所有 TCP 连接信息
+lsof -p 4721 -nP | grep TCP
+java    163379 root   14u     IPv6         2306092363       0t0        TCP *:8085 (LISTEN)
+java    163379 root   29u     IPv6         2306098266       0t0        TCP 172.31.96.175:8085->172.31.103.83:52600 (ESTABLISHED)
+java    163379 root   39u     IPv6         2306089478       0t0        TCP 172.31.96.175:8085->172.31.103.83:52610 (ESTABLISHED)
+java    163379 root  270u     IPv6         2306091217       0t0        TCP *:21162 (LISTEN)
+java    163379 root  272u     IPv6         2306089479       0t0        TCP 172.31.96.175:8085->172.31.103.83:52612 (ESTABLISHED)
+java    163379 root  273u     IPv6         2306101388       0t0        TCP 172.31.96.175:8085->172.31.103.83:52624 (ESTABLISHED)
+java    163379 root  274u     IPv6         2306077215       0t0        TCP 172.31.96.175:8085->172.31.103.83:52626 (ESTABLISHED)
 
 # 列出指定主机上的指定端口相关的所有文件信息, 3秒刷新一次
 lsof -i@172.31.46.2:6379,3306 -r 3
@@ -2078,6 +2343,93 @@ $ du -sh *
 ### iftop 带宽使用监控
 
 
+
+### mtr 网络测试工具
+
+mtr（My traceroute）几乎是所有Linux发行版本预装的网络测试工具，集成了`tracert`与`ping`这两个命令的图形界面，功能十分强大。`ping`送出封包到指定的服务器。如果服务器有回应就会传送回封包，并附带返回封包来回的时间。`tracert`返回从用户的电脑到指定的服务器中间经过的所有节点（路由）以及每个节点的回应速度。
+
+mtr默认发送ICMP数据包进行链路探测，通过“-u”参数指定UDP数据包用于探测。相对于traceroute只做一次链路跟踪测试，mtr会对链路上的相关节点做持续探测并给出相应的统计信息。mtr能避免节点波动对测试结果的影响，所以其测试结果更正确，建议优先使用。
+
+```bash
+jcy-dev (0.0.0.0)                                         Fri Feb 26 09:48:16 2021
+Keys:  Help   Display mode   Restart statistics   Order of fields   quit
+                                          Packets               Pings
+ Host                                   Loss%   Snt   Last   Avg  Best  Wrst StDev
+ 1. 172.31.46.1                          0.0%    18    0.9   0.9   0.7   2.2   0.0
+ 2. 10.253.13.65                         0.0%    18    0.8   0.7   0.6   0.9   0.0
+ 3. 10.253.13.70                         0.0%    18    1.0   0.9   0.8   1.1   0.0
+ 4. 100.65.0.9                           0.0%    18    0.4   0.4   0.3   0.5   0.0
+ 5. 36.7.109.2                           0.0%    18    1.3   1.3   1.0   2.4   0.2
+ 6. 100.64.23.1                          0.0%    18    0.8   1.6   0.7  11.4   2.4
+ 7. 10.12.0.161                          0.0%    18    2.0   1.7   1.3   2.1   0.0
+ 8. DZL-CORE-S-GE2-1.MAN.HF.AH.CN        0.0%    18    1.2   1.2   1.1   1.7   0.0
+ 9. 202.102.207.101                      0.0%    17    8.6   4.4   1.3  12.8   3.9
+10. 202.97.100.1                         0.0%    17    8.6   8.4   8.3   9.0   0.0
+11. 101.95.218.246                      81.2%    17   10.9   9.7   9.0  10.9   1.0
+12. 101.95.209.70                        0.0%    17    9.8   9.8   9.3  13.3   0.8
+13. 180.163.38.30                        0.0%    17    9.2  10.0   9.0  17.4   2.1
+14. 42.120.241.42                        0.0%    17   11.5  11.5   9.5  35.9   6.3
+15. 116.251.116.97                       0.0%    17   10.9  16.5  10.8  41.6   8.7
+16. ???
+17. ???
+18. public1.alidns.com                   0.0%    17   10.0  10.1  10.0  10.3   0.0
+```
+
+#### 常见可选参数说明
+
+- -r或--report：以报告模式显示输出。
+- -p或--split：将每次追踪的结果分别列出来，而非--report统计整个结果。
+- -s或--psize：指定ping数据包的大小。
+- -n或--no-dns：不对IP地址做域名反解析。
+- -a或--address：设置发送数据包的IP地址。用于主机有多个IP的情况。
+- -4：只使用IPv4协议。
+- -6：只使用IPv6协议。
+
+在mtr运行过程中，您也可以输入相应字母来快速切换模式，各字母的含义如下。
+- ?或h：显示帮助菜单。
+- d：切换显示模式。
+- n：切换启用或禁用DNS域名解析。
+- u：切换使用ICMP或UDP数据包进行探测。
+
+#### 返回结果说明
+默认配置下，返回结果中各数据列的说明如下。
+
+- 第一列（Host）：节点IP地址和域名。按 **n** 键可切换显示。
+- 第二列（Loss%）：节点丢包率。
+- 第三列（Snt）：每秒发送数据包数。默认值是10，可以通过“-c”参数指定。
+- 第四列（Last）：最近一次的探测延迟。
+- 第五、六、七列（Avg、Best、Worst）：分别是探测延迟的平均值、最小值和最大值。
+- 第八列（StDev）：标准偏差。越大说明相应节点越不稳定。
+
+#### 分析链路测试结果
+
+- 结合Avg（平均值）和StDev（标准偏差），判断各节点是否存在异常。
+
+  - 若StDev很高，则同步观察相应节点的Best和Worst，来判断相应节点是否存在异常。
+
+  - 若StDev不高，则通过Avg来判断相应节点是否存在异常。
+
+    >**注意**：上述StDev高或者不高，并没有具体的时间范围标准。而需要根据同一节点其它列的延迟值大小来进行相对评估。比如，如果Avg为30ms，那么，当StDev为25ms，则认为是很高的偏差。而如果Avg为325ms，则同样的StDev为25ms，反而认为是不高的偏差。
+
+- 查看节点丢包率，若“Loss%”不为零，则说明这一跳路由的网络可能存在问题。导致节点丢包的原因通常有两种。
+  - 人为限制了节点的ICMP发送速率，导致丢包。
+  - 节点确实存在异常，导致丢包。
+
+- 确定当前异常节点的丢包原因。
+
+  - 若随后节点均没有丢包，说明当前节点丢包是由于运营商策略限制所致，可以忽略。如前文链路测试结果示例图中的第2跳路由的网络所示。
+
+  - 若随后节点也出现丢包，说明当前节点存在网络异常，导致丢包。如前文链路测试结果示例图中的第5跳路由的网络所示。
+
+    > **说明**：前述两种情况可能同时发生，即相应节点既存在策略限速，又存在网络异常。对于这种情况，若当前节点及其后续节点连续出现丢包，而且各节点的丢包率不同，则通常以最后几跳路由的网络的丢包率为准。
+
+- 通过查看是否有明显的延迟，来确认节点是否存在异常。通过如下两个方面进行分析。
+
+  - 若某一跳路由的网络之后延迟明显陡增，则通常判断该节点存在网络异常。如前文链路测试结果示例图所示，从第5跳路由的网络之后的后续节点延迟明显陡增，则推断是第5跳路由的网络节点出现了网络异常。
+
+    >  注：高延迟并不一定完全意味着相应节点存在异常，延迟大也有可能是在数据回包链路中引发的，建议结合反向链路测试一并分析。
+
+  -  ICMP策略限速也可能会导致相应节点的延迟陡增，但后续节点通常会恢复正常。
 
 
 
