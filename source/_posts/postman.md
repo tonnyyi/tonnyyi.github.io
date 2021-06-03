@@ -158,6 +158,11 @@ pm.globals.set("username", "Admin");
 pm.collectionVariables.set("username", "Admin");
 pm.environment.set("username", "Admin");
 
+// 判断
+pm.variables.has("username");
+pm.environment.has("username");
+pm.globals.has("username");
+
 // 清理
 pm.environment.unset("username");
 ```
@@ -237,6 +242,7 @@ test脚本用于对请求结果进行验证处理, 比如: 判断响应码是否
 
 ```javascript
 pm.test("响应码验证", function(){
+    // 使用response对象的api进行验证
     pm.response.to.have.status(200);
 })
 
@@ -255,7 +261,501 @@ pm.test("响应码为200", function(){
 
 
 
+#### 常用脚本代码
+
+#### 前置脚本
+
+1. 操作变量
+
+```javascript
+// 设置全局变量
+pm.globals.set('variable_key', 'variable_value');
+// 获取全局变量
+var variable_key = pm.globals.get('variable_key');
+// unset 全局变量
+pm.globals.unset('variable_key');
+
+// 设置环境变量
+pm.environment.set('variable_key', 'variable_value');
+// 获取环境变量
+var variable_key = pm.environment.get('variable_key');
+// unset 环境变量
+pm.environment.unset('variable_key');
+
+// 设置临时变量
+pm.variables.set('variable_key', 'variable_value');
+// 获取临时变量
+var variable_key = pm.variables.get('variable_key');
+// unset 临时变量
+pm.variables.unset('variable_key');
+
+// 将对象或数组（非字符串）写入环境变量
+var array = [1, 2, 3, 4];
+pm.environment.set('array', JSON.stringify(array));
+var obj = { a: [1, 2, 3, 4], b: { c: 'val' } };
+pm.environment.set('obj', JSON.stringify(obj));
+// 转换回来
+try {
+  var array = JSON.parse(pm.environment.get('array'));
+  var obj = JSON.parse(pm.environment.get('obj'));
+} catch (e) {
+  // 处理异常
+}
+```
+
+2. 读取/修改接口请求信息
+
+```javascript
+// ================= URL ===================
+// 获取 url 对象
+var urlObject = pm.request.url;
+
+// 获取完整接口请求 URL，包含 query 参数
+var url = urlObj.toString();
+
+// 获取协议（http 或 https）
+var protocol = urlObj.protocol;
+
+// 获取 端口
+var port = urlObj.port;
+
+// ================= Header ===================
+// 获取 Header 参数对象
+var headers = pm.request.headers;
+
+// 获取 key 为 field1 的 header 参数的值
+var field1 = headers.get('field1');
+
+// 已键值对象方式获取所有 query 参数
+var headersObject = headers.toObject();
+
+// 遍历整个 query
+headers.each(item => {
+    console.log(item.key); // 输出参数名
+    console.log(item.value); // 输出参数值
+});
+
+// 增加 header 参数
+headers.add({
+    key: 'field1',
+    value: 'value1',
+});
+
+// 修改 query 参数（如不存在则新增）
+headers.upsert({
+    key: 'field2',
+    value: 'value2',
+});
+
+// ================= Query ===================
+// 获取 Query 参数对象
+var queryParams = pm.request.url.query;
+
+// 获取 key 为 field1 的 query 参数的值
+var field1 = queryParams.get('field1');
+
+// 已键值对象方式获取所有 query 参数
+var quertParamsObject = queryParams.toObject();
+
+// 遍历整个 query
+queryParams.each(item => {
+    console.log(item.key); // 输出参数名
+    console.log(item.value); // 输出参数值
+});
+
+// 增加 query 参数
+queryParams.add({
+    key: 'field1',
+    value: 'value1',
+});
+
+// 修改 query 参数（如不存在则新增）
+queryParams.upsert({
+    key: 'field2',
+    value: 'value2',
+});
+
+// ================= Body ===================
+// Body 参数来自pm.request.body，pm.request.body 是一个RequestBody 实例。
+// Body 参数在只能读取，不能直接修改。如需修改 Body 里的数据，请在 Body 里引用变量，然后在脚本里设置变量的值，以达到修改的目的。
+
+// --------------------- body 类型为 form-data ------------------
+// 当 body 类型为 form-data 时，从 pm.request.body.formdata 获取请求参数
+var formData = pm.request.body.formdata;
+
+// 获取 key 为 field1 的 form-data 参数的值
+var field1 = formData.get('field1');
+console.log(field1); // 控制台打印 field1
+
+// 已键值对象方式获取所有 formdata 参数
+var formdataObject = formData.toObject();
+console.log(formdataObject); // 控制台打印 formdataObject
+
+// 遍历整个 form-data 数据
+formData.each(item => {
+    console.log(item.key); // 控制台打印参数名
+    console.log(item.value); // 控制台打印参数值
+});
+
+// --------------------- body 类型为 x-www-form-urlencode ------------------
+// 当 body 类型为 x-www-form-urlencode** 时，从 pm.request.body.urlencoded 获取请求参数
+var formData = pm.request.body.urlencoded;
+
+// 获取 key 为 field1 的 form-data 参数的值
+var field1 = formData.get('field1');
+
+// 已键值对象方式获取所有 formdata 参数
+var formdataObject = formData.toObject();
+
+// 遍历整个 form 数据
+formData.each(item => {
+    console.log(item.key); // 控制台打印参数名
+    console.log(item.value); // 控制台打印参数值
+});
+
+// --------------------- body 类型为 JSON ------------------
+try {
+    var jsonData = JSON.parse(pm.request.body.raw);
+    console.log(jsonData); // 控制台打印参整个 json 数据
+} catch (e) {
+    console.log(e);
+}
+
+// --------------------- body 类型为 raw ------------------
+var raw = pm.request.body.raw;
+console.log(raw); // 控制台打印参整个 raw 数据
+
+
+
+#### 后置脚本
+
+```javascript
+pm.test("响应状态码为200", function () {
+  pm.response.to.have.status(200);
+  pm.expect(pm.response.code).to.eql(200);
+});
+
+// GET https://gank.io/api/v2/banners
+pm.test("成功响应且有数据", function() {
+	pm.expect(pm.response.code).to.eql(200);
+
+    const respJson = pm.response.json();
+    pm.expect(respJson.data).to.length.gt(0);
+})
+
+// GET https://gank.io/api/v2/data/category/GanHuo/type/iOS/page/1/count/10
+pm.test("分页数据满页", function() {
+    const respJson = pm.response.json();
+    pm.expect(respJson.data.length).to.eq(10);
+    pm.expect(respJson.data).to.have.lengthOf(10);
+})
+
+// 在脚本中发送请求
+pm.sendRequest("https://gank.io/api/v2/banners", function(err, resp) {
+    console.log(resp.json())
+})
+
+// 响应数据转换
+// json
+const responseJson = pm.response.json();
+// xml
+const responseJson = xml2Json(pm.response.text());
+// csv
+const parse = require('csv-parse/lib/sync');
+const responseJson = parse(pm.response.text());
+// html https://cheerio.js.org
+const $ = cheerio.load(pm.response.text());
+console.log($.html());
+console.log($(".header"));
+// 纯文本
+pm.expect(pm.response.text()).to.include("customer_id");
+pm.response.to.have.body("whole-body-text");
+
+// 将 jsonData.token 的值写入环境变量
+pm.environment.set('token', jsonData.token);
+```
+
+#### 
+
+#### 常用断言
+
+```javascript
+// response assertions 示例
+pm.test('返回结果没有错误', function() {
+  pm.response.to.not.be.error;
+  pm.response.to.have.jsonBody('');
+  pm.response.to.not.have.jsonBody('error');
+});
+
+// pm.response.to.be* 示例
+pm.test('返回结果没有错', function() {
+  // assert that the status code is 200
+  pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants
+  // assert that the response has a valid JSON body
+  pm.response.to.be.withBody;
+  pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed
+});
+
+// -----------  状态码  -------------
+pm.test('Status code is 200', function() {
+  pm.response.to.have.status(200);
+});
+// 检查 HTTP 状态码名称是否包含某个字符串
+pm.test('Status code name has string', function() {
+  pm.response.to.have.status('Created');
+});
+// 是否正确的 POST 请求状态码
+pm.test('Successful POST request', function() {
+  pm.expect(pm.response.code).to.be.oneOf([201, 202]);
+});
+
+// --------- 请求头  ---------
+pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');
+pm.test('Content-Type header is present', function() {
+  pm.response.to.have.header('Content-Type');
+});
+
+// ---------  cookie  ---------
+pm.expect(pm.cookies.has('JSESSIONID')).to.be.true;
+pm.expect(pm.cookies.get('isLoggedIn')).to.eql('1');
+
+// ---------  响应时间 ms  ---------
+pm.test('Response time is less than 200ms', function() {
+  pm.expect(pm.response.responseTime).to.be.below(200);
+});
+
+// ---------------  请求体验证  -----------------
+const jsonData = pm.response.json();
+pm.expect(jsonData.name).to.eql("Jane");
+// 响应值等于某个预先定义的变量值
+pm.expect(jsonData.name).to.eql(pm.environment.get("name"));
+
+// 检查 response body 是否包含某个字符串
+pm.test('Body matches string', function() {
+  pm.expect(pm.response.text()).to.include('string_you_want_to_search');
+});
+
+// 检查 response body 是否包含等于字符串
+pm.test('Body is correct', function() {
+  pm.response.to.have.body('response_body_string');
+});
+
+// 检查 json 值
+pm.test('Your test name', function() {
+  var jsonData = pm.response.json();
+  pm.expect(jsonData.value).to.eql(100);
+});
+
+// 断言数据类型
+pm.expect(jsonData).to.be.an("object");
+pm.expect(jsonData.name).to.be.a("string");
+pm.expect(jsonData.age).to.be.a("number");
+pm.expect(jsonData.hobbies).to.be.an("array");
+pm.expect(jsonData.website).to.be.undefined;
+pm.expect(jsonData.email).to.be.null;
+
+// 数组属性
+pm.expect(jsonData.errors).to.be.empty;
+pm.expect(jsonData.errors).to.be.an('array').that.is.empty;
+pm.expect(jsonData.areas).to.include("goods");
+const contactSettings = jsonData.settings.find(m => m.type === "contact");
+pm.expect(contactSettings).to.be.an("object", "找不到联系方式配置信息");
+pm.expect(contactSettings.detail).to.have.members(["email", "sms"]);
+
+// 对象
+pm.expect({a: 1, b: 2}).to.have.all.keys('a', 'b');
+pm.expect({a: 1, b: 2}).to.have.any.keys('a', 'b');
+pm.expect({a: 1, b: 2}).to.not.have.any.keys('c', 'd');
+pm.expect({a: 1}).to.have.property('a');
+pm.expect({a: 1, b: 2}).to.be.an('object').that.has.all.keys('a', 'b');
+pm.expect({a: 1, b: 2}).to.deep.include({a:1});	// 包含部分属性
+// 集合
+pm.expect({"a": 1, "b": 123}.a).to.be.oneOf([1, 123]);
+
+// 字符串
+pm.expect('').to.be.empty;
+```
+
+##### 脚本里发送请求
+
+```javascript
+pm.sendRequest('https://postman-echo.com/get', (error, response) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log(response);
+    pm.environment.set('variable_key', 'new_value');
+  }
+});
+
+// 完整的 request 参数示例
+const echoPostRequest = {
+  url: 'https://postman-echo.com/post',
+  method: 'POST',
+  header: {
+    headername1: 'value1',
+    headername2: 'value2',
+  },
+  body: {
+    mode: 'raw',
+    raw: JSON.stringify({ key: 'this is json' }),
+  },
+};
+pm.sendRequest(echoPostRequest, function(err, res) {
+  console.log(err ? err : res.json());
+});
+
+// 对返回结果进行断言
+pm.sendRequest('https://postman-echo.com/get', function(err, res) {
+  if (err) {
+    console.log(err);
+  }
+  pm.test('response should be okay to process', function() {
+    pm.expect(err).to.equal(null);
+    pm.expect(res).to.have.property('code', 200);
+    pm.expect(res).to.have.property('status', 'OK');
+  });
+});
+```
+
+在**Runner**中运行collection下的请求时, 可以通过`postman.setNextRequest(请求名)` 或者 `postman.setNextRequest(请求id)`来指定下一个请求, 这样可以构建起一个调用工作流, 比如先请求数据列表接口, 然后从响应中获取数据id, 再请求数据详情接口.
+
+
+
+#### 其他示例
+
+```javascript
+// Decode base64 数据
+var cryptoJs = require("crypto-js");
+
+// 假设 `base64Content` 是一个已经用 base64 encoded 过的值
+var rawContent = base64Content.slice(
+  'data:application/octet-stream;base64,'.length,
+);
+
+// CryptoJS 是一个已经内嵌到脚本引擎的对象，可以直接使用，使用文档: https://www.npmjs.com/package/crypto-js
+var intermediate = cryptoJs.enc.Base64.parse(base64content);
+pm.test('Contents are valid', function() {
+  pm.expect(cryptoJs.enc.Utf8.stringify(intermediate)).to.be.true; // a check for non-emptiness
+});
+
+// 转化 XML 为 JSON 对象
+var jsonObject = xml2Json(responseBody);
+```
+
+
+
+
+
+### API
+
+#### PM对象
+
+##### info属性
+
+`pm.info` 对象包含了接口（或测试集）运行的相关信息。
+
+```javascript
+// 当前执行是什么类型的脚本：前置脚本（prerequest），或后置脚本（test）。
+pm.info.eventName
+
+//当前执行第几轮循环（iteration），仅集合测试有效。
+pm.info.iteration
+
+// 本次执行需要循环的总轮数，仅集合测试有效。
+pm.info.iterationCount
+
+// 当前正在运行的接口用例名称
+pm.info.requestName
+
+// 当前正在运行的接口用例名称的唯一 ID
+pm.info.requestId
+```
+
+
+
+##### variable属性
+
+`pm.variables`用来对变量进行管理
+
+```javascript
+// 检查是否存在某个临时变量。
+pm.variables.has("username");
+// get 单个临时变量
+pm.variables.get("username");
+// set 单个临时变量
+pm.variables.set("username", "Admin");
+// 以真实的值替换字符串里的包含的动态变量，如{{variable_name}}。
+pm.variables.replaceIn("Hi, my name is {{$randomFirstName}}");
+// 以对象形式获取所有临时变量。
+pm.variables.toObject();
+
+// pm.globals pm.collectionVariables pm.environment pm.iterationData 都有下列API
+pm.collectionVariables.has("username");
+pm.collectionVariables.get("username");
+pm.collectionVariables.set("username", "Admin");
+pm.collectionVariables.unset("username");
+pm.collectionVariables.clear()
+pm.collectionVariables.replaceIn("hi {{username}}");	// 访问变量
+```
+
+##### request response cookies属性
+
+```javascript
+// ------------ request对象 --------------
+pm.request.url; 	// Url对象, 包含: 协议, 主机, 路径, 参数, 变量
+pm.request.headers;		// Header数组
+pm.request.method;		// "GET"
+pm.request.body;		// 请求体对象
+
+// 添加请求头
+pm.request.headers.add({
+  key: "client-id",
+  value: "abcdef"
+});
+
+// ------------ response对象 --------------
+pm.response.code;		// 响应码(数字) 
+pm.response.status; 	// "OK"
+pm.response.headers;	// 响应头数组
+pm.response.responseTime;	// 响应时间ms
+pm.response.responseSize;	// 响应体大小
+pm.response.text();			// 响应体转字符串格式
+pm.response.json();			// 响应体转json格式
+
+// ------------ cookies对象 --------------
+pm.cookies.has("test");
+pm.cookies.get("test");		// 获取cookie值(字符串)
+pm.cookies.toObject();
+// 设置cookie的作用域名
+const jar = pm.cookies.jar();
+jar.set("baidu.com", "username", "Admin", (error, cookie) => {});
+jar.set("baidu.com", {"name":"username", "value":"Admin", httpOnly:false},
+        (error, cookie) => {});
+jar.get("baidu.com", "username", (error, value) => {});
+jar.getAll("baidu.com", (error, cookies) => {});
+jar.unset("baidu.com", "username", (error) => {});
+jar.clear("baidu.com", (error) => {});
+
+// ------------ info对象 --------------
+pm.info.eventName;		// "prerequest" "test"
+pm.info.iteration;		// run collection时的第几次循环
+pm.info.iterationCount;	// 总计划循环次数
+pm.info.requestName;	// 本次请求的保存名称
+pm.info.requestId;		// 本次请求的唯一标识GUID
+```
+
+
+
+##### pm.expect
+
+```text
+pm.expect(assertion:*):Function → Assertion
+```
+
 Postman使用 [Chai Assertion Library BDD](https://www.chaijs.com/api/bdd/)库提供的 [断言语法](https://www.chaijs.com/api/bdd/) 进行验证
+
+该方法用来断言 `response` 或 `variables`里的数据非常有用，更多关于 `pm.expect`断言的是示例，可以点击这里查看：[Assertion library examples](https://learning.postman.com/docs/writing-scripts/script-references/test-examples/)
 
 ```javascript
 // 链式调用, 增加可读性
@@ -279,106 +779,83 @@ still
 expect({a: 1}).to.not.have.property('b');
 ```
 
-#### 常用测试代码
+#### 
 
-```javascript
-pm.test("响应状态码为200", function () {
-  pm.response.to.have.status(200);
-  pm.expect(pm.response.code).to.eql(200);
-});
+##### Response 对象可用的断言 API 列表
 
-// GET https://gank.io/api/v2/banners
-pm.test("成功响应且有数据", function() {
-	pm.expect(pm.response.code).to.eql(200);
-
-    const respJson = pm.response.json();
-    pm.expect(respJson.data).to.length.gt(0);
-})
-
-// GET https://gank.io/api/v2/data/category/GanHuo/type/iOS/page/1/count/10
-pm.test("分页数据满页", function() {
-    const respJson = pm.response.json();
-    pm.expect(respJson.data.length).to.eq(10);
-    pm.expect(respJson.data).to.have.lengthOf(10);
-})
-
-// 响应数据转换
-// json
-const responseJson = pm.response.json();
-// xml
-const responseJson = xml2Json(pm.response.text());
-// csv
-const parse = require('csv-parse/lib/sync');
-const responseJson = parse(pm.response.text());
-// html https://cheerio.js.org
-const $ = cheerio.load(pm.response.text());
-console.log($.html());
-console.log($(".header"));
-// 纯文本
-pm.expect(pm.response.text()).to.include("customer_id");
-pm.response.to.have.body("whole-body-text");
-```
-
-#### 常用API
-
-```javascript
-// 请求体验证
-const responseJson = pm.response.json();
-pm.expect(responseJson.name).to.eql("Jane");
-// 状态码
-pm.response.to.have.status(200);
-pm.expect(pm.response.code).to.be.oneOf([200,404,500]);
-pm.response.to.have.status("OK");
-// 请求头
-pm.response.to.have.header("Content-Type");
-pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');
-});
-// cookie
-pm.expect(pm.cookies.has('JSESSIONID')).to.be.true;
-pm.expect(pm.cookies.get('isLoggedIn')).to.eql('1');
-// 响应时间 ms
-pm.expect(pm.response.responseTime).to.be.below(200);
-
-// 在脚本中发送请求
-pm.sendRequest("https://gank.io/api/v2/banners", function(err, resp) {
-    console.log(resp.json())
-})
-```
-
-#### 常用断言
-
-```javascript
-const jsonData = pm.response.json();
-
-// 响应值等于某个预先定义的变量值
-pm.expect(jsonData.name).to.eql(pm.environment.get("name"));
-// 值类型
-pm.expect(jsonData).to.be.an("object");
-pm.expect(jsonData.name).to.be.a("string");
-pm.expect(jsonData.age).to.be.a("number");
-pm.expect(jsonData.hobbies).to.be.an("array");
-pm.expect(jsonData.website).to.be.undefined;
-pm.expect(jsonData.email).to.be.null;
-// 数组属性
-pm.expect(jsonData.errors).to.be.empty;
-pm.expect(jsonData.areas).to.include("goods");
-const contactSettings = jsonData.settings.find(m => m.type === "contact");
-pm.expect(contactSettings).to.be.an("object", "找不到联系方式配置信息");
-pm.expect(contactSettings.detail).to.have.members(["email", "sms"]);
-// 对象
-pm.expect({a: 1, b: 2}).to.have.all.keys('a', 'b');
-pm.expect({a: 1, b: 2}).to.have.any.keys('a', 'b');
-pm.expect({a: 1, b: 2}).to.not.have.any.keys('c', 'd');
-pm.expect({a: 1}).to.have.property('a');
-pm.expect({a: 1, b: 2}).to.be.an('object').that.has.all.keys('a', 'b');
-pm.expect({a: 1, b: 2}).to.deep.include({a:1});	// 包含部分属性
-// 集合
-pm.expect({"a": 1, "b": 123}.a).to.be.oneOf([1, 123]);
-```
+- `pm.response.to.have.status(code:Number)`
+- `pm.response.to.have.status(reason:String)`
+- `pm.response.to.have.header(key:String)`
+- `pm.response.to.have.header(key:String, optionalValue:String)`
+- `pm.response.to.have.body()`
+- `pm.response.to.have.body(optionalValue:String)`
+- `pm.response.to.have.body(optionalValue:RegExp)`
+- `pm.response.to.have.jsonBody()`
+- `pm.response.to.have.jsonBody(optionalExpectEqual:Object)`
+- `pm.response.to.have.jsonBody(optionalExpectPath:String)`
+- `pm.response.to.have.jsonBody(optionalExpectPath:String, optionalValue:*)`
+- `pm.response.to.have.jsonSchema(schema:Object)`
+- `pm.response.to.have.jsonSchema(schema:Object, ajvOptions:Object)`
 
 
 
-### API
+#### pm.response.to.be.*
+
+`pm.response.to.be` 是用来快速断言的一系列内置规则。
+
+- `pm.response.to.be.info`
+
+  检查状态码是否为`1XX`
+
+- `pm.response.to.be.success`
+
+  检查状态码是否为`2XX`
+
+- `pm.response.to.be.redirection`
+
+  检查状态码是否为`3XX`
+
+- `pm.response.to.be.clientError`
+
+  检查状态码是否为`4XX`
+
+- `pm.response.to.be.serverError`
+
+  检查状态码是否为`5XX`
+
+- `pm.response.to.be.error`
+
+  检查状态码是否为`4XX`或`5XX`
+
+- `pm.response.to.be.ok`
+
+  检查状态码是否为`200`
+
+- `pm.response.to.be.accepted`
+
+  检查状态码是否为`202`
+
+- `pm.response.to.be.badRequest`
+
+  检查状态码是否为`400`
+
+- `pm.response.to.be.unauthorized`
+
+  检查状态码是否为`401`
+
+- `pm.response.to.be.forbidden`
+
+  检查状态码是否为`403`
+
+- `pm.response.to.be.notFound`
+
+  检查状态码是否为`404`
+
+- `pm.response.to.be.rateLimited`
+
+  检查状态码是否为`429`
+
+
 
 #### 动态变量
 
@@ -600,118 +1077,6 @@ pm.expect({"a": 1, "b": 123}.a).to.be.oneOf([1, 123]);
 | $randomLoremLines  | 1-5行胡话 | Ducimus in ut mollitia.\nA itaque non.\nHarum temporibus nihil voluptas.\nIste in sed et nesciunt in quaerat sed. |
 
 
-
-#### pm对象
-
-##### variable属性
-
-`pm.variables`用来对变量进行管理
-
-```javascript
-pm.variables.has("username");
-pm.variables.get("username");
-pm.variables.set("username", "Admin");
-pm.variables.replaceIn("Hi, my name is {{$randomFirstName}}"); // 访问动态变量
-pm.variables.toObject();	// 合并后的所有变量
-
-// pm.globals pm.collectionVariables pm.environment pm.iterationData 都有下列API
-pm.collectionVariables.has("username");
-pm.collectionVariables.get("username");
-pm.collectionVariables.set("username", "Admin");
-pm.collectionVariables.unset("username");
-pm.collectionVariables.clear()
-pm.collectionVariables.replaceIn("hi {{username}}");	// 访问变量
-```
-
-##### request response cookies属性
-
-```javascript
-// ------------ request对象 --------------
-pm.request.url; 	// Url对象, 包含: 协议, 主机, 路径, 参数, 变量
-pm.request.headers;		// Header数组
-pm.request.method;		// "GET"
-pm.request.body;		// 请求体对象
-
-// 添加请求头
-pm.request.headers.add({
-  key: "client-id",
-  value: "abcdef"
-});
-
-// ------------ response对象 --------------
-pm.response.code;		// 响应码(数字) 
-pm.response.status; 	// "OK"
-pm.response.headers;	// 响应头数组
-pm.response.responseTime;	// 响应时间ms
-pm.response.responseSize;	// 响应体大小
-pm.response.text();			// 响应体转字符串格式
-pm.response.json();			// 响应体转json格式
-
-// ------------ cookies对象 --------------
-pm.cookies.has("test");
-pm.cookies.get("test");		// 获取cookie值(字符串)
-pm.cookies.toObject();
-// 设置cookie的作用域名
-const jar = pm.cookies.jar();
-jar.set("baidu.com", "username", "Admin", (error, cookie) => {});
-jar.set("baidu.com", {"name":"username", "value":"Admin", httpOnly:false},
-        (error, cookie) => {});
-jar.get("baidu.com", "username", (error, value) => {});
-jar.getAll("baidu.com", (error, cookies) => {});
-jar.unset("baidu.com", "username", (error) => {});
-jar.clear("baidu.com", (error) => {});
-
-// ------------ info对象 --------------
-pm.info.eventName;		// "prerequest" "test"
-pm.info.iteration;		// run collection时的第几次循环
-pm.info.iterationCount;	// 总计划循环次数
-pm.info.requestName;	// 本次请求的保存名称
-pm.info.requestId;		// 本次请求的唯一标识GUID
-```
-
-##### 脚本里发送请求
-
-```javascript
-pm.sendRequest('https://postman-echo.com/get', (error, response) => {
-  if (error) {
-    console.log(error);
-  } else {
-  console.log(response);
-  }
-});
-
-// Example with a full-fledged request
-const postRequest = {
-  url: 'https://postman-echo.com/post',
-  method: 'POST',
-  header: {
-    'Content-Type': 'application/json',
-    'X-Foo': 'bar'
-  },
-  body: {
-    mode: 'raw',
-    raw: JSON.stringify({ key: 'this is json' })
-  }
-};
-pm.sendRequest(postRequest, (error, response) => {
-  console.log(error ? error : response.json());
-});
-
-// Example containing a test
-pm.sendRequest('https://postman-echo.com/get', (error, response) => {
-  if (error) {
-    console.log(error);
-  }
-
-  pm.test('response should be okay to process', () => {
-    pm.expect(error).to.equal(null);
-    pm.expect(response).to.have.property('code', 200);
-    pm.expect(response).to.have.property('status', 'OK');
-  });
-});
-```
-
-在**Runner**中运行collection下的请求时, 可以通过`postman.setNextRequest(请求名)` 或者 `postman.setNextRequest(请求id)`来指定下一个请求, 这样可以构建起一个调用工作流, 比如先请求数据列表接口, 然后从响应中获取数据id, 再请求数据详情接口.
 
 ##### 使用外部库
 

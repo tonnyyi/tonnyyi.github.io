@@ -1498,15 +1498,226 @@ $ scp -r root@10.6.159.147:/opt/soft/test /opt/soft/
 $ scp /opt/soft/demo.tar root@10.6.159.147:/opt/soft/scptest
 ```
 
+### 文件传输RZ、SZ
+
+xshell下可以使用，只适合小的文件传输
+
+```bash
+# 安装
+$ yum install -y lrzsz.x86_64
+
+# 下载
+$ sz xxx
+# 弹窗确认保存位置
+
+# 上传
+$ rz
+# 弹窗选择文件
+```
+
 
 
 ### mount 磁盘挂载
 
 ```bash
+# 列出文件系统的整体磁盘空间使用情况
+$ df -h
+文件系统        容量  已用  可用 已用% 挂载点
+/dev/sda2       223G  6.8G  216G    4% /
+devtmpfs        126G     0  126G    0% /dev
+tmpfs           126G     0  126G    0% /dev/shm
+tmpfs           126G   19M  126G    1% /run
+tmpfs           126G     0  126G    0% /sys/fs/cgroup
+/dev/sda1       494M  158M  337M   32% /boot
+/dev/sdb1       2.0T   42G  2.0T    3% /iflytek
+tmpfs            26G     0   26G    0% /run/user/0
 
+# 列出所有可用块设备的信息，显示他们之间的依赖关系
+$ lsblk
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+sda      8:0    0 223.1G  0 disk
+├─sda1   8:1    0   500M  0 part /boot
+└─sda2   8:2    0 222.6G  0 part /
+sdb      8:16   0   7.3T  0 disk
+└─sdb1   8:17   0     2T  0 part /iflytek
 ```
 
+这里以CentOS下创建xfs为例
 
+centos7.0开始默认文件系统是xfs，centos6是ext4，centos5是ext3
+
+```bash
+# 1 安装XFS系统工具集
+# Fedora, CentOS, RHEL系统:
+$ sudo yum install xfsprogs
+# 很多Linux系统将XFS作为默认文件系统，所以无需安装, 比如Centos 7.3就无需安装
+# Debian, Ubuntu , Linux Mint系统：
+$ sudo apt-get install xfsprogs
+
+# 2 创建xfs格式分区
+# 查看下是否有分区
+$ fdisk -l
+Disk /dev/sdb: 323.2 GB, 323196289024 bytes, 631242752 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+# 开始分区
+$ fdisk /dev/sdb
+Welcome to fdisk (util-linux 2.23.2).
+ 
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+ 
+Device does not contain a recognized partition table
+Building a new DOS disklabel with disk identifier 0xafc7c358.
+# 输入n 添加分区 
+Command (m for help): n
+Partition type:
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended
+# 输入p 指定为主分区   
+Select (default p): p
+# 输入分区编号
+Partition number (1-4, default 1): 1
+# 一路默认
+First sector (2048-631242751, default 2048): 
+Using default value 2048
+Last sector, +sectors or +size{K,M,G} (2048-631242751, default 631242751): 
+Using default value 631242751
+Partition 1 of type Linux and of size 301 GiB is set
+# 输入w 保存配置并退出
+Command (m for help): w
+The partition table has been altered!
+ 
+Calling ioctl() to re-read partition table.
+Syncing disks.
+
+# 3 格式化分区为xfs 如果已有其他文件系统创建在此分区，必须加上"-f"参数来覆盖它。
+$ mkfs.xfs -f  /dev/sdb
+meta-data=/dev/sdb               isize=512    agcount=4, agsize=19726336 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=0, sparse=0
+data     =                       bsize=4096   blocks=78905344, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+log      =internal log           bsize=4096   blocks=38528, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+
+# 4 挂载
+$ mkdir /mysql
+$ mount  -t  xfs  /dev/sdb  /mysql
+# 验证XFS挂载是否成功
+$ df -Th /dev/sdb
+Filesystem     Type 1K-blocks  Used Available Use% Mounted on
+/dev/sdb       xfs  315467264 32944 315434320   1% /mysql
+$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2        30G   22G  8.2G  73% /
+devtmpfs        1.7G     0  1.7G   0% /dev
+tmpfs           1.7G     0  1.7G   0% /dev/shm
+tmpfs           1.7G   25M  1.7G   2% /run
+tmpfs           1.7G     0  1.7G   0% /sys/fs/cgroup
+/dev/sda1       497M   62M  436M  13% /boot
+/dev/sdc1       133G  4.2G  122G   4% /mnt/resource
+tmpfs           344M     0  344M   0% /run/user/1000
+/dev/sdb        301G   33M  301G   1% /mysql
+
+# 5 开机自动挂载
+$ vim /etc/fstab
+# 追加如下一行
+/dev/sdb1		/iflytek 			xfs			defaults		0 0
+
+# 可以使用UUID替换对应的设备
+$ blkid /dev/sdb1
+/dev/sdb1: UUID="23c36f8a-04cb-4cfc-8fdd-663379c4563c" TYPE="xfs"
+
+$ vim /etc/fstab
+UUID=23c36f8a-04cb-4cfc-8fdd-663379c4563c		/iflytek 	xfs		defaults	0 0
+```
+
+查看磁盘分区的文件系统类型
+
+```bash
+$ df -Th
+文件系统       类型      容量  已用  可用 已用% 挂载点
+/dev/sda2      xfs       223G  6.8G  216G    4% /
+devtmpfs       devtmpfs  126G     0  126G    0% /dev
+tmpfs          tmpfs     126G     0  126G    0% /dev/shm
+tmpfs          tmpfs     126G   19M  126G    1% /run
+tmpfs          tmpfs     126G     0  126G    0% /sys/fs/cgroup
+/dev/sda1      xfs       494M  158M  337M   32% /boot
+/dev/sdb1      xfs       2.0T   42G  2.0T    3% /iflytek
+tmpfs          tmpfs      26G     0   26G    0% /run/user/0
+
+# 或者
+$ parted -l
+Model: AVAGO INSPUR (scsi)
+Disk /dev/sda: 240GB
+Sector size (logical/physical): 512B/4096B
+Partition Table: msdos
+Disk Flags:
+
+Number  Start   End    Size   Type     File system  标志
+ 1      1049kB  525MB  524MB  primary  xfs          启动
+ 2      525MB   240GB  239GB  primary  xfs
+
+
+Model: AVAGO INSPUR (scsi)
+Disk /dev/sdb: 8001GB
+Sector size (logical/physical): 512B/4096B
+Partition Table: msdos
+Disk Flags:
+
+Number  Start   End     Size    Type     File system  标志
+ 1      1049kB  2199GB  2199GB  primary  xfs
+
+# 查看已格式化分区的UUID和文件系统
+$ blkid
+/dev/sda2: UUID="58e6f06c-55bf-4565-9ef3-50b1155c1e2a" TYPE="xfs"
+/dev/sdb1: UUID="23c36f8a-04cb-4cfc-8fdd-663379c4563c" TYPE="xfs"
+/dev/sda1: UUID="799fab66-2443-4490-a387-b3483162e23d" TYPE="xfs"
+
+# 可以查看未挂载的文件系统类型，有些系统可能没有这个命令
+$ lsblk -f
+NAME   FSTYPE LABEL UUID                                 MOUNTPOINT
+sda
+├─sda1 xfs          799fab66-2443-4490-a387-b3483162e23d /boot
+└─sda2 xfs          58e6f06c-55bf-4565-9ef3-50b1155c1e2a /
+sdb
+└─sdb1 xfs          23c36f8a-04cb-4cfc-8fdd-663379c4563c /iflytek
+```
+
+#### LVM(Logical volume Manager)逻辑卷管理相关概念
+
+传统的磁盘管理机制，Linux操作系统和windows的差不多，绝大多数都是使用MBR(Master Boot Recorder)都是通过先对一个硬盘进行分区，然后再将该分区进行文件系统的格式化，在Linux系统中如果要使用该分区就将其挂载上去即可，windows的话其实底层也就是自动将所有的分区挂载好，然后我们就可以对该分区进行使用了。
+
+在传统的磁盘管理机制中，我们的上层应用是直接访问文件系统，从而对底层的物理硬盘进行读取，而在LVM中，其通过对底层的硬盘进行封装，当我们对底层的物理硬盘进行操作时，其不再是针对于分区进行操作，而是通过一个叫做逻辑卷的东西来对其进行底层的磁盘管理操作。
+
+LVM最大的特点就是可以对磁盘进行动态管理。因为逻辑卷的大小是可以动态调整的，而且不会丢失现有的数据。我们如果新增加了硬盘，其也不会改变现有上层的逻辑卷。
+
+- 物理拓展(Physical Extend，PE)　　
+- 物理卷（Physical Volume,PV）：也就是物理磁盘分区，如果想要使用LVM来管理这个分区，可以使用fdisk将其ID改为LVM可以识别的值，即8e。
+- 卷组（Volume Group,VG）：PV的集合
+- 逻辑卷（Logic Volume,LV）：VG中画出来的一块逻辑磁盘
+
+**为什么要使用逻辑卷**：
+
+- 业务上使用大容量的磁盘。举个例子，我们需要在/data下挂载30TB的存储，对于单个磁盘，是无法满足要求的，因为市面上没有那么大的单块磁盘。但是如果我们使用逻辑卷，将多个小容量的磁盘聚合为一个大的逻辑磁盘，就能满足需求。
+- 扩展和收缩磁盘。在业务初期规划磁盘时，我们并不能完全知道需要分配多少磁盘空间是合理的，如果使用物理卷，后期无法扩展和收缩，如果使用逻辑卷，可以根据后期的需求量，手动扩展或收缩。
+
+总结：
+
+(1)物理磁盘被格式化为PV，空间被划分为一个个的PE
+
+(2)不同的PV加入到同一个VG中，不同PV的PE全部进入到了VG的PE池内
+
+(3)LV基于PE创建，大小为PE的整数倍，组成LV的PE可能来自不同的物理磁盘（当我们创建好我们的VG以后，这个时候我们创建LV其实就是从VG中拿出我们指定数量的PE）
+
+(4)LV现在就直接可以格式化后挂载使用了
+
+(5)LV的扩充缩减实际上就是增加或减少组成该LV的PE数量，其过程不会丢失原始数据
 
 ### time 统计命令执行时间
 
@@ -1541,6 +1752,57 @@ date -d '2 weeks'   # 2周后
 date -d '-100 days'     # 100天后
 date -d 'next monday'   # 下个周一
 date -d last-month +%Y%m    # 上个月
+```
+
+### 修改时间、时区、语言
+
+```bash
+# 查看当前时区
+$ date -R
+Sat, 15 May 2021 15:33:16 +0800
+
+# 修改时区方法1 依次输入序号 Asia > China > Beijing Time
+$ tzselect
+
+# 或者
+$ ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+```
+
+```bash
+# 查看时间日期
+$ date
+2021年 05月 15日 星期六 15:43:17 CST
+
+# 设置日期  2021-05-15
+$ date -s 15/05/2021
+# 设置时间 15:45:30
+$ date -s 15:45:30
+
+# 或者使用datetimectl
+$ timedatectl -h
+
+# 将当前时间日期写入BIOS，避免重启后失效
+$ hwclock -w
+```
+
+```bash
+# 查看当前语言设置
+$ echo $LANG
+zh_CN.UTF-8
+
+# 查看系统安装的语言包
+$ locale -a | grep zh_CN
+
+# 如果没有中文语言，可以执行如下指令，安装中文语言包
+$ yum groupinstall chinese-support
+
+# 临时修改
+$ export LANG=zh_CN.UTF-8
+# 永久修改
+$ vim /etc/locale.conf  
+# 改为 LANG="zh_CN.UTF-8"
+# 或者
+$ localectl  set-locale LANG=zh_CN.UTF8
 ```
 
 
@@ -2310,11 +2572,38 @@ free
 free -s 10  # 每10秒刷新一次
 ```
 
+### fdisk 磁盘列表
+
+```bash
+$ fdisk -l
+磁盘 /dev/sda：239.5 GB, 239511535616 字节，467795968 个扇区
+Units = 扇区 of 1 * 512 = 512 bytes
+扇区大小(逻辑/物理)：512 字节 / 4096 字节
+I/O 大小(最小/最佳)：65536 字节 / 65536 字节
+磁盘标签类型：dos
+磁盘标识符：0x0004b739
+
+   设备 Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        2048     1026047      512000   83  Linux
+/dev/sda2         1026048   467795967   233384960   83  Linux
+
+磁盘 /dev/sdb：8001.0 GB, 8001020755968 字节，15626993664 个扇区
+Units = 扇区 of 1 * 512 = 512 bytes
+扇区大小(逻辑/物理)：512 字节 / 4096 字节
+I/O 大小(最小/最佳)：65536 字节 / 65536 字节
+磁盘标签类型：dos
+磁盘标识符：0x7356a9d5
+
+   设备 Boot      Start         End      Blocks   Id  System
+/dev/sdb1            2048  4294967294  2147482623+  83  Linux
+```
+
+
 
 ### df  查询磁盘可用空间
 
 ```bash
-$ df -h
+$ df -lh
 Filesystem      Size  Used Avail Use% Mounted on
 /dev/vda1       237G  7.9G  219G    4% /
 devtmpfs         48G     0   48G    0% /dev
