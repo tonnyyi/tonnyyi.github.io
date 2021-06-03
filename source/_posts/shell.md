@@ -79,7 +79,7 @@ World
 boo
 _var="hello"
 # 除了显示设置变量, 还可以用语句给变量赋值
-for file in `ls /etc`
+ file in `ls /etc`
 或
 for file in $(ls /etc)
 
@@ -624,6 +624,7 @@ fi
 | `-S file` | 文件是否存在且为套接字文件Socket |
 | `-p file` | 文件是否存在且为命名管道文件FIFO(pipe) |
 | `-L file` | 文件是否存在且是一个链接文件(Link) |
+| `-h file` | 文件是否存在且是一个链接文件(Link) |
 
 文件属性检测:
 
