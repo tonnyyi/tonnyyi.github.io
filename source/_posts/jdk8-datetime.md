@@ -43,144 +43,201 @@ JDK8之前的日期api有很多不便的地方, 如:
 | at | 把当前对象和另一个对象结合, 生成新的类型的实例 | `localDate.atTime(21, 30, 50)` |
 | format | 格式化 | `localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));` |
 
-### LocalDate和LocalTime
-`LocalDate`表示日期(年月日), 但不包含时间(时分秒), 也**不包时区信息**, 内部使用3个属性`(int: year, short: month, short: day)`记录时间信息. 
+### LocalDate LocalTime
+
+`LocalDate`表示日期(年月日),  `LocalTime`表示时间(时分秒纳秒), **全都不包时区信息**
+
+#### 创建实例
+
+- `now`方法
+
+  ```java
+  LocalDate.now();
+  LocalDate.now(Clock.systemDefaultZone());   // 系统默认时区
+  LocalDate.now(ZoneId.systemDefault());      // 系统默认时区
+  LocalDate.now(ZoneId.of("UTC-10"));         // 夏威夷: 2020-04-21
+  LocalDate.now(ZoneOffset.ofHours(8));		// +8
+  
+  LocalTime.now();
+  LocalTime.now(Clock.systemDefaultZone());
+  LocalTime.now(ZoneId.systemDefault());
+  LocalTime.now(ZoneId.of("UTC+8"));
+  LocalTime.now(ZoneOffset.ofHours(8));
+  ```
+
+- `of`方法
+
+  ```java
+  LocalDate.of(2021, 10, 31);			// 年月日
+  LocalDate.ofYearDay(2021, 100);		// 2021-04-10, 某一年的某一天
+  LocalDate.ofEpochDay(0);			// 1970-01-01, 以1970-01-01为起点, 单位: 天 
+  
+  LocalTime.of(17, 45);						// 时 分
+  LocalTime.of(17, 45, 59);					// 时 分 秒
+  LocalTime.of(17, 45, 59, 999_999_999);		// 时 分 秒 纳秒 0 ~ 999,999,999
+  LocalTime.ofSecondOfDay(43200);				// 12:00	以当天的秒数
+  LocalTime.ofNanoOfDay(43200000000000L);		// 12:00 	以当天的纳秒
+  ```
+
+- 时间戳  都需要先转成`Instant`
+
+  ```java
+  ZonedDateTime zone = Instant.ofEpochMilli(1625390224369L).atZone(ZoneId.systemDefault());
+  zone.toLocalDate();
+  zone.toLocalTime();
+  ```
+
+- `Date`类
+
+  ```java
+  ZonedDateTime zone = new Date().toInstant().atZone(ZoneId.systemDefault());
+  zone.toLocalDate();
+  zone.toLocalTime();
+  
+  // 也可以通过先转成时间戳再转换
+  ZonedDateTime zone = Instant.ofEpochMilli(new Date().getTime()).atZone(ZoneId.systemDefault());
+  zone.toLocalDate();
+  zone.toLocalTime();
+  ```
+
+- 字符串
+
+  ```java
+  LocalDate.parse("2007-12-03")		// 2007-12-03
+  LocalDate.parse("2007/12/03", DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+      
+  LocalTime.parse("10:15:30");
+  LocalTime.parse("10/15/30", DateTimeFormatter.ofPattern("HH/mm/ss"));    
+  ```
+
+- `LocalDateTime`
+
+  ```java
+  LocalDateTime now = LocalDateTime.now();
+  now.toLocalDate();
+  now.toLocalTime();
+  ```
+
+  
+
+#### 读取属性
 
 ```java
-/* 创建 */
-LocalDate localDate = LocalDate.now();
-LocalDate.now(Clock.systemDefaultZone());   // 指定时钟
-LocalDate.now(ZoneId.systemDefault());      // 获取某个时区下当前日期
-// 统一时刻, 中国时间与夏威夷时间
-LocalDate.now(ZoneId.systemDefault()); 		  // 中国: 2020-04-22
-LocalDate.now(ZoneId.of("UTC-10"));         // 夏威夷: 2020-04-21
+LocalDate now = LocalDate.now(2021, 7, 4);
+now.getYear();			// 2021
+now.getMonth();     	// JULY  返回Month对象
+now.getMonthValue();	// 7
+now.getDayOfMonth();	// 4
+now.getDayOfYear();		// 191 在一年中的第几天
+now.getDayOfWeek();		// DayOfWeek 对象, 其getValue()方法返回 1 - 7, 对应周一到周日
+// 通用的获取指定字段
+now.get(ChronoField.DAY_OF_WEEK);		// 返回周几
+now.getLong(ChronoField.DAY_OF_YEAR);	// 返回Long格式的指定字段
+now.lengthOfMonth();					// 返回当月有多少天
+now.lengthOfYear();						// 返回当年有多少天
+now.toEpochDay();						// 返回距离1970-01-01的天数
 
-LocalDate.of(2018, 12, 20);                 // 年月日
-LocalDate.of(2018, Month.DECEMBER, 20);
-LocalDate.ofYearDay(2018, 265);             // 根据年和在本年的天数创建, 2018年第265天
-LocalDate.ofEpochDay(17888);                // 自1970-01-01以来的天数
+LocalTime now = LocalTime.of(17, 45, 59, 99999999);
+now.getHour();
+now.getMinute();
+now.getSecond();
+now.getNano();		// 99999999
+now.get(ChronoField.SECOND_OF_DAY);
+now.toSecondOfDay();				// 返回在当天的秒数
+```
 
-LocalDate.parse("2018-12-20");              // 解析字符串
-LocalDate.parse("2018/12/20", DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 
-/* 基于LocalDate创建LocalDateTime */
-LocalDateTime localDateTime = localDate.atStartOfDay();
-localDateTime = localDate.atTime(21, 30);            // 补充 时分
-localDateTime = localDate.atTime(21, 30, 50);        // 补充 时分秒
-localDateTime = localDate.atTime(21, 30, 50, 123000123);     // 时分秒纳秒
-localDateTime = localDate.atTime(LocalTime.now());
-ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
-OffsetDateTime offsetDateTime = localDate.atTime(OffsetTime.now());
 
-/* 格式化 */
-localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));     // 2018-10-23
-// 预定义格式 在DateTimeFormatter里
-localDate.format(DateTimeFormatter.ISO_DATE);                    // 2018-10-23
-localDate.format(DateTimeFormatter.BASIC_ISO_DATE);              // 20181023
-// 2018年 12月 23日 星期日
-localDate.format(DateTimeFormatter.ofPattern("yyyy年 MM月 dd日 E", Locale.CHINESE));
+#### 修改属性
 
-/* 获取某个时间字段 */
-localDate.getYear();
-localDate.getMonthValue();
-Month month = localDate.getMonth();
-localDate.getDayOfMonth();
-localDate.getDayOfYear();
-DayOfWeek dayOfWeek = localDate.getDayOfWeek();
-localDate.getLong(ChronoField.DAY_OF_WEEK);          // 获取指定时间字段
+```java
+LocalDate now = LocalDate.now();
+now.plusDays(10);					// 加10天
+now.minusDays(10);					// 减10天
+now.plus(1, ChronoUnit.DAYS);		// 通用加法
+now.plus(Period.parse("P1Y2M3D"));	// 使用Period对象就行修改
+now.withYear(2022);					// 设置年为2022
+now.with(ChronoField.YEAR, 2022);	// 通用的设置方法
+// 在进行复杂的操作时, 比如下一个工作日, 下个月的第一天时, 可以使用`with`的重载方法
+// 返回下一个距离当前时间最近的星期日
+LocalDate date7 = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+// 返回本月第一个星期六
+LocalDate date8 = date.with(TemporalAdjusters.firstInMonth(DayOfWeek.SATURDAY));   
+// 返回本月最后一个星期六
+LocalDate date9 = date.with(TemporalAdjusters.lastInMonth(DayOfWeek.SATURDAY));   
 
-localDate.lengthOfMonth();       // 这个月的总天数
-localDate.lengthOfYear();        // 这一年的总天数
-localDate.range(ChronoField.MONTH_OF_YEAR);          // 获取某个字段的合法范围
+LocalTime now = LocalTime.now();
+now.plusHours(1);
+now.plusNanos(999999L);
+now.plus(10, ChronoUnit.HOURS);
+now.plus(Duration.parse("P6H3M"));
+now.with(ChronoField.MINUTE_OF_HOUR, 10);
+now.truncatedTo(ChronoUnit.HOURS);	// 返回指定字段清空后的副本
+```
 
-/* 时间比对 */
-localDate.isAfter(LocalDate.now());
+
+
+#### 转换方法
+
+- 时间戳
+
+  ```java
+  // 转秒
+  LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toEpochSecond()
+  // 转毫秒需要先转成Instant    
+  LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+  ```
+
+- `LocaldateTime`
+
+  ```java
+  LocalDate now = LocalDate.now();
+  LocalDateTime localDateTime = now.atStartOfDay();
+  now.atTime(LocalTime.now());
+  now.atTime(11, 45);
+  now.atTime(11, 45, 59);
+  now.atTime(11, 45, 59, 999999999);
+  
+  ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
+  OffsetDateTime offsetDateTime = localDate.atTime(OffsetTime.now());
+  ```
+
+- `Date`
+
+  ```java
+  java.util.Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+  ```
+
+- 字符串
+
+  ```java
+  localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));     // 2018-10-23
+  // 预定义格式 在DateTimeFormatter里
+  localDate.format(DateTimeFormatter.ISO_DATE);                    // 2018-10-23
+  localDate.format(DateTimeFormatter.BASIC_ISO_DATE);              // 20181023
+  
+  // 2018年 12月 23日 星期日
+  localDate.format(DateTimeFormatter.ofPattern("yyyy年 MM月 dd日 E", Locale.CHINESE));
+  ```
+
+  
+
+#### 其他方法
+
+```java
+// 计算两个LocalDate之间的时间差, 返回Period
+Period period = LocalDate.now().until(LocalDate.of(2020, 1, 1));
+
+// 返回某个字段的范围, ValueRange作为工具类也挺好用
+ValueRange range = now.range(ChronoField.DAY_OF_MONTH);		// 1 - 31
+
+localDate.isAfter(LocalDate.now());			 // 时间先后对比
 localDate.isBefore(MinguoDate.now());        // 与民国历法比对, 2018是民国107年
 localDate.isLeapYear();                      // 是否是闰年
 localDate.isSupported(ChronoUnit.NANOS);     // 是否有指定的时间字段
-
-/* 时间操作, 值可以为负, 返回新的对象 */
-localDate.minus(1, ChronoUnit.DAYS);         // 减去不支持的时间字段(时分秒)会抛异常
-localDate.minus(Period.of(1, 2, 3));         // 减去1年2个月3天, 基于Period
-// 基于Duration会抛异常, 其内部是转化成了秒, LocalDate不支持秒
-// date.minus(Duration.ofDays(2));      
-localDate.minusDays(1);
-localDate.minusMonths(-2);
-localDate.minusYears(3);
-localDate.minusWeeks(-4);
-localDate.plus(Period.of(1, 2, 3));
-localDate.plusDays(-1);
-localDate.plusMonths(2);
-localDate.plusYears(-3);
-localDate.plusWeeks(4);
-
-localDate.with(ChronoField.DAY_OF_WEEK, 4);      // 复制新的实例, 指定部分被更新
-localDate.with(MinguoDate.now());                // 复制新的实例, 数据被调整
-localDate.withDayOfYear(330);                    // 复制新的实例, 天部分被更新
-localDate.withDayOfMonth(27);                    // 复制新的实例, 天部分被更新
-localDate.withMonth(3);                          // 复制新的实例, 月部分被更新
-localDate.withYear(2008);                        // 复制新的实例, 年部分被更新
-
-/* 时间差计算 */
-// 计算到指定时间之间的差值, 指定时间在这之前返回负值, 
-// 表示已经过去xx时间, 正值表示还有xx时间才到来
-Period period = localDate.until(LocalDate.now());  
-
-period.get(ChronoUnit.DAYS) # 同下
-period.getDays()    # 返回的是相差的天的部分, 而不是总天数的意思, 可以用下面的方式获取总天数
-
-// 距离民国元年1月1日有多少天
-long amount = localDate.until(MinguoDate.of(0, 1, 1), ChronoUnit.DAYS);
-// 或者
-ChronoUnit.DAYS.between(localDate, localDate2)
-
-/* 自定义访问方法 */
-localDate.query(new TemporalQuery<String>() {
-    @Override
-    public String queryFrom(TemporalAccessor temporal) {
-        LocalDate date1 = (LocalDate) temporal;
-        return null;
-    }
-});
 ```
-`LocalTime`与`LocalDate`类似, 大部分接口名都相同, 包含纳秒信息, **不包时区信息**, 内部使用`(byte: hour, byte: minute, byte: second, int: nano)`记录时间信息
 
-```java
-LocalTime localTime = LocalTime.now();
-LocalTime.now(Clock.systemDefaultZone());           // SystemClock[Asia/Shanghai]
-LocalTime.now(ZoneId.systemDefault());              // Asia/Shanghai
 
-LocalTime.of(21, 36);       // 小时(0-23) + 分钟
-LocalTime.of(21, 30, 0);     //
-LocalTime.of(21, 30, 0, 120);   // 小时 + 分钟 + 秒 + 纳秒(0 - 999,999,999)
-LocalTime.ofSecondOfDay(120);
-LocalTime.ofNanoOfDay(120);
-
-// 最后一位值纳秒, 最短为: 10:01, 必须两位, 用零补齐
-LocalTime.parse("10:15:23.829890898"); 
-LocalTime.parse("10.15.23.898989", new DateTimeFormatterBuilder().appendPattern("HH.mm.ss")
-        // 可以有9位的纳秒表示(包含了点符号)
-        .optionalStart().appendFraction(ChronoField.NANO_OF_SECOND, 9, 9, true).optionalEnd()
-        // 可以有6位的纳秒表示(包含了点符号)
-        .optionalStart().appendFraction(ChronoField.NANO_OF_SECOND, 6, 6, true).optionalEnd()
-        // 可以有3位的纳秒表示(包含了点符号)
-        .optionalStart().appendFraction(ChronoField.NANO_OF_SECOND, 3, 3, true).optionalEnd()
-        .toFormatter());
-
-LocalDateTime localDateTime = localTime.atDate(LocalDate.now());
-localTime.adjustInto(localDateTime.now());    // 调整指定对象的时间和当前对象一致
-localTime.getHour();
-localTime.getMinute();
-localTime.getSecond();
-localTime.getNano();
-localTime.getLong(ChronoField.MINUTE_OF_HOUR);
-
-// 从某个字段开始截断, 截断分钟则秒, 纳秒会被清零
-localTime.truncatedTo(ChronoUnit.MINUTES);        
-
-// offsetTime表示具有相对于UTC的固定区偏移的时间
-OffsetTime offsetTime = localTime.atOffset(ZoneOffset.ofHours(8));
-```
 
 ### LocalDateTime
 `LocalDateTime`内部用两个属性: `LocalDate`和`LocalTime`记录时间信息, **不包含时区信息**
@@ -202,10 +259,10 @@ LocalTime.now().atDate(LocalDate.now());
 ```java
 /* 创建 */
 Instant now = Instant.now();
-Instant.ofEpochMilli(333L);     // 从1970-01-01T00:00:00Z开始到现在的毫秒数
+Instant.ofEpochMilli(1625390224369L);     // 从1970-01-01T00:00:00Z开始到现在的毫秒数
 Instant.ofEpochMilli(new Date().getTime());
-Instant.ofEpochSecond(22L);     // 从1970-01-01T00:00:00Z开始到现在的秒数
-Instant.ofEpochSecond(44L, 6L); // 从1970-01-01T00:00:00Z开始到现在的秒数 + 纳秒
+Instant.ofEpochSecond(1625390224L);     // 从1970-01-01T00:00:00Z开始到现在的秒数
+Instant.ofEpochSecond(1625390224L, 6L); // 从1970-01-01T00:00:00Z开始到现在的秒数 + 纳秒
 
 now.getEpochSecond();       // 获取秒部分
 now.getNano();              // 获取纳秒部分
@@ -263,45 +320,15 @@ duration.abs();             // 转正值
 Period period = Period.of(1, 3, 28);    //年 月 日
 Period.ofDays(3);
 Period.ofWeeks(2);
-Period.ofMonths(10);
-Period.ofYears(4);
 Period.between(LocalDate.now(), LocalDate.of(2018, 1, 1));
 
 Period of = Period.of(2, -13, 400);
-System.out.println(of.getYears());       // 2
-System.out.println(of.getMonths());      // -13
-System.out.println(of.getDays());        // 400
+of.getYears()       // 2
 
 Period normalized = of.normalized();    // 归一化, 只处理年和月部分
 System.out.println(normalized.getYears());    // 0
 System.out.println(normalized.getMonths());   // 11
 System.out.println(normalized.getDays());     // 400
-```
-
-## 日期调整与格式化
-### 加减调整
-jdk8中时间日期对象都是不可变的, 因此在调整时, 总是会返回新的实例. 调整方法主要有`plus`, `minus` 和 `with`
-
-```java
-LocalDate date = LocalDate.of(2018, 12, 5);          // 2018-12-05
-
-LocalDate date1 = date.withYear(2016);              // 修改为 2016-12-05
-LocalDate date2 = date.withMonth(2);                // 修改为 2018-02-05
-LocalDate date3 = date.withDayOfMonth(1);           // 修改为 2018-12-01
-
-LocalDate date4 = date.plusYears(1);                // 增加一年 2019-12-05
-LocalDate date5 = date.minusMonths(2);              // 减少两个月 2018-10-05
-LocalDate date6 = date.plus(5, ChronoUnit.DAYS);    // 增加5天 2018-12-10
-```
-在进行复杂的操作时, 比如下一个工作日, 下个月的第一天时, 可以使用`with`的重载方法, 接受一个`TemporalAdjuster`参数.
-
-```java
-// 返回下一个距离当前时间最近的星期日
-LocalDate date7 = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-// 返回本月第一个星期六
-LocalDate date8 = date.with(TemporalAdjusters.firstInMonth(DayOfWeek.SATURDAY));   
-// 返回本月最后一个星期六
-LocalDate date9 = date.with(TemporalAdjusters.lastInMonth(DayOfWeek.SATURDAY));   
 ```
 
 ### java.time.temporal.ChronoField枚举类
@@ -380,7 +407,7 @@ date.with(temporal -> {
 });
 ```
 
-### 格式化
+### `DateTimeFormatter`格式化
 JDK8中提供了一个新的类`java.time.format.DateTimeFormatter`
 来处理格式化操作. 日期类中有一个`format`方法, 该方法接收一个`DateTimeFormatter`类型的参数.
 
@@ -502,12 +529,16 @@ LocalDateTime localDateTime = Instant.ofEpochMilli(timestamp).atZone(ZoneOffset.
 
 ## 时区
 
+#### `ZoneId`
+
 jdk8中使用新的时区类`java.time.ZoneId`来替代原来的`java.util.TimeZone`, 对应的时间类是`ZonedDateTime`. 使用方式如下:
 
 ```java
 // 创建
 ZoneId shanghaiZoneId = ZoneId.of("Asia/Shanghai");
-// ZoneId.of("UTC+8");
+ZoneId.of("CTT");	// 等同于 Asia/Shanghai
+ZoneId.of("UTC+8");
+
 ZoneId systemZoneId = ZoneId.systemDefault();
 ZoneId oldToNewZoneId = TimeZone.getDefault().toZoneId();
 
@@ -532,7 +563,43 @@ LocalDateTime localDateTime = LocalDateTime.now();
 OffsetDateTime offsetDateTime = OffsetDateTime.of(localDateTime, zoneOffset);
 ```
 
+#### `ZoneOffset` 继承`ZoneId`
+
+```java
+ZoneOffset.ofHours(8);
+ZoneOffset.ofHours("+8");
+```
+
+
+
+#### Clock
+
+```java
+Clock clock = Clock.systemDefaultZone();
+clock.instant();
+Clock clock = Clock.system(ZoneId.of("+8"));
+```
+
+
+
+#### ChronoUnit
+
+枚举类, 表示时间单位, 天: `DAYS` 十年:`DECADES` 世纪: `CENTURIES`, 在时间计算(加/减)时常用
+
+其方法`getDuration`能获取单位对应的`Duration`对象
+
+
+
+#### ChronoField
+
+枚举类, 一天的秒数:`SECOND_OF_DAY` 一年的天数:`DAY_OF_YEAR` 
+
+其`range()`方法返回对应的范围, 如:`DAY_OF_YEAR`的范围是1 ~ 365/366
+
+
+
 ## 其他历法
+
 Java中使用的历法是ISO 8601日历系统, 它是世界民用历法, 也就是我们所说的公历. 平年有365天, 闰年是366天. 闰年的定义是: 非世纪年, 能被4整除; 世纪年能被400整除. 为了计算的一致性, 公元1年的前一年被当做公元0年, 以此类推.
 
 此外Java 8还提供了4套其他历法(但是没有农历), 每套历法都包含一个日期类, 分别是:

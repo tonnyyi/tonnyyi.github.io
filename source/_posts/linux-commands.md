@@ -17,7 +17,8 @@ date: 2018-03-08 15:09:41
 ls -t    # 按更新时间排序, 最新的在前
 ls -tr    # 按更新时间排序, 最旧的在前, -r:倒序
 ls -h    # 使用可读单位(K, M, G)显示文件大小
-ls -d /dir    # 只显示目录信息, 不显示目录内文件信息
+ls -d /root/*/	# 显示目录
+ls -d */		# 显示当前目录的子目录
 ls -a    # 显示所有文件, 包括 . 和 ..
 ls -A    # 显示所有文件, 不包括 . 和 ..
 ls -R    # 递归展示所有文件, 及子目录内所有文件
@@ -197,15 +198,21 @@ cat file2 >> file2  # file1文件追加到file2
 
 ### grep 过滤
 ```bash
-# -i :不区分大小写;  -4 :前后4行;  -n :输出行号
 grep "the" file
 grep "the" file_*  # 查找所有file_开头的文件
+grep -n "the" file	# 输出行号
 grep -i "the" file  # 不区分大小写查找
+
+grep "23;" file		# 23后是一个tab键
+grep "^$" file	# 搜索空行
+grep "centos[678]" file	# 正则
+grep "^[^48]" file	# 行首不是48
+grep "K...D" file	# 第2,3,4是任意字符
 grep "th.*" file  # 正则查找, 推荐用egrep 或 -e
 egrep "th.{2}" file
 grep -v -e "^th" -e "se$" -e "at"  # 除了th开头, se结尾, 包含at 的其他行
 grep -w "is" file  # 完整匹配, 不会匹配上this/his, 只查找is
-
+grep -3 "the" file	# 输出匹配行及其前后3行
 grep -A 3 -i "the" file  # 输出匹配到的行, 及之后的3行
 grep -B 3 -i "the" file  # 输出匹配到的行, 及之前的3行
 grep -3 -i "the" file  # 输出匹配到的行, 及前后的3行, 可以写 -3i
@@ -272,6 +279,8 @@ history | less
 less -N xxx.txt    # 显示行号
 less -m xxx.txt    # 显示百分比
 ```
+
+### cut切分
 
 
 
@@ -956,7 +965,90 @@ iptables -t nat -A PREROUTING -d 210.14.67.127 -p tcp --dport 2222  -j DNAT --to
 
 
 
+### firewalld
 
+```bash
+# 安装firewalld
+yum install firewalld firewall-config
+
+systemctl start  firewalld # 启动
+systemctl stop firewalld  # 停止
+systemctl enable firewalld # 启用自动启动
+systemctl disable firewalld # 禁用自动启动
+systemctl status firewalld # 或者 firewall-cmd --state 查看状态
+```
+
+配置
+
+```bash
+firewall-cmd --version  # 查看版本
+firewall-cmd --help     # 查看帮助
+
+# 查看设置：
+firewall-cmd --state  # 显示状态
+firewall-cmd --get-active-zones  # 查看区域信息
+firewall-cmd --get-zone-of-interface=eth0  # 查看指定接口所属区域
+firewall-cmd --panic-on  # 拒绝所有包
+firewall-cmd --panic-off  # 取消拒绝状态
+firewall-cmd --query-panic  # 查看是否拒绝
+
+firewall-cmd --reload # 更新防火墙规则
+firewall-cmd --complete-reload
+# 两者的区别就是第一个无需断开连接，就是firewalld特性之一动态添加规则，第二个需要断开连接，类似重启服务
+
+# 将接口添加到区域，默认接口都在public	永久生效再加上 --permanent 然后reload防火墙
+firewall-cmd --zone=public --add-interface=eth0
+firewall-cmd --set-default-zone=public# 设置默认接口区域，立即生效无需重启
+
+firewall-cmd --zone=dmz --list-ports	# 查看所有打开的端口
+
+firewall-cmd --zone=dmz --add-port=8080/tcp		# 加入一个端口到区域：
+# 若要永久生效方法同上
+ 
+# 打开一个服务，类似于将端口可视化，服务需要在配置文件中添加，/etc/firewalld 目录下有services文件夹，这个不详细说了，详情参考文档
+firewall-cmd --zone=work --add-service=smtp
+ 
+# 移除服务
+firewall-cmd --zone=work --remove-service=smtp
+
+firewall-cmd --get-zones		# 显示支持的区域列表
+firewall-cmd --set-default-zone=home		# 设置为家庭区域
+firewall-cmd --get-active-zones		# 查看当前区域
+firewall-cmd --get-zone-of-interface=enp03s		# 设置当前区域的接口
+firewall-cmd --zone=public --list-all			# 显示所有公共区域（public）
+firewall-cmd --zone=internal --change-interface=enp03s	# 临时修改网络接口（enp0s3）为内部区域（internal）
+firewall-cmd --permanent --zone=internal --change-interface=enp03s	# 永久修改网络接口enp03s为内部区域（internal）
+```
+
+服务管理
+
+```bash
+# 显示服务列表  
+# Amanda, FTP, Samba和TFTP等最重要的服务已经被FirewallD提供相应的服务，可以使用如下命令查看：
+
+firewall-cmd --get-services
+firewall-cmd --new-service=ssh		# 允许SSH服务通过
+firewall-cmd --delete-service=ssh	# 禁止SSH服务通过
+firewall-cmd --enable ports=8080/tcp	# 打开TCP的8080端口
+firewall-cmd --enable service=samba --timeout=600	# 临时允许Samba服务通过600秒
+firewall-cmd --list-services	# 显示当前服务
+firewall-cmd --permanent --zone=internal --add-service=http		# 添加HTTP服务到内部区域（internal）
+firewall-cmd --reload     # 在不改变状态的条件下重新加载防火墙
+```
+
+端口管理
+
+```bash
+firewall-cmd --add-port=443/tcp	# 打开443/TCP端口
+firewall-cmd --permanent --add-port=3690/tcp	# 永久打开3690/TCP端口
+
+# 永久打开端口好像需要reload一下，临时打开好像不用，如果用了reload临时打开的端口就失效了
+# 其它服务也可能是这样的，这个没有测试
+firewall-cmd --reload
+
+# 查看防火墙，添加的端口也可以看到
+firewall-cmd --list-all
+```
 
 ### ping 测试网络通断与延迟
 
@@ -967,7 +1059,7 @@ ping -c 10 -i 0.5 192.168.1.101     # 指定次数和间隔(秒)
 ping -i 3 -s 1024 -t 255 192.168.1.101  # -s 发送包大小为1024字节 -t TTL为255
 ```
 
-### Tcpping
+### tcpping
 
 ping命令是基于ICMP协议, 遇到某些主机会禁用ICMP协议导致Ping命令失效, 这时可以使用基于tcp协议的工具, 比如: tcpping, tcping, psping, hping, paping等
 
@@ -1019,6 +1111,32 @@ ifconfig eth0 hw ether 00:AA:BB:CC:dd:EE
 
 # 设置网卡最大传输单元MTU
 ifconfig eth0 mtu 1500
+```
+
+
+
+### nmcli 网络管理
+
+安装命令:`yum install -y NetworkManager`, centos默认已安装
+
+```bash
+# 网络设备列表及其状态
+$ nmcli device
+DEVICE     TYPE      STATE   CONNECTION
+enp95s0f0  ethernet  连接的  enp95s0f0
+docker0    bridge    连接的  docker0
+eno1       ethernet  不可用  --
+eno2       ethernet  不可用  --
+
+# 显示所有链接
+$ nmcli connection show
+NAME       UUID                                  TYPE      DEVICE
+docker0    4b08510f-a715-46d9-bd22-2fd6bd7c9508  bridge    docker0
+enp95s0f0  de3c137d-dc87-4478-8377-856c1c9ad578  ethernet  enp95s0f0
+eno1       57c4e4ed-9b47-4ddd-b75b-8bc407b9825b  ethernet  --
+eno2       964cbe81-2ba9-424c-acd1-8384eebc2e46  ethernet  --
+
+
 ```
 
 
@@ -1180,9 +1298,9 @@ ss src 192.168.1.230
 ss dport = :3306   # 连接到3306端口的
 ss sport = :http   # 从80端发起连接的
 # <= or le    >= or ge    == or eq    != or ne    < or gt     > or lt
-ss dport > :1024
-ss sport > :1024
-ss sport < :32000
+ss dport \> :1024
+ss sport \> :1024
+ss sport \< :32000
 ss sport eq :22
 ss dport != :22
 
@@ -1266,10 +1384,70 @@ java    163379 root  273u     IPv6         2306101388       0t0        TCP 172.3
 java    163379 root  274u     IPv6         2306077215       0t0        TCP 172.31.96.175:8085->172.31.103.83:52626 (ESTABLISHED)
 
 # 列出指定主机上的指定端口相关的所有文件信息, 3秒刷新一次
-lsof -i@172.31.46.2:6379,3306 -r 3
+lsof -i @172.31.46.2:6379,3306 -r 3
 ```
 
 
+
+### sftp
+
+连接命令格式:
+
+```bash
+sftp user_name@remote_server_address[:远程路径]
+# 例
+sftp root@172.31.169.140:/usr/local
+sftp root@172.31.169.140
+```
+
+其他参数:
+
+- **-B**: buffer size, 设置传输buffer大小, 默认为32768
+- **-p**: 当服务器自定义了连接的端口号是, 使用`-p`指定端口号
+- **-R**: 默认64, 提高该值贵略微提高传输速度, 但会消耗更多内存
+
+**连接后, 执行的bash命令, 默认是操作服务器的, 如果要操作本地环境, 则需要在命令前加上字符`l`.** 
+
+```shell
+sftp> pwd
+Remote working directory: /usr/local
+sftp> lpwd
+Local working directory: /Users/tonnyyi
+sftp> ls
+bin        boost      etc        games      include    lib        lib64      libexec    sbin       share      src
+sftp> lls
+Downloads			Pictures	Public		Applications	work		Library		workspace
+Desktop				Movies		Documents			Music
+
+# 使用!可以直接运行shell命令
+sftp> !df -h
+```
+
+#### 文件传输
+
+- 从服务器拉取
+
+  ```bash
+  # 如果不指定newName, 则下载的文件和服务器的文件同名
+  sftp> get remoteFile [newName]
+  
+  # 拉取目录
+  sftp> get -r remoteDirectory
+  ```
+
+  
+
+- 从本地上传
+
+  ```bash
+  sftp> put localFile
+  
+  # 上传目录, 如果服务器不存在该目录则需要先创建
+  sftp> mkdir folderName
+  sftp> put -r folderName
+  ```
+
+  
 
 ### ethtool 网卡信息查看
 
@@ -1303,7 +1481,7 @@ Settings for enp95s0f0:
 ### nslookup 查询DNS记录
 
 ```bash
-$ nslookup nslookup www.baidu.com
+$ nslookup www.baidu.com
 Server:		100.100.2.136
 Address:	100.100.2.136#53
 
@@ -1345,10 +1523,17 @@ baidu.com.		549	IN	A	220.181.38.148
 
 ### tcpdump 抓包
 
+![技术分享](https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20210806174355.jpeg)
+
+
+
 抓取经过eth0接口请求8080端口的tcp请求
 
 ```bash
-tcpdump tcp -i eth0 -s 0 -nn -vvv and dst port 8080 -w 8080dump.cap
+tcpdump tcp -i eth0 -s 0 -nn -vvv and port 8080 -w tcpdump.cap
+
+# 使用wireshark实时分析
+ssh root@172.31.47.13 tcpdump -i enp95s0f0 tcp -s 0 -nn -w - 'port 8085' | /Applications/Wireshark.app/Contents/MacOS/Wireshark -k -i -
 ```
 
 - 类型: `host` `net` `port`  
@@ -1356,40 +1541,235 @@ tcpdump tcp -i eth0 -s 0 -nn -vvv and dst port 8080 -w 8080dump.cap
 - 协议：`ip` `tcp` `udp` `arp` `icmp`....
 
 ```bash
+# 实时查看
+tcpdump -i eno1 tcp -s 0 -S -nn -tttt and port 8080
+
+tcpdump -i eno1 -Alnvs0 -w /tmp/tcpdump.pcap
+
+tcpdump tcp -i eth0 -t -s 0 -c 100 -n and dst port ! 22 and src net 192.168.1.0/24 -w tcpdump.pcap
+```
+
+- `tcp` : tcp udp ip ip6 icmp arp等这些选项都要放到第一个参数的位置，用来过滤数据报的类型
+- `-i eth0`：只抓取接口eth0的包
+- **`-s 0`**：默认只抓取68字节，加上`-s 0`后可以抓取完整的数据包
+- `-c 100`：只抓取100个数据包
+- `dst port ! 22`：不抓取目标端口是22的数据包
+- `src net 192.168.1.0/24`：数据包的源网络地址为192.168.1.0/24
+- `-w tcpdump.pcap`：抓取结果写入文件
+- **`-X`**：以16进制和ASCII码显示包数据，**现场分析数据包内容必备**
+- `-e`: 显示数据链路层信息, **显示mac地址**已经vlan信息
+- `-p`: 不进入混杂模式, 屏蔽交换机在混杂模式下的噪声, 只接受给自己的数据, 不能与host或broadcast一起使用
+
+##### 常见的 TCP 报文的 Flags:
+
+- `[S]` : SYN（开始连接）
+- `[.]` : 没有 Flag
+- `[P]` : PSH（推送数据）
+- `[F]` : FIN （结束连接）
+- `[R]` : RST（重置连接）
+
+##### 设置不解析域名提示速度
+
+- `-n`：将IP以数字形式显示，否则显示为主机名
+- **`-nn`**：除了有`-n`的作用，还把端口显示为数值，否则显示为端口服务名
+- `-N`：不打印host的域名部分
+
+##### 控制详细内容的输出
+
+- `-v`：产生详细的输出. 比如包的TTL，id标识，数据包长度，以及IP包的一些选项。同时它还会打开一些附加的包完整性检测，比如对IP或ICMP包头部的校验和。
+- `-vv`：产生比-v更详细的输出. 比如NFS回应包中的附加域将会被打印, SMB数据包也会被完全解码。（摘自网络，目前我还未使用过）
+- `-vvv`：产生比-vv更详细的输出。比如 telent 时所使用的SB, SE 选项将会被打印, 如果telnet同时使用的是图形界面，其相应的图形选项将会以16进制的方式打印出来（摘自网络，目前我还未使用过）
+
+##### 控制时间的显示
+
+- `-t`：在每行的输出中不输出时间
+- `-tt`：在每行的输出中会输出时间戳(相对1970-01-01)
+- `-ttt`：输出每两行的时间间隔(以毫秒为单位)
+- `-tttt`：在每行的时间戳之前添加日期（此种选项，输出的时间最直观）
+
+##### 显示数据包的头部
+
+- `-x`：以16进制的形式打印每个包的头部数据（但不包括数据链路层的头部）
+- `-xx`：以16进制的形式打印每个包的头部数据（包括数据链路层的头部）
+- `-X`：以16进制和 ASCII码形式打印出每个包的数据(但不包括连接层的头部)，这在分析一些新协议的数据包很方便。
+- `-XX`：以16进制和 ASCII码形式打印出每个包的数据(包括连接层的头部)，这在分析一些新协议的数据包很方便。
+
+##### 对输出内容进行控制的参数
+
+- `-D` : 显示所有可用网络接口的列表
+- `-e` : 每行的打印输出中将包括数据包的数据链路层头部信息
+- `-E` : 揭秘IPSEC数据
+- `-L` ：列出指定网络接口所支持的数据链路层的类型后退出
+- `-Z`：后接用户名，在抓包时会受到权限的限制。如果以root用户启动tcpdump，tcpdump将会有超级用户权限。
+- `-d`：打印出易读的包匹配码
+- `-dd`：以C语言的形式打印出包匹配码.
+- `-ddd`：以十进制数的形式打印出包匹配码
+
+##### 过滤特定流向的数据包
+
+- `-Q`： 选择是入方向还是出方向的数据包，可选项有：in, out, inout，也可以使用 --direction=[direction] 这种写法
+
+##### 其他参数
+
+- `-A`：以ASCII码方式显示每一个数据包(不显示链路层头部信息). 在抓取包含网页数据的数据包时, 可方便查看数据
+- `-l` : 基于行的输出，便于你保存查看，或者交给其它工具分析
+- `-q` : 简洁地打印输出。即打印很少的协议相关信息, 从而输出行都比较简短.
+- `-c` : 捕获 count 个包 tcpdump 就退出
+- `-s` :  tcpdump 默认只会截取前 `96` 字节的内容，要想截取所有的报文内容，可以使用 `-s number`， `number` 就是你要截取的报文字节数，如果是 0 的话，表示截取报文全部内容。
+- `-S` : 使用绝对序列号，而不是相对序列号
+- `-C`：file-size，tcpdump 在把原始数据包直接保存到文件中之前, 检查此文件大小是否超过file-size. 如果超过了, 将关闭此文件,另创一个文件继续用于原始数据包的记录. 新创建的文件名与-w 选项指定的文件名一致, 但文件名后多了一个数字.该数字会从1开始随着新创建文件的增多而增加. file-size的单位是百万字节(nt: 这里指1,000,000个字节,并非1,048,576个字节, 后者是以1024字节为1k, 1024k字节为1M计算所得, 即1M=1024 ＊ 1024 ＝ 1,048,576)
+- `-F`：使用file 文件作为过滤条件表达式的输入, 此时命令行上的输入将被
+
+```bash
 # 监听特定网卡
 tcpdump -i eth0
 
 # 监听特定主机  监听与172.31.46.2主机间的通信，出入的包都会被监听
 tcpdump host 172.31.46.2
+# 监听与百度之间的通信
+tcpdump -i en6 host www.baidu.com
 
+# 根据发送/接收主机监听
 tcpdump src host 172.31.46.2
 tcpdump dst host 172.31.46.2
 
+# 过滤特定主机的特定协议
+tcpdump tcp src host 192.168.10.100
+
+# 监听特定网段
+tcpdump net 192.168.10.0/24
+# 根据目标网段进行过滤
+tcpdump dst net 192.168
+
 # 监听特定端口
 tcpdump port 8080
+# 根据目标端口进行过滤
+tcpdump dst port 8088
+# 监听多个端口
+tcpdump port 80 or port 8088
+tcpdump port 80 or 8088
+# 监听端口范围
+tcpdump dst portrange 8000-8080
+# 监听常见协议的默认端口时，可以直接使用协议名，不用具体的端口号
+tcpdump tcp port http
+
+# 监听IPv4
+tcpdump 'ip proto tcp'
+tcpdump ip proto 6
+# 监听IPv6
+tcpdump 'ip6 proto tcp'
+tcpdump ip6 proto 6
 
 # 监听来自172.31.46.2的请求本机8080端口的tcp通信
 tcpdump tcp port 8080 and src host 172.31.46.2
+
+# 组合
+tcpdump 'src 10.0.2.4 and (dst port 3389 or 22)'
+# 过滤来自进程名为 nc 发出的流经 en0 网卡的数据包，或者不流经 en0 的入方向数据包
+tcpdump "( if=en0 and proc=nc ) || (if != en0 and dir=in)"
+
+# 抓取syn包
+# 第一种写法：使用数字表示偏移量
+tcpdump -i eth0 "tcp[13] & 2 != 0" 
+# 第二种写法：使用别名常量表示偏移量
+tcpdump -i eth0 "tcp[tcpflags] & tcp-syn != 0" 
+# 第三种写法：使用混合写法
+tcpdump -i eth0 "tcp[tcpflags] & 2 != 0" 
+tcpdump -i eth0 "tcp[13] & tcp-syn != 0" 
+
+# 根据包大小过滤  less 32 
+tcpdump -n -i eth0 -A -x dst port 443 and greater 100
+
+# 抓取80端口的HTTP有效包，排除 TCP 连接建立过程的数据包（SYN / FIN / ACK）
+tcpdump 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'
+# 抓取Http GET
+tcpdump -s 0 -A -vv 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420'
+# 抓取Http POST请求
+tcpdump -s 0 -A -vv 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x504f5354'
+# GET OR POST
+tcpdump -i enp0s8 -s 0 -A 'tcp dst port 80 or tcp dst port 443 and tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420 or tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x504F5354' and host 192.168.10.1
+
+# 找出一段时间内发包最多的 IP，或者从一堆报文中找出发包最多的 IP
+# cut -f 1,2,3,4 -d '.' : 以 . 为分隔符，打印出每行的前四列。即 IP 地址。sort | uniq -c : 排序并计数。sort -nr : 按照数值大小逆向排序
+tcpdump -nnn -t -c 200 | cut -f 1,2,3,4 -d '.' | sort | uniq -c | sort -nr | head -n 20
+
+# 切割pcap文件 每3600秒创建一个新文件capture-(hour).pcap，每个文件大小不超过 200*1000000 字节
+tcpdump  -w /tmp/capture-%H.pcap -G 3600 -C 200
 ```
 
-```bash
-tcpdump tcp -i eth0 -t -s 0 -c 100 -n and dst port ! 22 and src net 192.168.1.0/24 -w tcpdump.cap
+#### wireshark 使用
+
+通常 `Wireshark`（或 tshark）比 tcpdump 更容易分析应用层协议。一般的做法是在远程服务器上先使用 `tcpdump` 抓取数据并写入文件，然后再将文件拷贝到本地工作站上用 `Wireshark` 分析。
+
+还有一种更高效的方法，可以通过 ssh 连接将抓取到的数据实时发送给 Wireshark 进行分析。
+
+```shell
+# 使用wireshark实时分析
+ssh root@172.31.47.13 tcpdump -i enp95s0f0 tcp -s 0 -nn -w - 'port 8085' | /Applications/Wireshark.app/Contents/MacOS/Wireshark -k -i -
 ```
 
-- `tcp` : tcp udp ip icmp arp等这些选项都要放到第一个参数的位置，用来过滤数据报的类型
-- `-i eth0`：只抓取接口eth0的包
-- `-t`：不显示时间戳
-- **`-s 0`**：默认只抓取68字节，加上`-s 0`后可以抓取完整的数据包
-- `-c 100`：只抓取100个数据包
-- `-n`：将地址以数字形式显示，否则显示为主机名
-- **`-nn`**：除了有`-n`的作用，还把端口显示为数值，否则显示为端口服务名
-- `dst port ! 22`：不抓取目标端口是22的数据包
-- `src net 192.168.1.0/24`：数据包的源网络地址为192.168.1.0/24
-- `-w tcpdump.cap`：抓取结果写入文件
-- **`-X`**：以16进制和ASCII码显示包数据，**现场分析数据包内容必备**
-- `-v` `-vv` `-vvv` ：输出结果详细程度递增
+##### [过滤器语法](https://gitlab.com/wireshark/wireshark/-/wikis/DisplayFilters)
 
+1. 根据IP过滤
 
+   ```bash
+   # ip过滤
+   ip.addr == 10.43.54.65
+   # 等同于
+   ip.src == 10.43.54.65 or ip.dst == 10.43.54.65
+   
+   ip.addr != 10.43.54.65
+   # 等同于
+   ip.src != 10.43.54.65 or ip.dst != 10.43.54.65
+   
+   !(ip.addr == 10.43.54.65)
+   # 等同于 这个更常用
+   !(ip.src == 10.43.54.65 or ip.dst == 10.43.54.65)
+   
+   # 网段过滤
+   ip.src==192.168.0.0/16 and ip.dst==192.168.0.0/16
+   
+   ip.addr in {10.0.0.5 .. 10.0.0.9 192.168.1.1..192.168.1.9}
+   ```
+
+2. 根据端口过滤
+
+   ```bash
+   tcp.port == 25
+   tcp.port in {80 443 8080}
+   tcp.port == 443 || (tcp.port >= 4430 && tcp.port <= 4434)
+   tcp.dstport == 23
+   tcp.srcport == 23
+   ```
+
+3. HTTP协议过滤
+
+   ```bash
+   # 主机过滤
+   http.host == "www.baidu.com"
+   http contains "HTTP/1.1 200 OK" && http contains "application/json"
+   # 其他常用条件
+   http.accept
+   http.location
+   http.request.method
+   http.request.uri
+   http.response.code
+   http.server
+   http.referer
+   
+   # http uri结尾字符
+   http.request.uri matches "gl=se$"
+   ```
+
+4. 根据MAC过滤
+
+   ```bash
+   eth.dst == A0:00:00:04:C5:84 // 过滤目标mac
+   eth.src eq A0:00:00:04:C5:84 // 过滤来源mac
+   eth.addr eq A0:00:00:04:C5:84 // 过滤来源MAC和目标MAC都等于A0:00:00:04:C5:84的
+   ```
+
+   
 
 ### wget 文件下载
 
@@ -1874,7 +2254,38 @@ cat /etc/yum.repos.d/epel.repo
 >
 > http://mirrors.163.com/.help/CentOS5-Base-163.repo
 
+#### 离线安装 
 
+1. 查看依赖包
+
+   ```bash
+   yum deplist ansible
+   ```
+
+2. 方案一: repotrack
+
+   ```bash
+   yum install -y yum-utils
+   reoptrack ansible
+   ```
+
+3. 方案二: yumdonwloader
+
+   ```bash
+   yum install -y yum-utils
+   yumdownloader --resolve --destdir=/tmp ansible
+   ```
+
+   > 仅会将主软件和基于当前操作系统缺失的依赖关系包一并下载
+
+4. 方案四: yum的downloadonly插件
+
+   ```bash
+   yum install -y yum-download
+   yum install -y ansible --downloadonly --downloaddir=/tmp
+   ```
+
+   > 仅会将主软件和基于当前操作系统缺失的依赖关系包一并下载
 
 ### rpm  软件包管理
 
@@ -2192,7 +2603,7 @@ vda               0.00     0.12    0.02    4.74     0.84    53.32    22.76     0
 `await` 平均每次设备I/O操作的等待时间 (毫秒)。
 `r_await` 平均每次设备读I/O操作的等待时间 (毫秒)。
 `w_await` 平均每次设备写I/O操作的等待时间 (毫秒)。
-`svctm` 平均每次设备I/O操作的服务时间 (毫秒)。
+~~`svctm` 平均每次设备I/O操作的服务时间 (毫秒)~~*废弃*。
 `%util` 一秒中有百分之多少的时间用于 I/O 操作，即被io消耗的cpu百分比
 
 > 如果 %util 接近 100%，说明产生的I/O请求太多，I/O系统已经满负荷，该磁盘可能存在瓶颈。如果 svctm 比较接近 await，说明 I/O 几乎没有等待时间；如果 await 远大于 svctm，说明I/O 队列太长，io响应太慢，则需要进行必要优化。如果avgqu-sz比较大，也表示有大量io在等待。

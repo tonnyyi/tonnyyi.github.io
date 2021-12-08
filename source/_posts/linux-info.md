@@ -20,7 +20,7 @@ date: 2016-09-02 15:34:31
     Product Name: PowerEdge R720
     Product Name: 068CDY
     ```
-<!-- more -->
+  <!-- more -->
 
 `hostnamectl`是systemd的一部分, 可用于查询和更改系统主机名和相关设置
 
@@ -284,7 +284,7 @@ Device does not support Self Test logging
     2.3G	/tmp/
     
     # 查看目录下文件/文件夹占用空间
-$ du -sh /home/*
+    $ du -sh /home/*
     12K	/home/centos
     9.1M	/home/elastic
     1.3G	/home/git
@@ -353,7 +353,7 @@ $ du -sh /home/*
     	Current message level: 0x000000ff (255)
     			       drv probe link timer ifdown ifup rx_err tx_err
     	Link detected: yes         # 表示有网线连接，和路由是通的
-
+    
     ```
 
 ## 操作系统
@@ -418,6 +418,189 @@ netstat -antp          # 查看所有已经建立的连接
 netstat -s             # 查看网络统计信息
 
 ```
+
+### TCP连接数限制
+
+1. 可用端口范围 
+
+   创建TCP连接时, 需要占用本机的一个端口号作为源端口, 本机可用端口号范围查询方式:
+
+   ```bash
+   $ cat /proc/sys/net/ipv4/ip_local_port_range
+   32768	60999
+   
+   # 修改方式
+   # 1. 临时
+   echo "15000 64000" > /proc/sys/net/ipv4/ip_local_port_range
+   # 2. 永久
+   vim /etc/sysctl.conf 
+   # 添加一行  net.ipv4.ip_local_port_range = 32768 59000
+   sysctl -p /etc/sysctl.conf 	#生效
+   ```
+
+   > 同一源端口可以对多个不同的(目标IP+端口)建立TCP连接, 所以一台主机最多建立65536个TCP连接的说法不正确
+
+2. 文件描述符
+   - **系统级** `cat /proc/sys/fs/file-max` 所有进程打开的文件描述符总和, Centos7默认是794168
+   - **用户级** `cat /etc/security/limits.conf` 和 `ulimit -n` 每个用户创建的进程打开的文件描述符总和
+   - **进程级** `cat /proc/sys/fs/nr_open` 单个进程可用的最大文件描述符数量
+   
+   #### 查看文件句柄使用统计
+
+    ```bash
+    # 系统级
+    $ cat /proc/sys/fs/file-nr
+    4950	0	26114240
+    已分配 已分配未使用 最大数量
+   
+    # 进程级 看Max open files行
+    $ cat /proc/进程ID/limits
+    Limit                     Soft Limit           Hard Limit           Units
+    Max cpu time              unlimited            unlimited            seconds
+    Max file size             unlimited            unlimited            bytes
+    Max data size             unlimited            unlimited            bytes
+    Max stack size            8388608              unlimited            bytes
+    Max core file size        0                    unlimited            bytes
+    Max resident set          unlimited            unlimited            bytes
+    Max processes             1028915              1028915              processes
+    Max open files            5000                 5000                 files
+    Max locked memory         65536                65536                bytes
+    Max address space         unlimited            unlimited            bytes
+    Max file locks            unlimited            unlimited            locks
+    Max pending signals       1028915              1028915              signals
+    Max msgqueue size         819200               819200               bytes
+    Max nice priority         0                    0
+    Max realtime priority     0                    0
+    Max realtime timeout      unlimited            unlimited            us
+   
+    # 实际进程已使用描述符数量 
+    $ ll /proc/进程ID/fd | wc -l 
+    115
+    ```
+
+    #### 修改方式
+
+    ```bash
+    # 系统级
+    # 1. 临时
+    sysctl -w fs.file-max=26114247
+    # 或者
+    echo "26114247" > /proc/sys/fs/file-max
+    # 2. 永久
+    vim /etc/sysctl.conf
+    # 添加如下一行
+    fs.file-max=26114247
+    # 生效
+    sysctl -p
+   
+    # 用户级
+    # 1. 临时 
+    ulimit -HSn 102400
+    # 2. 永久 重新登录即生效
+    vim /etc/security/limits.conf
+    # 添加如下两行
+    * hard nofile 102400
+    * soft nofile 102400
+   
+    # 进程级
+    # 1. 临时
+    sysctl -w fs.nr_open=1048576
+    # 或者
+    echo 1000000 > /proc/sys/fs/nr_open
+    # 2. 永久
+    vim /etc/sysctl.conf
+    # 添加如下一行
+    fs.nr_open=1048576
+    # 生效
+    sysctl -p
+    ```
+
+    > - `file-max` 限制不了 `limits.conf`
+    >
+    > - `ulimit -n` 是设置当前shell以及当前shell启动的进程能打开的最大文件数量, 默认1024, 但`limits.conf`优先级更高
+    >
+    > - 如果每个线程处理一个TCP连接, 当线程数太多时, 服务器可能由于忙于上下文切换而导致崩溃(这就是C10K问题), 此时可以用**多路IO复用**, 一个线程管理多个TCP连接
+
+3. 内存溢出
+
+   每个TCP连接都会用到缓冲区, 都是需要占用一定的内存
+
+4. CPU资源
+
+### 设备唯一性
+
+- `/etc/machine-id`文件
+
+  系统安装或首次启动后生成并一致保持不变
+
+  > **docker容器中该文件与宿主机内容一致**
+
+  ```bash
+  $ cat /etc/machine-id
+  036aad1b88ec4e80906d5d27ed9cef1d
+  ```
+
+- `/sys/class/dmi/id/product_uuid`文件
+
+  > **docker容器中该文件与宿主机内容一致**
+
+  ```bash
+  $ cat /sys/class/dmi/id/product_uuid
+  036aad1b-88ec-4e80-906d-5d27ed9cef1d
+  ```
+
+- `/etc/fstab`文件
+
+  >**docker容器中没有该文件**
+
+  ```bash
+  $ cat /etc/fstab
+  
+  #
+  # /etc/fstab
+  # Created by anaconda on Wed Mar 17 09:09:33 2021
+  #
+  # Accessible filesystems, by reference, are maintained under '/dev/disk'
+  # See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+  #
+  /dev/mapper/klas-root   /                       xfs     defaults        0 0
+  UUID=018c9363-2d14-4daf-ba6a-d12b294cfd82 /boot                   ext4    defaults        1 2
+  UUID=7497-92C5          /boot/efi               vfat    umask=0077,shortname=winnt 0 0
+  /dev/mapper/klas-home   /home                   xfs     defaults        0 0
+  /dev/mapper/klas-swap   swap                    swap    defaults        0 0
+  
+  # 查看boot分区的UUID
+  $ grep UUID /etc/fstab | grep -v /boot/ | awk '{print $1}'
+  UUID=018c9363-2d14-4daf-ba6a-d12b294cfd82
+  ```
+
+- `/sys/class/dmi/id/board_serial`文件
+
+  该文件内容为主板序列号, 虚拟机内没有该文件
+
+  ```bash
+  $ cat /sys/class/dmi/id/board_serial
+  MBJ705S21125A90
+  ```
+
+- `hostid`命令
+
+  无法确保全局唯一性, 且可以通过命令行配置
+
+  ```bash
+  $ hostid
+  1facab67
+  ```
+
+- 根据根目录`/`挂载的磁盘id
+
+  ```bash
+  $ sudo /sbin/blkid | grep "$(df -h / | sed -n 2p | cut -d" " -f1):" | grep -o "UUID=\"[^\"]*\" " | sed "s/UUID=\"//;s/\"//"
+  ef4de747-8828-4e4e-97db-05d47a5e1e60
+  c6e4c0f0-576e-46f0-953a-da00dfa060fb
+  ```
+
+  
 
 -----
 ### 参考

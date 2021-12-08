@@ -424,8 +424,7 @@ try {
 // --------------------- body 类型为 raw ------------------
 var raw = pm.request.body.raw;
 console.log(raw); // 控制台打印参整个 raw 数据
-
-
+```
 
 #### 后置脚本
 
@@ -474,8 +473,6 @@ pm.response.to.have.body("whole-body-text");
 // 将 jsonData.token 的值写入环境变量
 pm.environment.set('token', jsonData.token);
 ```
-
-#### 
 
 #### 常用断言
 

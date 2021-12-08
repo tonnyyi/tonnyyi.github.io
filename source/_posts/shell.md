@@ -413,15 +413,16 @@ $ ./test.sh 1 2 3
     * 一般情况下算数表达式可以不加双引号，但是若表达式中有bash中的关键字则需加上
     * let后的表达式只能进行整数运算
 
-2. `(())`
+2. `(())` **推荐**
     `(())`的使用方法与let关键字完全相同
+    
     ```bash
     var=1;
     ((var+=1));
     echo $var
     ```
-
-3. `$[]`
+    
+3. `$[]` 
 
     ```bash
     var=1;
@@ -922,7 +923,9 @@ fi
 - `if command`: 根据命令执行后的返回码为判断依据
 
 ## for
+
 语法及示例:
+
 ```bash
 for bar in item1 item2 ... itemN
 do
@@ -934,10 +937,10 @@ done
 for bar in item1 item2 ... itemN; do command1; command2;.. done;
 
 # 遍历数字, 4种方式
-for loop in 1, 2 3 4;
-# for ((loop=1; loop<=4; loop++));
-# for loop in $(seq 1 4);
-# for loop in {1..4};
+for loop in 1 2 3 4;
+for ((loop=1; loop<=4; loop++));
+for loop in $(seq 1 4);
+for loop in {1..4};
 do
     echo "value is: $loop"
 done
@@ -1383,3 +1386,19 @@ for file in "${files[@]}"; do
     echo $file
 done
 ```
+
+#### 生成随机数
+
+```bash
+# 生成1个, 范围2000 ~ 6500
+shuf -i 2000-6500 -n 1
+
+# 生成10个范围在0~100的随机数并写入文件
+shuf -i 0-100 -n 10 -i random_number.txt
+
+# 乱序读取文件每一行
+shuf foo.txt
+```
+
+
+

@@ -9,17 +9,36 @@ categories:
 date: 2020-04-27 20:06:52
 ---
 
+
+
+## spring boot 属性加载顺序
+
+1. 默认属性(通过`SpringApplication.setDefaultProperties`设置)
+2. `@Configuration`配置类通过`@PropertySource`启用的资源文件
+3. **配置文件**
+4. `RandomValuePropertySource`
+5. 操作系统属性
+6. `System.getProperties()`
+7. JNDI属性(`java:comp/env`)
+8. `ServletContext`初始化参数
+9. `ServletConfig`初始化参数
+10. `SPRING_APPLICATION_JSON`
+11. 命令行参数
+12. 单元测试时`@SpringBootTest`配置的属性
+13. 单元测试时`@TestPropertySource`启用的属性
+14. devtools使用的`$HOME/.config/spring-boot`目录下的文件
+
 ## spring boot 配置文件加载顺序
 
-> https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-external-config-application-property-files
+> https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#features.external-config.files
 
-spring boot默认会按照以下顺序, 在下面的文件夹中查找配置文件:
+spring boot默认会按照以下顺序, 在下面的文件夹中查找配置文件(优先级由低到高):
 
-1. **启动目录**下的`config`目录
-2. **启动目录**
-3. classpath下的`config`目录
-
-4. classpath根目录下
+1. classpath根目录
+2. classpath下的`/config`文件夹
+3. 启动目录
+4. 启动目录下的`/config`文件夹
+5. 启动目录下的`/config`文件夹的子文件夹
 
 - **启动目录**指的是你在哪个目录下启动的应用, 举例来说: 应用包`user-center-1.0.0.jar`在`/home/test/app/`下
 

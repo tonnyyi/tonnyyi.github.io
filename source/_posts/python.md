@@ -798,7 +798,169 @@ os.uname #
 os.environ
 ```
 
+### 文件
+
+Python中有几个内置模块和方法来处理文件。这些方法被分割到例如`os`, `os.path` , `shutil` 和 `pathlib` 等等几个模块中。
+
+#### 文件读写
+
+```python
+# 只读
+with open('data.txt', 'r') as f:
+    # 读取全部内容
+    data = f.read()
+    print('context: {}'.format(data))
+    
+    # 按行读取
+    for line in f.readlines():
+        print(line, end='')  
+    # 简化操作 同时降低内存占用
+    for lien in f:
+        print(line, end='')        
+    
+    
+# 写入
+with open('data.txt', 'w') as f:
+    data = 'some data to be written to the file'
+    f.write(data)
+```
+
+##### 读写模式
+
+|              |  r   |  r+  |  w   |  w+  |  a   |  a+  |
+| ------------ | :--: | :--: | :--: | :--: | :--: | :--: |
+| 可读         |  *   |  *   |      |  *   |      |  *   |
+| 可写         |      |  *   |  *   |  *   |  *   |  *   |
+| 不存在时创建 |      |      |  *   |  *   |  *   |  *   |
+| 存在时先清空 |      |      |  *   |  *   |      |      |
+| 指针在头     |  *   |  *   |  *   |  *   |      |      |
+| 指针在尾     |      |      |      |      |  *   |  *   |
+
+- `r` `r+` : 当文件不存在时抛出异常
+- `+` : 在现有模式上添加读和写的能力, 即更新模式
+
+#### 目录
+
+```python
+# 获取目录列表 3.5版本之后才有scandir接口
+import os
+with os.scandir('download') as entities:
+    for entry in entities:
+        print(entry.name)
+
+# pathlib模块 3.4版本之后才有pathlib
+from pathlib import Path
+entries = Path('download')
+for entry in entries.iterdir():
+    print(entry.name)
+    # 只打印文件
+    if entry.is_file():
+        print(entry.name)
+
+# 只列出文件
+import os
+with os.scandir('download') as entities:
+    for entry in entities:
+        # 使用os.path.isfile判断该路径是否是文件类型
+        # 可以使用os.path.isdir判断是否为目录，进而递归调用
+        if os.path.isfile(os.path.join(base_path, entry)):
+            print(entry)
+    
+        # 更简单的判断方法
+        if entry.is_file():
+            print(entry)
+
+# 结合表达式简化操作
+from pathlib import Path
+files = (entry for entry in Path('.').iterdir() if entry.is_file())
+for file in files:
+    print(file)
+```
+
+
+
+
+
+### 网络
+
+```python
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+import sys
+import getopt
+import base64
+import json
+import requests
+
+# python3 test.py -s localhost -f /Users/tonnyyi/Downloads/demo/test/02.png
+
+def readFileToBase64Str(filePath): 
+    with open(filePath, 'rb') as f:
+        return base64.b64encode(f.read())
+
+if __name__ == "__main__":
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "s:f:", ["server=", "file="])
+    except getopt.GetoptError as err:
+        # print help information and exit:
+        print(err)  # will print something like "option -a not recognized"
+        sys.exit(2)
+
+    server = None
+    file = None
+    for o, a in opts:
+        if o in ("-s", "--server"):
+            server = a
+        elif o in ("-f", "--file"):
+            file = a
+
+    print(server, file)
+    base64Str = readFileToBase64Str(file)
+    print("文件读取完成: {}, length: {}".format(file, len(base64Str)))
+
+    headers={
+        'Content-type': 'application/json'
+    }
+    param = {
+        "sfwjnr": True,
+        "sfwjwb": True,
+        "sfwjxx": True,
+        "wjhz": file[file.find(".", -6):],
+        "wjnr": base64Str.decode("utf-8"),
+        "wjxh": "34CE46B98EBF4B058EACBC38EE075C5C",
+        "yxj": "",
+        "yylx": "OCRManager"
+    }
+
+    url = 'http://'+server+'/procuracy-web/api/GetWJOCRSBJG'
+    body = json.dumps(param)
+    resp = requests.post(url, body, headers=headers)
+    print("请求完成, url: {}, code: {}".format(url, resp.status_code))
+
+    resp_dict = json.loads(resp.text)
+    pdfPath = file + ".pdf"
+    with open(pdfPath, "wb") as f:
+        f.write(base64.b64decode(resp_dict['data']['pdfnr']))
+        print("双层PDF保存成功, path: {}".format(pdfPath))
+
+    resp_dict['data']['pdfnr'] = None
+    for sbxx in resp_dict['data']['wjsbxx']:
+        sbxx['wjnr'] = None
+
+    jsonPath = file + ".json"
+    with open(jsonPath, "w", encoding='utf8') as f:
+        json.dump(resp_dict, f, ensure_ascii=False)
+        print("响应结果JSON保存成功, path: {}".format(jsonPath))
+
+```
+
+
+
+
+
 ### IO
+
 文件打开模式:
 - `r`: 默认, 只读
 - `w`: 先清空在写
@@ -1070,6 +1232,36 @@ p.children()    #子进程
 ```
 
 ### 字符串
+
+#### 格式化
+
+1. 2.6以前：`%`
+
+2. 2.6：`format`（**次选**）
+
+   ```python
+   >>> print("{} is {}".format("foo", "bar"))
+   foo is bar
+   
+   # 索引方式匹配参数，下标从0开始
+   >>> print("{1} is {0}".format("foo", "bar"))
+   bar is foo
+   
+   # 参数名匹配参数
+   >>> print("{foo} is {bar}".format(foo="f123", bar="b321"))
+   f123 is b321
+   
+   # 混合使用
+   >>> print("my name is {}, i am {age} years old, i am from {}".format("Tom", "Beijing", age=20))
+   my name is Tom, i am 20 years old, i am from Beijing
+   ```
+
+   
+
+3. 3.6：`f-String`（**首选**）
+
+4. `Template` 类（**格式由入参决定**）
+
 #### 正则
 
 ### 其他
@@ -1094,7 +1286,29 @@ logger.addHandler(handler)
 logger.info("Hello Logger")
 ```
 
+
+
+## pip
+
+```bash
+# 显示pip版本
+python3 -m pip --version
+
+# 查看已安装包
+pip list
+
+# 查看import时包搜索路径
+import sys
+sys.path
+
+# 安装包到指定命令
+pip install xxx --target=/xx/xx
+```
+
+
+
 ## Tips
+
 #### 交换两个变量值
 ```python
 x, y = 1, 3

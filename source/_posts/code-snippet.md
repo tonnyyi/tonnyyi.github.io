@@ -114,3 +114,13 @@ return new File(MyClass.class.getProtectionDomain().getCodeSource().getLocation(
     .toURI()).getPath();
 ```
 
+### 数据库连接池大小多少合适
+
+```
+connections = ((core_count * 2) + effective_spindle_count)
+```
+
+这个公式[来自HikariCP](https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing#the-formula)
+
+其中，`core_count`是**CPU核心数**，注意：**核心数不包括超线程**， `effective_spindle_count` 的含义是**有效磁盘数**，如果你的服务器使用的是带有16个磁盘的RAID，那么`valid_spindle_count=16`。它实质上是服务器可以管理多少个并行I / O请求的度量。旋转硬盘一次（通常）一次只能处理一个I / O请求，如果你有16个，则系统可以同时处理16个I / O请求。
+
