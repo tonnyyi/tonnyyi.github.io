@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/Han/3.3.0/han.min.css">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="光标移动在出现软换行时，一个实际行可以被换行成了多个屏幕行。 基础命令 123  k              &amp;lt;上&amp;gt;h   l      &amp;lt;左&amp;gt;         &amp;lt;右&amp;gt;  j              &amp;lt;下&amp;gt;    按键 动作     gj 下移一个屏幕行   gk 上移一个屏幕行   0 移动到实际行的行首   g0 移动到屏幕行的行首   ^">
+<meta name="keywords" content="linux,vim">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vim">
+<meta property="og:url" content="http://codertang.com/2021/06/16/vim/index.html">
+<meta property="og:site_name" content="Tonny&#39;s Blog">
+<meta property="og:description" content="光标移动在出现软换行时，一个实际行可以被换行成了多个屏幕行。 基础命令 123  k              &amp;lt;上&amp;gt;h   l      &amp;lt;左&amp;gt;         &amp;lt;右&amp;gt;  j              &amp;lt;下&amp;gt;    按键 动作     gj 下移一个屏幕行   gk 上移一个屏幕行   0 移动到实际行的行首   g0 移动到屏幕行的行首   ^">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20210616175022.png">
+<meta property="og:updated_time" content="2021-07-16T09:31:19.117Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vim">
+<meta name="twitter:description" content="光标移动在出现软换行时，一个实际行可以被换行成了多个屏幕行。 基础命令 123  k              &amp;lt;上&amp;gt;h   l      &amp;lt;左&amp;gt;         &amp;lt;右&amp;gt;  j              &amp;lt;下&amp;gt;    按键 动作     gj 下移一个屏幕行   gk 上移一个屏幕行   0 移动到实际行的行首   g0 移动到屏幕行的行首   ^">
+<meta name="twitter:image" content="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20210616175022.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://codertang.com/2021/06/16/vim/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>vim | Tonny's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tonny's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">莫等闲, 白了少年头, 空悲切</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://codertang.com/2021/06/16/vim/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tonny Yi">
+      <meta itemprop="description" content="Coding, Life, Zen">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tonny's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">vim
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-06-16 11:05:33" itemprop="dateCreated datePublished" datetime="2021-06-16T11:05:33+08:00">2021-06-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-07-16 17:31:19" itemprop="dateModified" datetime="2021-07-16T17:31:19+08:00">2021-07-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="光标移动"><a href="#光标移动" class="headerlink" title="光标移动"></a>光标移动</h3><p>在出现软换行时，一个<strong>实际行</strong>可以被换行成了多个<strong>屏幕行</strong>。</p>
+<p>基础命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  k              &lt;上&gt;</span><br><span class="line">h   l      &lt;左&gt;         &lt;右&gt;</span><br><span class="line">  j              &lt;下&gt;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>按键</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gj</td>
+<td>下移一个屏幕行</td>
+</tr>
+<tr>
+<td>gk</td>
+<td>上移一个屏幕行</td>
+</tr>
+<tr>
+<td>0</td>
+<td>移动到实际行的行首</td>
+</tr>
+<tr>
+<td>g0</td>
+<td>移动到屏幕行的行首</td>
+</tr>
+<tr>
+<td>^</td>
+<td>移动到实际行的第一个非空白字符</td>
+</tr>
+<tr>
+<td>g^</td>
+<td>移动到屏幕行的第一个非空白字符</td>
+</tr>
+<tr>
+<td>$</td>
+<td>移动到实际行的行尾</td>
+</tr>
+<tr>
+<td>g$</td>
+<td>移动到屏幕行的行尾</td>
+</tr>
+</tbody>
+</table>
+<h4 id="基于单词移动"><a href="#基于单词移动" class="headerlink" title="基于单词移动"></a>基于单词移动</h4><p><code>w</code>和<code>b</code>最常用，要记住</p>
+<p><img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20210616175022.png" alt="image-20210616174958341" style="zoom:50%;"></p>
+<table>
+<thead>
+<tr>
+<th>按键</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>w</td>
+<td>移动到下一单词的开头</td>
+</tr>
+<tr>
+<td>b</td>
+<td>移动到当前/上一单词的开头</td>
+</tr>
+<tr>
+<td>e</td>
+<td>移动到当前/下一单词的结尾</td>
+</tr>
+<tr>
+<td>ge</td>
+<td>移动到上一单词的结尾</td>
+</tr>
+<tr>
+<td>W</td>
+<td>移动到下一字符串的开头</td>
+</tr>
+<tr>
+<td>B</td>
+<td>移动到当前/上一字符串的开头</td>
+</tr>
+<tr>
+<td>E</td>
+<td>移动到当前/下一字符串的结尾</td>
+</tr>
+<tr>
+<td>gE</td>
+<td>移动到上一字符串的结尾</td>
+</tr>
+<tr>
+<td>H</td>
+<td>移动光标到屏幕上方</td>
+</tr>
+<tr>
+<td>M</td>
+<td>移动光标到屏幕中间</td>
+</tr>
+<tr>
+<td>L</td>
+<td>移动光标到屏幕底部</td>
+</tr>
+<tr>
+<td>zt</td>
+<td>当前行滚动到屏幕顶部</td>
+</tr>
+<tr>
+<td>zz</td>
+<td>当前行滚动到屏幕中间</td>
+</tr>
+<tr>
+<td>zb</td>
+<td>当前行滚动到屏幕底部</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>单词</strong>和<strong>字符串</strong>区别就记住：<strong>字符串比单词长</strong></p>
+</blockquote>
+<blockquote>
+<p><code>ea</code>命令连在一起可以被用作<strong>在当前单词结尾添加</strong>， 输入<code>ea</code>后接着输入要追加的字符</p>
+</blockquote>
+<h3 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h3><h4 id="插入文本"><a href="#插入文本" class="headerlink" title="插入文本"></a>插入文本</h4><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>在光标后插入</td>
+</tr>
+<tr>
+<td>A</td>
+<td>在光标所在行尾插入</td>
+</tr>
+<tr>
+<td>i</td>
+<td>在光标前插入</td>
+</tr>
+<tr>
+<td>I</td>
+<td>在光标所在行头插入</td>
+</tr>
+<tr>
+<td>o</td>
+<td>在光标下新起一行开始编辑</td>
+</tr>
+<tr>
+<td>O</td>
+<td>在光标上新起一行开始编辑</td>
+</tr>
+</tbody>
+</table>
+<h4 id="插入文件"><a href="#插入文件" class="headerlink" title="插入文件"></a>插入文件</h4><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>:r[ead] filename</td>
+<td>读取并插入文件内容到当前光标下, 如: <code>:r sys.log</code></td>
+</tr>
+<tr>
+<td>:r[ead] !{cmd}</td>
+<td>执行命令并将命令输出插入到当前光标下, 如: <code>:r !date</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="查找与替换"><a href="#查找与替换" class="headerlink" title="查找与替换"></a>查找与替换</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r{char}</td>
+<td>用{char}替换光标下的字符</td>
+</tr>
+<tr>
+<td>R</td>
+<td>进入插入模式, 如: 按R后输入1234, 则原来的位置的4个字符都被替换, 按<code>esc</code>退出</td>
+</tr>
+<tr>
+<td>~</td>
+<td>切换光标所在字符的大小写, 并且光标向右移动</td>
+</tr>
+<tr>
+<td>g~{范围文本对象}</td>
+<td>替换范围内的文本大小写  如: <code>g~aw</code>替换光标所在单词大小写</td>
+</tr>
+<tr>
+<td>可视 ~</td>
+<td>先按<code>v</code>进入可视模式, 选中文件后按<code>~</code>切换大小写</td>
+</tr>
+<tr>
+<td>可视 U</td>
+<td>先按<code>v</code>进入可视模式, 选中文件后按<code>U</code>切换到大写</td>
+</tr>
+<tr>
+<td>%</td>
+<td>跳转到光标所在字符的匹配字符, 如: 光标在<code>{</code>上, 按<code>%</code>则跳转到<code>}</code></td>
+</tr>
+<tr>
+<td>*</td>
+<td>搜索光标所在单词并高亮</td>
+</tr>
+</tbody>
+</table>
+<h4 id="替换范围"><a href="#替换范围" class="headerlink" title="替换范围"></a>替换范围</h4><p>语法:  <code>:[range]s/{pattern}/{string}/[c][e][g][p][r][i][I] [count]</code></p>
+<ul>
+<li><code>c</code> 替换前确认, 可以输入如下命令<ul>
+<li><code>y</code> 替换</li>
+<li><code>n</code> 跳过</li>
+<li><code>a</code> 替换剩余所有</li>
+<li><code>CRTL E</code> 向上滚动屏幕</li>
+<li><code>CRTL Y</code> 向下滚动屏幕</li>
+</ul>
+</li>
+<li><code>g</code> 替换行中出现的所有项</li>
+<li><code>i</code> 忽略匹配时的大小写</li>
+</ul>
+<p>示例:</p>
+<ul>
+<li><code>:s/old/new/g</code> 替换当前行old为new</li>
+<li><code>:7s/old/new/g</code>  替换第7行old为new</li>
+<li><code>:$/old/new/g</code> 替换最后一行</li>
+<li><code>:%s/old/new/g</code> 替换所有行</li>
+<li><code>:.,$s/old/new/g</code> 替换当前行到最后一行</li>
+<li><code>:.,+7s/old/new/g</code> 替换当前行以及后面7行</li>
+</ul>
+<h4 id="f命令"><a href="#f命令" class="headerlink" title="f命令"></a>f命令</h4><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>f*</td>
+<td>光标移动到下一个字符*，如：<code>fa</code></td>
+</tr>
+<tr>
+<td>F*</td>
+<td>光标移动到上一个字符*</td>
+</tr>
+<tr>
+<td>t*</td>
+<td>光标移动到下一个字符*的前一个字符，如：<code>fa</code></td>
+</tr>
+<tr>
+<td>T*</td>
+<td>光标移动到上一个字符*的前一个字符</td>
+</tr>
+<tr>
+<td>;</td>
+<td>重复上一次字符查找命令</td>
+</tr>
+<tr>
+<td>,</td>
+<td>反向查找上一次的字符查找命令</td>
+</tr>
+</tbody>
+</table>
+<p><code>f*</code>会在光标与当前行行尾之间查找指定的字符<code>*</code>，比如：输入<code>fa</code>会在当前行查找光标后第一个字符<code>a</code>。结合<code>;</code>命令，就可以一直往后查找字符<code>a</code>，而不用一遍遍的输入<code>fa</code>。如果<code>;</code>命令按多了，可以输入<code>,</code>命令往回跳。</p>
+<p>假如有这么一段字符串：<em>I’m Tom, welcome.</em> 输入<code>f,</code>，定位到逗号，输入<code>dt.</code>就会删除到末尾，但保留句号。结果就是：<em>I’m Tom.</em></p>
+<h4 id="查找"><a href="#查找" class="headerlink" title="/查找"></a>/查找</h4><p>f命令一次只能查找一个字符，并且只能在本行内查找，为了提高效率，因此我们还需要查找命令。<code>/foo</code>查找字符串<code>foo</code>，使用<code>n</code>命令可以查找下一个<code>foo</code>字符串了，<code>N</code>可以向上查找。</p>
+<h4 id="自动位置标记"><a href="#自动位置标记" class="headerlink" title="自动位置标记"></a>自动位置标记</h4><table>
+<thead>
+<tr>
+<th>位置标记</th>
+<th>跳转到</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code></code></td>
+<td>当前文件中上次跳转动作之前的位置</td>
+</tr>
+<tr>
+<td>`.</td>
+<td>上次修改的位置</td>
+</tr>
+<tr>
+<td>`^</td>
+<td>上次插入的位置</td>
+</tr>
+<tr>
+<td>`[</td>
+<td>上次修改或复制的起始位置</td>
+</tr>
+<tr>
+<td>`]</td>
+<td>上次修改或复制的结束位置</td>
+</tr>
+<tr>
+<td>`&lt;</td>
+<td>上次高亮选区的起始位置</td>
+</tr>
+<tr>
+<td>`&gt;</td>
+<td>上次高亮选区的结束位置</td>
+</tr>
+</tbody>
+</table>
+<h3 id="删除与复制"><a href="#删除与复制" class="headerlink" title="删除与复制"></a>删除与复制</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>删除光标之后的字符</td>
+</tr>
+<tr>
+<td>X</td>
+<td>删除光标之前的字符</td>
+</tr>
+<tr>
+<td>d{范围文本对象}</td>
+<td>删除范围内的文本 <code>dw</code> <code>daw</code> <code>d$</code> <code>d0</code></td>
+</tr>
+<tr>
+<td>[count]dd</td>
+<td>删除从光标开始往下count行, <code>dd</code> <code>3dd</code></td>
+</tr>
+<tr>
+<td>D</td>
+<td>从光标删除到行尾  相当于 <code>d$</code></td>
+</tr>
+<tr>
+<td>:[range]d</td>
+<td><code>:2d</code> 删除第2行     <code>:2,3d</code> 删除第2到第3行</td>
+</tr>
+<tr>
+<td>:[range]d {count}</td>
+<td><code>:2d 10</code> 从第二行开始删除10行</td>
+</tr>
+</tbody>
+</table>
+<p><code>bdw</code> 删除当前单词</p>
+<p><code>cw</code> 删除从光标到单词结尾并进入插入模式</p>
+<p><code>ciw</code> 删除从光标所在单词并进入插入模式</p>
+<p><code>daw</code> 删除光标所在单词及空格 <strong>优先使用</strong>  配合<code>.</code>可以一直往下删除单个词</p>
+<p><code>d2w</code> 删除2个单词  <code>2dw</code>也可以</p>
+<p><code>d0</code> 或 <code>d^</code> 从光标删除到行首</p>
+<p><code>d$</code> 从光标删除到行尾</p>
+<h4 id="范围文本对象"><a href="#范围文本对象" class="headerlink" title="范围文本对象"></a>范围文本对象</h4><table>
+<thead>
+<tr>
+<th>文本对象</th>
+<th>选择范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iw</td>
+<td>当前单词</td>
+</tr>
+<tr>
+<td>aw</td>
+<td>当前单词及一个空格</td>
+</tr>
+<tr>
+<td>iW</td>
+<td>当前字符串</td>
+</tr>
+<tr>
+<td>aW</td>
+<td>当前字符串及一个空格</td>
+</tr>
+<tr>
+<td>is</td>
+<td>当前句子</td>
+</tr>
+<tr>
+<td>as</td>
+<td>当前句子及一个空格</td>
+</tr>
+<tr>
+<td>ip</td>
+<td>当前段落</td>
+</tr>
+<tr>
+<td>ap</td>
+<td>当前段落及一个空格</td>
+</tr>
+</tbody>
+</table>
+<h4 id="删除长字符串"><a href="#删除长字符串" class="headerlink" title="删除长字符串"></a>删除长字符串</h4><p>字符串：<em>I’m Tom, nice to meet you.</em> 假设光标定位在<code>Tom</code>上，<strong>输入<code>v</code>进入可视模式</strong>，输入<code>/yo</code>定位到字符串<code>you</code>，输入<code>h</code>先取消选中<code>y</code>，输入<code>d</code>，删除从Tom到meet，结果就是：<em>I’m you.</em>  更高效的做法是输入<code>d/you</code>。</p>
+<h4 id="插入模式下删除"><a href="#插入模式下删除" class="headerlink" title="插入模式下删除"></a>插入模式下删除</h4><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CTRL h</td>
+<td>删除前一个字符, 等同于退格键</td>
+</tr>
+<tr>
+<td>CTRL w</td>
+<td>删除前一个单词</td>
+</tr>
+<tr>
+<td>CTRL u</td>
+<td>删除至行首</td>
+</tr>
+</tbody>
+</table>
+<h3 id="撤销-重做-重复"><a href="#撤销-重做-重复" class="headerlink" title="撤销 重做 重复"></a>撤销 重做 重复</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[count]u</td>
+<td>撤销前count个修改</td>
+</tr>
+<tr>
+<td>:u</td>
+<td>撤销上一次操作</td>
+</tr>
+<tr>
+<td>[count]CRTL R</td>
+<td>重做count个撤销操作, 即恢复</td>
+</tr>
+<tr>
+<td>:red[o]</td>
+<td>重做上个撤销操作</td>
+</tr>
+<tr>
+<td>U</td>
+<td>恢复当前行</td>
+</tr>
+<tr>
+<td>.</td>
+<td>重复上一个命令</td>
+</tr>
+</tbody>
+</table>
+<h3 id="可视模式"><a href="#可视模式" class="headerlink" title="可视模式"></a>可视模式</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v</td>
+<td>进入面向字符的可视模式, 上下左右类似鼠标拖选</td>
+</tr>
+<tr>
+<td>V</td>
+<td>进入面向行的可视模式, 上下选中整行</td>
+</tr>
+<tr>
+<td>CTRL v</td>
+<td>进入面向块的可视模式</td>
+</tr>
+<tr>
+<td>gv</td>
+<td>重选上次的高亮选区</td>
+</tr>
+</tbody>
+</table>
+<h4 id="切换选取的起始位置"><a href="#切换选取的起始位置" class="headerlink" title="切换选取的起始位置"></a>切换选取的起始位置</h4><p>当定义选区时, 如果发现开始位置选的不对, 可以按下<code>o</code>更改选区编辑, 更改好了再按下<code>o</code></p>
+<p><code>vww</code> 选择2个单词 -&gt; <code>o</code>调整起始位置 -&gt; <code>b</code>向前选中 -&gt; <code>o</code>确定起始位置, 切换到结尾位置 </p>
+<h4 id="在长短不一的高亮块后添加文本"><a href="#在长短不一的高亮块后添加文本" class="headerlink" title="在长短不一的高亮块后添加文本"></a>在长短不一的高亮块后添加文本</h4><p>为长短不一的代码行尾添加分号: <code>CTRL v</code> 进入块模式 -&gt;  <code>jj$</code> 向下选择2行并选择到行尾  -&gt;  <code>A;</code> 追加分号 -&gt; <code>esc</code> </p>
+<h3 id="多窗口"><a href="#多窗口" class="headerlink" title="多窗口"></a>多窗口</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>:e filename</td>
+<td>编辑另一个文件</td>
+</tr>
+<tr>
+<td>:split filename</td>
+<td>水平拆分窗口并打开另一个文件</td>
+</tr>
+<tr>
+<td>:vsplit filename</td>
+<td>垂直拆分并打开另一个文件</td>
+</tr>
+<tr>
+<td>:sview file</td>
+<td><code>split</code>的readonly模式</td>
+</tr>
+<tr>
+<td>CTRL W v</td>
+<td>垂直拆分窗口</td>
+</tr>
+<tr>
+<td>CTRL W s</td>
+<td>水平拆分窗口</td>
+</tr>
+<tr>
+<td>CTRL W 上箭头</td>
+<td>移动光标到上一个窗口</td>
+</tr>
+<tr>
+<td>CTRL W CTRL W</td>
+<td>循环切换窗口</td>
+</tr>
+<tr>
+<td>CTRL W _</td>
+<td>最大化当前窗口</td>
+</tr>
+<tr>
+<td>CTRL W =</td>
+<td>所有窗口一样大</td>
+</tr>
+<tr>
+<td>10 CTRL W+</td>
+<td>将当前窗口增加10行高度</td>
+</tr>
+<tr>
+<td>:hide</td>
+<td>关闭当前窗口</td>
+</tr>
+<tr>
+<td>:only</td>
+<td>仅保持当前窗口打开</td>
+</tr>
+<tr>
+<td>:ls</td>
+<td>展示当前缓冲区列表(文件列表)</td>
+</tr>
+<tr>
+<td>:b 2</td>
+<td>打开缓冲区中编号2的文件</td>
+</tr>
+</tbody>
+</table>
+<h4 id="插入-普通模式-CTRL-o"><a href="#插入-普通模式-CTRL-o" class="headerlink" title="插入-普通模式 CTRL o"></a>插入-普通模式 <code>CTRL o</code></h4><p>当前在插入模式, 但是想向下滚动一屏幕看到更多内容, 然后离开返回插入模式, 可以执行<code>CTRL o tt</code></p>
+<h3 id="命令行模式"><a href="#命令行模式" class="headerlink" title="命令行模式"></a>命令行模式</h3><p>输入<code>:</code> 进入命令行模式, 由于历史原因, 在命令行中执行的命令又被称为Ex命令. 可以使用Ex命令读写文件(<code>:edit</code>), 创建标签页(<code>:tabnew</code>), 分隔窗口(<code>:split</code>), 完整命令见: <code>:h ex-cmd-index</code></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>:[range]delete [x]</td>
+<td>删除指定范围内的行[到寄存器x], <code>:10,15delete</code> 删除10到15行</td>
+</tr>
+<tr>
+<td>:[range]yank [x]</td>
+<td>复制指定范围的行[到寄存器x]</td>
+</tr>
+<tr>
+<td>:[line]put [x]</td>
+<td>在指定行后粘贴寄存器x中的内容, <code>:10put a</code> 在第10行粘贴寄存器a中的内容</td>
+</tr>
+<tr>
+<td>:[range]copy {address}</td>
+<td>把指定范围内的行拷贝到{address}所指定的行之下, <code>:3,5t.</code> 把第3行到第5行复制到当前行下方, <code>:t5</code>复制当前行到第5行下  <strong><code>copy</code>命令的简写形式为<code>t</code></strong></td>
+</tr>
+<tr>
+<td>:[range]move {address}</td>
+<td>把指定范围的行移动到{address}所指定的行下,  <code>:3,5m.</code>把第3行到第5行复制到当前行下方,  <strong><code>move</code>命令的简写形式为<code>m</code></strong></td>
+</tr>
+<tr>
+<td>:[range]join</td>
+<td>连接指定范围内的行 <code>:3,+2join</code> 第3行以及后面2行连接</td>
+</tr>
+<tr>
+<td>:[range]normal {commands}</td>
+<td>对指定范围内的每一行执行普通模式命令{commands}</td>
+</tr>
+<tr>
+<td>:[range]substitute/{pattern}/ {string}/[flags]</td>
+<td>指定范围内的文本进行替换</td>
+</tr>
+</tbody>
+</table>
+<h4 id="调用外部程序"><a href="#调用外部程序" class="headerlink" title="调用外部程序"></a>调用外部程序</h4><p><code>:!{command}</code> 执行外部查询, 如: <code>:!ls</code> 查看当前目录内容, 这种方式适合执行一次性命令</p>
+<p><code>:shell</code> 启动一个交互的shell会话, 可以执行多条命令了</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Tonny Yi</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://codertang.com/2021/06/16/vim/" title="vim">http://codertang.com/2021/06/16/vim/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="external nofollow" target="_blank">CC BY-NC 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/vim/" rel="tag"># vim</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/06/11/jni/" rel="next" title="JNI开发">
+                <i class="fa fa-chevron-left"></i> JNI开发
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/06/23/arthas/" rel="prev" title="arthas">
+                arthas <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Tonny Yi">
+            
+              <p class="site-author-name" itemprop="name">Tonny Yi</p>
+              <p class="site-description motion-element" itemprop="description">Coding, Life, Zen</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tonnyyi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:tonnyemails@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#光标移动"><span class="nav-number">1.</span> <span class="nav-text">光标移动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于单词移动"><span class="nav-number">1.1.</span> <span class="nav-text">基于单词移动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入"><span class="nav-number">2.</span> <span class="nav-text">插入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插入文本"><span class="nav-number">2.1.</span> <span class="nav-text">插入文本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#插入文件"><span class="nav-number">2.2.</span> <span class="nav-text">插入文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找与替换"><span class="nav-number">3.</span> <span class="nav-text">查找与替换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#替换范围"><span class="nav-number">3.1.</span> <span class="nav-text">替换范围</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#f命令"><span class="nav-number">3.2.</span> <span class="nav-text">f命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查找"><span class="nav-number">3.3.</span> <span class="nav-text">/查找</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自动位置标记"><span class="nav-number">3.4.</span> <span class="nav-text">自动位置标记</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除与复制"><span class="nav-number">4.</span> <span class="nav-text">删除与复制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#范围文本对象"><span class="nav-number">4.1.</span> <span class="nav-text">范围文本对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除长字符串"><span class="nav-number">4.2.</span> <span class="nav-text">删除长字符串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#插入模式下删除"><span class="nav-number">4.3.</span> <span class="nav-text">插入模式下删除</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#撤销-重做-重复"><span class="nav-number">5.</span> <span class="nav-text">撤销 重做 重复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可视模式"><span class="nav-number">6.</span> <span class="nav-text">可视模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#切换选取的起始位置"><span class="nav-number">6.1.</span> <span class="nav-text">切换选取的起始位置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在长短不一的高亮块后添加文本"><span class="nav-number">6.2.</span> <span class="nav-text">在长短不一的高亮块后添加文本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多窗口"><span class="nav-number">7.</span> <span class="nav-text">多窗口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插入-普通模式-CTRL-o"><span class="nav-number">7.1.</span> <span class="nav-text">插入-普通模式 CTRL o</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令行模式"><span class="nav-number">8.</span> <span class="nav-text">命令行模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#调用外部程序"><span class="nav-number">8.1.</span> <span class="nav-text">调用外部程序</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tonny Yi</span>
+
+  
+
+  
+</div>
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>

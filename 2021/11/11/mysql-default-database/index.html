@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/Han/3.3.0/han.min.css">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="infomation_schema数据库CHARACTER_SETS表该表提供查询MySQL支持的可用字符集有哪些, 该表是Memory引擎临时表 12345678910111213141516mysql&amp;gt; select * from character_sets;+--------------------+----------------------+-------------------">
+<meta name="keywords" content="mysql,schema">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql-default-database">
+<meta property="og:url" content="http://codertang.com/2021/11/11/mysql-default-database/index.html">
+<meta property="og:site_name" content="Tonny&#39;s Blog">
+<meta property="og:description" content="infomation_schema数据库CHARACTER_SETS表该表提供查询MySQL支持的可用字符集有哪些, 该表是Memory引擎临时表 12345678910111213141516mysql&amp;gt; select * from character_sets;+--------------------+----------------------+-------------------">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-11-11T07:41:51.195Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mysql-default-database">
+<meta name="twitter:description" content="infomation_schema数据库CHARACTER_SETS表该表提供查询MySQL支持的可用字符集有哪些, 该表是Memory引擎临时表 12345678910111213141516mysql&amp;gt; select * from character_sets;+--------------------+----------------------+-------------------">
+
+
+
+
+
+
+  <link rel="canonical" href="http://codertang.com/2021/11/11/mysql-default-database/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>mysql-default-database | Tonny's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tonny's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">莫等闲, 白了少年头, 空悲切</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://codertang.com/2021/11/11/mysql-default-database/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tonny Yi">
+      <meta itemprop="description" content="Coding, Life, Zen">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tonny's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">mysql-default-database
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-11-11 14:31:48 / 修改时间：15:41:51" itemprop="dateCreated datePublished" datetime="2021-11-11T14:31:48+08:00">2021-11-11</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/mysql/" itemprop="url" rel="index"><span itemprop="name">mysql</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="infomation-schema数据库"><a href="#infomation-schema数据库" class="headerlink" title="infomation_schema数据库"></a>infomation_schema数据库</h1><h2 id="CHARACTER-SETS表"><a href="#CHARACTER-SETS表" class="headerlink" title="CHARACTER_SETS表"></a>CHARACTER_SETS表</h2><p>该表提供查询MySQL支持的可用字符集有哪些, 该表是Memory引擎临时表</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from character_sets;</span><br><span class="line">+--------------------+----------------------+---------------------------------+--------+</span><br><span class="line">| CHARACTER_SET_NAME | DEFAULT_COLLATE_NAME | DESCRIPTION                     | MAXLEN |</span><br><span class="line">+--------------------+----------------------+---------------------------------+--------+</span><br><span class="line">| big5               | big5_chinese_ci      | Big5 Traditional Chinese        |      2 |</span><br><span class="line">| latin1             | latin1_swedish_ci    | cp1252 West European            |      1 |</span><br><span class="line">| ascii              | ascii_general_ci     | US ASCII                        |      1 |</span><br><span class="line">| gb2312             | gb2312_chinese_ci    | GB2312 Simplified Chinese       |      2 |</span><br><span class="line">| gbk                | gbk_chinese_ci       | GBK Simplified Chinese          |      2 |</span><br><span class="line">| utf8               | utf8_general_ci      | UTF-8 Unicode                   |      3 |</span><br><span class="line">| latin7             | latin7_general_ci    | ISO 8859-13 Baltic              |      1 |</span><br><span class="line">| utf8mb4            | utf8mb4_general_ci   | UTF-8 Unicode                   |      4 |</span><br><span class="line">| gb18030            | gb18030_chinese_ci   | China National Standard GB18030 |      4 |</span><br><span class="line">...</span><br><span class="line">+--------------------+----------------------+---------------------------------+--------+</span><br><span class="line">41 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="字段含义"><a href="#字段含义" class="headerlink" title="字段含义"></a>字段含义</h3><ul>
+<li><strong>CHARACTER_SET_NAME</strong>: 字符集名称</li>
+<li><strong>DEFAULT_COLLATE_NAME</strong>: 字符集应对的默认校验规则</li>
+<li><strong>DESCRIPTION</strong>: 字符集描述信息</li>
+<li><strong>MAXLEN</strong>: 字符集单个字符占用的最大字节数</li>
+</ul>
+<h2 id="COLLATION-CHARACTER-SET-APPLICABILITY表"><a href="#COLLATION-CHARACTER-SET-APPLICABILITY表" class="headerlink" title="COLLATION_CHARACTER_SET_APPLICABILITY表"></a>COLLATION_CHARACTER_SET_APPLICABILITY表</h2><p>该表提供查询MySQL中某中字符集所适用的校对规则, 该表是Memory引擎临时表</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from collation_character_set_applicability;</span><br><span class="line">+--------------------------+--------------------+</span><br><span class="line">| COLLATION_NAME           | CHARACTER_SET_NAME |</span><br><span class="line">+--------------------------+--------------------+</span><br><span class="line">| gbk_chinese_ci           | gbk                |</span><br><span class="line">| gbk_bin                  | gbk                |</span><br><span class="line">| utf8_general_ci          | utf8               |</span><br><span class="line">| utf8_bin                 | utf8               |</span><br><span class="line">| utf8_unicode_ci          | utf8               |</span><br><span class="line">...</span><br><span class="line">| utf8_unicode_520_ci      | utf8               |</span><br><span class="line">| utf8_vietnamese_ci       | utf8               |</span><br><span class="line">| utf8mb4_general_ci       | utf8mb4            |</span><br><span class="line">| utf8mb4_bin              | utf8mb4            |</span><br><span class="line">| utf8mb4_unicode_ci       | utf8mb4            |</span><br><span class="line">...</span><br><span class="line">| utf8mb4_unicode_520_ci   | utf8mb4            |</span><br><span class="line">| utf8mb4_vietnamese_ci    | utf8mb4            |</span><br><span class="line">| gb18030_chinese_ci       | gb18030            |</span><br><span class="line">| gb18030_bin              | gb18030            |</span><br><span class="line">| gb18030_unicode_520_ci   | gb18030            |</span><br><span class="line">+--------------------------+--------------------+</span><br><span class="line">222 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="字段含义-1"><a href="#字段含义-1" class="headerlink" title="字段含义"></a>字段含义</h3><ul>
+<li><strong>COLLATION_NAME</strong>: 校对规则名称</li>
+<li><strong>CHARACTER_SET_NAME</strong>: 校对规则对应的字符集名称</li>
+</ul>
+<h2 id="COLLATIONS表"><a href="#COLLATIONS表" class="headerlink" title="COLLATIONS表"></a>COLLATIONS表</h2><p>该表提供查询MySQL支持的可用校对规则有哪些</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from COLLATIONS;</span><br><span class="line">+--------------------------+--------------------+-----+------------+-------------+---------+</span><br><span class="line">| COLLATION_NAME           | CHARACTER_SET_NAME | ID  | IS_DEFAULT | IS_COMPILED | SORTLEN |</span><br><span class="line">+--------------------------+--------------------+-----+------------+-------------+---------+</span><br><span class="line">...</span><br><span class="line">| utf8_general_ci          | utf8               |  33 | Yes        | Yes         |       1 |</span><br><span class="line">| utf8_bin                 | utf8               |  83 |            | Yes         |       1 |</span><br><span class="line">| utf8_unicode_ci          | utf8               | 192 |            | Yes         |       8 |</span><br><span class="line">...</span><br><span class="line">| utf8mb4_general_ci       | utf8mb4            |  45 | Yes        | Yes         |       1 |</span><br><span class="line">| utf8mb4_bin              | utf8mb4            |  46 |            | Yes         |       1 |</span><br><span class="line">| utf8mb4_unicode_ci       | utf8mb4            | 224 |            | Yes         |       8 |</span><br><span class="line">...</span><br><span class="line">+--------------------------+--------------------+-----+------------+-------------+---------+</span><br><span class="line">222 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="字段含义-2"><a href="#字段含义-2" class="headerlink" title="字段含义"></a>字段含义</h3><ul>
+<li><strong>COLLACTION_NAME</strong>: 校对规则名称</li>
+<li><strong>CHARACTER_SET_NAME</strong>: 校对规则对应的字符集名称</li>
+<li><strong>ID</strong>: 校对规则的ID号</li>
+<li><strong>IS_DEFAULT</strong>: 是否是字符集默认的校对规则</li>
+<li><strong>IS_COMPILED</strong>: 校对规则是否被编译进Server中, 不过不是Yes, 则该规则处于不可用状态</li>
+<li><strong>SORTLEN</strong>: 最大排序字节长度, 与字符集对应的字符串在排序时所占用的内存大小有关</li>
+</ul>
+<h2 id="COLUMN-PRIVILEGES表"><a href="#COLUMN-PRIVILEGES表" class="headerlink" title="COLUMN_PRIVILEGES表"></a>COLUMN_PRIVILEGES表</h2><p>该表提供查询关于列(字段), 表中的内容来自<code>mysql.column_priv</code>列权限表(需要针对一个表的列单独授权之后才会有内容)</p>
+<h3 id="字段含义-3"><a href="#字段含义-3" class="headerlink" title="字段含义"></a>字段含义</h3><ul>
+<li><p>GRANTEE：PRIVILEGE_TYPE 列值的权限对应的授予者(账户名)</p>
+</li>
+<li><p>TABLE_SCHEMA：PRIVILEGE_TYPE 列值的权限关联的表对应的库名</p>
+</li>
+<li><p>TABLE_NAME：PRIVILEGE_TYPE 列值的权限关联的表名</p>
+</li>
+<li><p>COLUMN_NAME：PRIVILEGE_TYPE 列值的权限关联的字段名</p>
+</li>
+<li><p>PRIVILEGE_TYPE：具体的列权限名称，注意：该字段值只显示一个权限名称，即，如果一个字段拥有多个可授予的列权限值，则在该表中会记录多行记录，每行PRIVILEGE_TYPE列值仅对应一个权限名称</p>
+</li>
+<li><p>IS_GRANTABLE：如果GRANTEE列值表示的授予者还同时拥有grant option权限，则该列值为YES，否则为NO\</p>
+</li>
+</ul>
+<p> 该表中的信息还可以通过show语句方式查询(select和show方式虽然都能查询该表中的列权限信息，但是查询的结果展示方式有所不同)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法</span></span><br><span class="line">SHOW GRANTS;</span><br><span class="line">SHOW GRANTS FOR CURRENT_USER;</span><br><span class="line">SHOW GRANTS FOR CURRENT_USER();</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例</span></span><br><span class="line">root@localhost : information_schema 09:39:10&gt; show grants <span class="keyword">for</span> <span class="string">'xx'</span>@<span class="string">'%'</span>;</span><br><span class="line">+-------------------------------------------------------------------------------+</span><br><span class="line">| Grants <span class="keyword">for</span> xx@%                                                              |</span><br><span class="line">+-------------------------------------------------------------------------------+</span><br><span class="line">| GRANT USAGE ON *.* TO <span class="string">'xx'</span>@<span class="string">'%'</span>                                                |</span><br><span class="line">| GRANT SELECT (id), INSERT (id), UPDATE (id) ON `sbtest`.`sbtest1` TO <span class="string">'xx'</span>@<span class="string">'%'</span> |</span><br><span class="line">+-------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<h2 id="COLUMNS表"><a href="#COLUMNS表" class="headerlink" title="COLUMNS表"></a>COLUMNS表</h2><p>该表提供查询表中的列(字段)信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from columns <span class="built_in">where</span> table_name = <span class="string">'test'</span> <span class="built_in">limit</span> 1 \G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">           TABLE_CATALOG: def</span><br><span class="line">            TABLE_SCHEMA: <span class="built_in">test</span></span><br><span class="line">              TABLE_NAME: <span class="built_in">test</span></span><br><span class="line">             COLUMN_NAME: id</span><br><span class="line">        ORDINAL_POSITION: 1</span><br><span class="line">          COLUMN_DEFAULT: NULL</span><br><span class="line">             IS_NULLABLE: NO</span><br><span class="line">               DATA_TYPE: int</span><br><span class="line">CHARACTER_MAXIMUM_LENGTH: NULL</span><br><span class="line">  CHARACTER_OCTET_LENGTH: NULL</span><br><span class="line">       NUMERIC_PRECISION: 10</span><br><span class="line">           NUMERIC_SCALE: 0</span><br><span class="line">      DATETIME_PRECISION: NULL</span><br><span class="line">      CHARACTER_SET_NAME: NULL</span><br><span class="line">          COLLATION_NAME: NULL</span><br><span class="line">             COLUMN_TYPE: int(11) unsigned</span><br><span class="line">              COLUMN_KEY: PRI</span><br><span class="line">                   EXTRA: auto_increment</span><br><span class="line">              PRIVILEGES: select,insert,update,references</span><br><span class="line">          COLUMN_COMMENT: </span><br><span class="line">   GENERATION_EXPRESSION: </span><br><span class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="字段含义-4"><a href="#字段含义-4" class="headerlink" title="字段含义"></a>字段含义</h3><ul>
+<li>TABLE_SCHEMA：显示列对应的库名</li>
+<li>TABLE_NAME：显示列对应的表名</li>
+<li>COLUMN_NAME：显示列名称</li>
+<li>ORDINAL_POSITION：显示表列在表中的列创建顺序</li>
+<li>COLUMN_DEFAULT：显示表列默认值</li>
+<li>IS_NULLABLE：显示表列是否带有NULL属性</li>
+<li>DATA_TYPE：显示列的数据类型，不包含列的数据类型定义的额外属性</li>
+<li>CHARACTER_MAXIMUM_LENGTH：显示字符类型字段的定义长度</li>
+<li>CHARACTER_OCTET_LENGTH：显示字符类型字段的定义长度对应的字节数，如果是单字节字符集，则该字段值与CHARACTER_MAXIMUM_LENGTH字段值相同(多字节字符集除外)</li>
+<li>NUMERIC_PRECISION：显示数字类型字段的精度（定义长度）</li>
+<li>NUMERIC_SCALE：显示数字类型字段的标度（小数位数）</li>
+<li>DATETIME_PRECISION：显示时间类型字段的精度（5.6版本之后，datetime时间类型字段在存储引擎层存储时都当作int类型处理，但存储时会比timestamp多一个字节）</li>
+<li>CHARACTER_SET_NAME：显示表列的字符集，如果使用SHOW FULL COLUMNS语句查看，那么可以从结果集的Collation列中看到字符集类型，例如：Collation值为latin1_swedish_ci，则该字符集就是latin1</li>
+<li>COLLATION_NAME：显示列的校对规则</li>
+<li>COLUMN_TYPE：显示表列的定义类型，包含列数据类型定义的额外属性（在show columns语句的结果集中该字段信息显示在Type列），例如：varchar(32)，该字段为 “MySQL extension” 列</li>
+<li>COLUMN_KEY：如果字段是索引列，则这里会显示出索引的类型</li>
+<li>EXTRA：显示生成列的类型，有效值为：VIRTUAL GENERATED或VIRTUAL STORED，该字段为 “MySQL extension” 列</li>
+<li>PRIVILEGES：显示列的可授予权限列表，未列出的权限无法使用grant语句授予</li>
+<li>COLUMN_COMMENT：显示列的注释信息</li>
+<li>GENERATION_EXPRESSION：显示生成列的计算表达式，该字段为 “MySQL extension” 列</li>
+</ul>
+<p>还可以通过<code>show columns</code>语句查询表的列信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show columns from test.test;</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| Field | Type             | Null | Key | Default | Extra          |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">| id    | int(11) unsigned | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| order | <span class="built_in">float</span>            | YES  |     | NULL    |                |</span><br><span class="line">+-------+------------------+------+-----+---------+----------------+</span><br><span class="line">2 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>查询某个表所有字段的可授予权限, 还可以使用<code>show full columns</code>语句</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show full columns from test.test;</span><br><span class="line">+-------+------------------+-----------+------+-----+---------+----------------+---------------------------------+---------+</span><br><span class="line">| Field | Type             | Collation | Null | Key | Default | Extra          | Privileges                      | Comment |</span><br><span class="line">+-------+------------------+-----------+------+-----+---------+----------------+---------------------------------+---------+</span><br><span class="line">| id    | int(11) unsigned | NULL      | NO   | PRI | NULL    | auto_increment | select,insert,update,references |         |</span><br><span class="line">| order | <span class="built_in">float</span>            | NULL      | YES  |     | NULL    |                | select,insert,update,references |         |</span><br><span class="line">+-------+------------------+-----------+------+-----+---------+----------------+---------------------------------+---------+</span><br><span class="line">2 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h2 id="ENGINES表"><a href="#ENGINES表" class="headerlink" title="ENGINES表"></a>ENGINES表</h2><p>该笔提供查询MySQL支持的引擎相关信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from engines;</span><br><span class="line">+--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span><br><span class="line">| ENGINE             | SUPPORT | COMMENT                                                        | TRANSACTIONS | XA   | SAVEPOINTS |</span><br><span class="line">+--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span><br><span class="line">| InnoDB             | DEFAULT | Supports transactions, row-level locking, and foreign keys     | YES          | YES  | YES        |</span><br><span class="line">| MRG_MYISAM         | YES     | Collection of identical MyISAM tables                          | NO           | NO   | NO         |</span><br><span class="line">| MEMORY             | YES     | Hash based, stored <span class="keyword">in</span> memory, useful <span class="keyword">for</span> temporary tables      | NO           | NO   | NO         |</span><br><span class="line">| BLACKHOLE          | YES     | /dev/null storage engine (anything you write to it disappears) | NO           | NO   | NO         |</span><br><span class="line">| MyISAM             | YES     | MyISAM storage engine                                          | NO           | NO   | NO         |</span><br><span class="line">| CSV                | YES     | CSV storage engine                                             | NO           | NO   | NO         |</span><br><span class="line">| ARCHIVE            | YES     | Archive storage engine                                         | NO           | NO   | NO         |</span><br><span class="line">| PERFORMANCE_SCHEMA | YES     | Performance Schema                                             | NO           | NO   | NO         |</span><br><span class="line">| FEDERATED          | NO      | Federated MySQL storage engine                                 | NULL         | NULL | NULL       |</span><br><span class="line">+--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span><br><span class="line">9 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="字段含义-5"><a href="#字段含义-5" class="headerlink" title="字段含义"></a>字段含义</h3><ul>
+<li>ENGINE：引擎名称</li>
+<li>SUPPORT：表示ENGINE字段显示的引擎在MySQL Server中是否支持</li>
+<li>COMMENT：表示ENGINE字段显示的引擎相关的解释信息，例如：”Supports transactions, row-level locking, and foreign keys”，表示支持事务、支持行级锁，支持外键</li>
+<li>TRANSACTIONS：表示ENGINE字段显示的引擎是否支持事务</li>
+<li>XA：表示ENGINE字段显示的引擎是否支持XA事务</li>
+<li>SAVEPOINTS：表示ENGINE字段显示的引擎是否支持事务保存点</li>
+</ul>
+<p><strong>还可以通过<code>show engines;</code>语句查询</strong></p>
+<h2 id="EVENTS表"><a href="#EVENTS表" class="headerlink" title="EVENTS表"></a>EVENTS表</h2><p>该表提供查询计划任务事件的相关信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 创建统计事件</span></span><br><span class="line">DELIMITER $$</span><br><span class="line">CREATE EVENT test_event</span><br><span class="line">    -&gt;    ON SCHEDULE</span><br><span class="line">    -&gt;      EVERY 1 DAY</span><br><span class="line">    -&gt;    COMMENT <span class="string">'每天统计sbtest1表中的最大自增值'</span></span><br><span class="line">    -&gt;    DO</span><br><span class="line">    -&gt;      BEGIN</span><br><span class="line">    -&gt; insert into test_table select max(id) from sbtest1;</span><br><span class="line">    -&gt;      END $$</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">DELIMITER ;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 然后在events表中查询事件信息</span></span><br><span class="line">select * from information_schema.events\G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">      EVENT_CATALOG: def</span><br><span class="line">        EVENT_SCHEMA: sbtest</span><br><span class="line">          EVENT_NAME: test_event</span><br><span class="line">            DEFINER: root@%</span><br><span class="line">          TIME_ZONE: +08:00</span><br><span class="line">          EVENT_BODY: SQL</span><br><span class="line">    EVENT_DEFINITION: BEGIN</span><br><span class="line">insert into test_table select max(id) from sbtest1;</span><br><span class="line">      END</span><br><span class="line">          EVENT_TYPE: RECURRING</span><br><span class="line">          EXECUTE_AT: NULL</span><br><span class="line">      INTERVAL_VALUE: 1</span><br><span class="line">      INTERVAL_FIELD: DAY</span><br><span class="line">            SQL_MODE: ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION</span><br><span class="line">              STARTS: 2018-01-21 17:05:37</span><br><span class="line">                ENDS: NULL</span><br><span class="line">              STATUS: ENABLED</span><br><span class="line">      ON_COMPLETION: NOT PRESERVE</span><br><span class="line">            CREATED: 2018-01-21 17:05:37</span><br><span class="line">        LAST_ALTERED: 2018-01-21 17:05:37</span><br><span class="line">      LAST_EXECUTED: NULL</span><br><span class="line">      EVENT_COMMENT: 每天统计sbtest1表中的最大自增值</span><br><span class="line">          ORIGINATOR: 3306111</span><br><span class="line">CHARACTER_SET_CLIENT: utf8</span><br><span class="line">COLLATION_CONNECTION: utf8_general_ci</span><br><span class="line">  DATABASE_COLLATION: utf8_bin</span><br><span class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="字段含义-6"><a href="#字段含义-6" class="headerlink" title="字段含义"></a>字段含义</h3><ul>
+<li>EVENT_CATALOG：此列的值始终为def</li>
+<li>EVENT_SCHEMA：此事件所属的数据库名称</li>
+<li>EVENT_NAME：事件的名称</li>
+<li>DEFINER：创建事件的账户名称</li>
+<li>TIME_ZONE：事件的时区，是用于调度事件的时区，且在事件执行时生效。默认值为SYSTEM，代表使用system_time_zone系统变量设置的时区</li>
+<li>EVENT_BODY：用于事件的DO子句中的语句的语言类型，在MySQL 5.7中，总是”SQL”。注意：不要将此列值与早期MySQL版本中存在的同名列（该列先更名为EVENT_DEFINITION列）列混淆</li>
+<li>EVENT_DEFINITION：构成事件的DO子句的SQL语句的文本。即被事件执行的SQL语句</li>
+<li>EVENT_TYPE：事件重复类型，一次（transient）或重复（RECURRING）</li>
+<li>EXECUTE_AT：对于一次性事件，该字段表示创建事件的CREATE EVENT语句中、或修改事件的最后一个ALTER EVENT语句的AT子句中指定的DATETIME值（例如，如果事件是使用”ON SCHEDULE AT CURRENT_TIMESTAMP +’1：6’DAY_HOUR”子句创建，且事件在2018-01-21 14:05:30创建的，则此列中显示的值为’2018-01-22 20:05:30’，表示这个一次性事件将在创建时间2018-01-21 14:05:30的基础上再过一天+6小时之后执行）。如果事件的计时由EVERY子句而不是AT子句确定（则表示该事件是一个重复事件），则此列的值为NULL。</li>
+<li>INTERVAL_VALUE：对于重复事件，此列包含事件的EVERY子句中的数字部分。但对于一次性事件，此列为NULL。</li>
+<li>INTERVAL_FIELD：对于重复事件，此列包含EVERY子句的单位部分，用于管理事件的时间。此列有效值可能包含“YEAR”，“QUARTER”，“DAY”等值。但对于一次性事件，此列为NULL。</li>
+<li>SQL_MODE：创建或更改事件时MySQL Server的SQL模式</li>
+<li>STARTS：对于其定义中包含STARTS子句的重复事件，此列包含相应的DATETIME值。与EXECUTE_AT列类似，此值可解析定义语句中所使用的任何表达式并计算出结果值存放在该列中。如果没有STARTS子句，则此列为NULL</li>
+<li>ENDS：对于其定义中包含ENDS子句的重复事件，此列包含相应的DATETIME值。与EXECUTE_AT列类似，此值可解析定义语句中所使用的任何表达式并计算出结果值存放在该列中。如果没有ENDS子句，则此列为NULL</li>
+<li>STATUS：该列包含三个有效值，ENABLED、DISABLED、SLAVESIDE_DISABLED</li>
+</ul>
+<blockquote>
+<p>* SLAVESIDE_DISABLED：表示事件是通过主备复制中的binlog重放方式在从库上创建的，事件运行状态在从库上被关闭</p>
+</blockquote>
+<ul>
+<li>ON_COMPLETION：该列包含两个有效值，PRESVEVE、NOT PRESERVE</li>
+<li>CREATED：创建事件的日期和时间。是一个TIMESTAMP值</li>
+<li>LAST_ALTERED：上次修改事件的日期和时间。是一个TIMESTAMP值。如果该事件自创建以来从未修改，则此列与CREATED列值相同</li>
+<li>LAST_EXECUTED：事件上次执行的日期和时间。是一个 DATETIME值。如果事件从未执行，则此列值为NULL。LAST_EXECUTED表示事件是从什么时候开始的。因此，ENDS列的时间值总是大于LAST_EXECUTED</li>
+<li>EVENT_COMMENT：事件的注释文本信息，如果事件没有注释信息，则该字段为空串</li>
+<li>ORIGINATOR：创建事件的MySQL Server的server id，用于复制。默认值为0</li>
+<li>CHARACTER_SET_CLIENT：创建事件时的character_set_client系统变量的会话值</li>
+<li>COLLATION_CONNECTION：创建事件时的collation_connection系统变量的会话值</li>
+<li>DATABASE_COLLATION：与事件关联的数据库的排序规则</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Tonny Yi</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://codertang.com/2021/11/11/mysql-default-database/" title="mysql-default-database">http://codertang.com/2021/11/11/mysql-default-database/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="external nofollow" target="_blank">CC BY-NC 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+            <a href="/tags/schema/" rel="tag"># schema</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/11/05/python-snippet/" rel="next" title="python代码片段">
+                <i class="fa fa-chevron-left"></i> python代码片段
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/12/07/springboot-prometheus-grafana/" rel="prev" title="springboot应用基于prometheus监控自定义指标">
+                springboot应用基于prometheus监控自定义指标 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Tonny Yi">
+            
+              <p class="site-author-name" itemprop="name">Tonny Yi</p>
+              <p class="site-description motion-element" itemprop="description">Coding, Life, Zen</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tonnyyi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:tonnyemails@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#infomation-schema数据库"><span class="nav-number">1.</span> <span class="nav-text">infomation_schema数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CHARACTER-SETS表"><span class="nav-number">1.1.</span> <span class="nav-text">CHARACTER_SETS表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字段含义"><span class="nav-number">1.1.1.</span> <span class="nav-text">字段含义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#COLLATION-CHARACTER-SET-APPLICABILITY表"><span class="nav-number">1.2.</span> <span class="nav-text">COLLATION_CHARACTER_SET_APPLICABILITY表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字段含义-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">字段含义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#COLLATIONS表"><span class="nav-number">1.3.</span> <span class="nav-text">COLLATIONS表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字段含义-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">字段含义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#COLUMN-PRIVILEGES表"><span class="nav-number">1.4.</span> <span class="nav-text">COLUMN_PRIVILEGES表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字段含义-3"><span class="nav-number">1.4.1.</span> <span class="nav-text">字段含义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#COLUMNS表"><span class="nav-number">1.5.</span> <span class="nav-text">COLUMNS表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字段含义-4"><span class="nav-number">1.5.1.</span> <span class="nav-text">字段含义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ENGINES表"><span class="nav-number">1.6.</span> <span class="nav-text">ENGINES表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字段含义-5"><span class="nav-number">1.6.1.</span> <span class="nav-text">字段含义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EVENTS表"><span class="nav-number">1.7.</span> <span class="nav-text">EVENTS表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字段含义-6"><span class="nav-number">1.7.1.</span> <span class="nav-text">字段含义</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tonny Yi</span>
+
+  
+
+  
+</div>
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>

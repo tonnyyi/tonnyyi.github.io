@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/Han/3.3.0/han.min.css">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="系统开发中需要统计很多应用指标, 比如: 接口请求QPS, 接口响应时间统计, 接口耗时发布等. SpringBoot自带的spring-actuator中集成了Micrometer进行度量统计, 然后我们再用Promethues收集存储指标后, 在Grafana中以图标展示. 1. Micrometer1.1 Micrometer提供的度量类库在Micrometer中, Meter接口是用于收集">
+<meta name="keywords" content="springboot,prometheus">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springboot应用基于prometheus监控自定义指标">
+<meta property="og:url" content="http://codertang.com/2021/12/07/springboot-prometheus-grafana/index.html">
+<meta property="og:site_name" content="Tonny&#39;s Blog">
+<meta property="og:description" content="系统开发中需要统计很多应用指标, 比如: 接口请求QPS, 接口响应时间统计, 接口耗时发布等. SpringBoot自带的spring-actuator中集成了Micrometer进行度量统计, 然后我们再用Promethues收集存储指标后, 在Grafana中以图标展示. 1. Micrometer1.1 Micrometer提供的度量类库在Micrometer中, Meter接口是用于收集">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-12-07T08:37:49.108Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="springboot应用基于prometheus监控自定义指标">
+<meta name="twitter:description" content="系统开发中需要统计很多应用指标, 比如: 接口请求QPS, 接口响应时间统计, 接口耗时发布等. SpringBoot自带的spring-actuator中集成了Micrometer进行度量统计, 然后我们再用Promethues收集存储指标后, 在Grafana中以图标展示. 1. Micrometer1.1 Micrometer提供的度量类库在Micrometer中, Meter接口是用于收集">
+
+
+
+
+
+
+  <link rel="canonical" href="http://codertang.com/2021/12/07/springboot-prometheus-grafana/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>springboot应用基于prometheus监控自定义指标 | Tonny's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tonny's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">莫等闲, 白了少年头, 空悲切</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://codertang.com/2021/12/07/springboot-prometheus-grafana/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tonny Yi">
+      <meta itemprop="description" content="Coding, Life, Zen">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tonny's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">springboot应用基于prometheus监控自定义指标
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-12-07 10:07:10 / 修改时间：16:37:49" itemprop="dateCreated datePublished" datetime="2021-12-07T10:07:10+08:00">2021-12-07</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/monitor/" itemprop="url" rel="index"><span itemprop="name">monitor</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>系统开发中需要统计很多应用指标, 比如: 接口请求QPS, 接口响应时间统计, 接口耗时发布等. SpringBoot自带的<code>spring-actuator</code>中集成了<code>Micrometer</code>进行度量统计, 然后我们再用<code>Promethues</code>收集存储指标后, 在<code>Grafana</code>中以图标展示.</p>
+<h1 id="1-Micrometer"><a href="#1-Micrometer" class="headerlink" title="1. Micrometer"></a>1. Micrometer</h1><h2 id="1-1-Micrometer提供的度量类库"><a href="#1-1-Micrometer提供的度量类库" class="headerlink" title="1.1 Micrometer提供的度量类库"></a>1.1 Micrometer提供的度量类库</h2><p>在<code>Micrometer</code>中, <code>Meter</code>接口是用于收集应用中度量数据的, 它是由<code>MeterRegistry</code>创建和保存的, 可以将<code>MeterRegistry</code>理解为<code>Meter</code>的工厂和缓存中心. 一般而言, 每个JVM应用在使用<code>Micrometer</code>时都需要创建一个<code>MeterRegistry</code>的具体实现. </p>
+<p><code>MeterRegistry</code>在<code>Micrometer</code>中是一个抽象类, 主要实现包括:</p>
+<ul>
+<li><code>SimpleMeterRegistry</code> : 每个Meter的最新数据可以收集到<code>SimpleMeterRegistry</code>实例中，但是这些数据不会发布到其他系统，也就是说数据是位于应用的内存中的。<strong>适合调试的时候使用</strong></li>
+<li><code>CompositeMeterRegistry</code>: 多个<code>MeterRegistry</code>的聚合</li>
+<li>全局的<code>MeterRegistry</code>: 工厂类<code>io.micrometer.core.instrument.Metrics</code>中持有一个静态final类型的<code>CompositeMeterRegistry</code>实例</li>
+</ul>
+<h2 id="1-2-Meter"><a href="#1-2-Meter" class="headerlink" title="1.2 Meter"></a>1.2 Meter</h2><h3 id="Counter"><a href="#Counter" class="headerlink" title="Counter"></a>Counter</h3><p><code>Counter</code>是一种比较简单的<code>Meter</code>, 它的值<strong>只能单调递增</strong>. 可以用来统计比如: 接口调用次数, 订单总量等. 使用实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MeterRegistry meterRegistry = <span class="keyword">new</span> SimpleMeterRegistry();</span><br><span class="line">Counter counter = meterRegistry.counter(<span class="string">"http.request"</span>, <span class="string">"createOrder"</span>, <span class="string">"/order/create"</span>);</span><br><span class="line">counter.increment();</span><br><span class="line">System.out.println(counter.measure()); <span class="comment">// [Measurement&#123;statistic='COUNT', value=1.0&#125;]</span></span><br></pre></td></tr></table></figure>
+<p>通过Tag可以区分不同的场景，对于下单，可以使用不同的Tag标记不同的业务来源或者是按日期划分，对于Http请求总量记录，可以使用Tag区分不同的URL。用下单业务举个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//实体</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Order</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String orderId;</span><br><span class="line">    <span class="keyword">private</span> Integer amount;</span><br><span class="line">    <span class="keyword">private</span> String channel;</span><br><span class="line">    <span class="keyword">private</span> LocalDateTime createTime;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CounterMain</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(<span class="string">"yyyy-MM-dd"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">            Metrics.addRegistry(<span class="keyword">new</span> SimpleMeterRegistry());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">            Order order1 = <span class="keyword">new</span> Order();</span><br><span class="line">            order1.setOrderId(<span class="string">"ORDER_ID_1"</span>);</span><br><span class="line">            order1.setAmount(<span class="number">100</span>);</span><br><span class="line">            order1.setChannel(<span class="string">"CHANNEL_A"</span>);</span><br><span class="line">            order1.setCreateTime(LocalDateTime.now());</span><br><span class="line">            createOrder(order1);</span><br><span class="line">            Order order2 = <span class="keyword">new</span> Order();</span><br><span class="line">            order2.setOrderId(<span class="string">"ORDER_ID_2"</span>);</span><br><span class="line">            order2.setAmount(<span class="number">200</span>);</span><br><span class="line">            order2.setChannel(<span class="string">"CHANNEL_B"</span>);</span><br><span class="line">            order2.setCreateTime(LocalDateTime.now());</span><br><span class="line">            createOrder(order2);</span><br><span class="line">            <span class="comment">// 通过Micrometer的Search接口查找指标数据</span></span><br><span class="line">            Search.in(Metrics.globalRegistry).meters().forEach(each -&gt; &#123;</span><br><span class="line">                StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">                builder.append(<span class="string">"name:"</span>)</span><br><span class="line">                        .append(each.getId().getName())</span><br><span class="line">                        .append(<span class="string">",tags:"</span>)</span><br><span class="line">                        .append(each.getId().getTags())</span><br><span class="line">                        .append(<span class="string">",type:"</span>).append(each.getId().getType())</span><br><span class="line">                        .append(<span class="string">",value:"</span>).append(each.measure());</span><br><span class="line">                System.out.println(builder.toString());</span><br><span class="line">            &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">createOrder</span><span class="params">(Order order)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//忽略订单入库等操作</span></span><br><span class="line">        Metrics.counter(<span class="string">"order.create"</span>,</span><br><span class="line">                <span class="string">"channel"</span>, order.getChannel(),</span><br><span class="line">                <span class="string">"createTime"</span>, FORMATTER.format(order.getCreateTime())).increment();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>控制台输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">name:order.create,tags:[tag(channel=CHANNEL_A), tag(createTime=2018-11-10)],type:COUNTER,value:[Measurement&#123;statistic=&apos;COUNT&apos;, value=1.0&#125;]</span><br><span class="line">name:order.create,tags:[tag(channel=CHANNEL_B), tag(createTime=2018-11-10)],type:COUNTER,value:[Measurement&#123;statistic=&apos;COUNT&apos;, value=1.0&#125;]</span><br></pre></td></tr></table></figure>
+<p>上面的例子是使用全局静态方法工厂类Metrics去构造Counter实例，实际上，<code>io.micrometer.core.instrument.Counter</code>接口提供了一个内部建造器类<code>Counter.Builder</code>去实例化<code>Counter</code>，Counter.Builder的使用方式如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    Counter counter = Counter.builder(<span class="string">"name"</span>)  <span class="comment">//名称</span></span><br><span class="line">        .baseUnit(<span class="string">"unit"</span>) <span class="comment">//基础单位</span></span><br><span class="line">        .description(<span class="string">"desc"</span>) <span class="comment">//描述</span></span><br><span class="line">        .tag(<span class="string">"tagKey"</span>, <span class="string">"tagValue"</span>)  <span class="comment">//标签</span></span><br><span class="line">        .register(<span class="keyword">new</span> SimpleMeterRegistry());<span class="comment">//绑定的MeterRegistry</span></span><br><span class="line">    counter.increment();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="FunctionCounter"><a href="#FunctionCounter" class="headerlink" title="FunctionCounter"></a>FunctionCounter</h3><p><code>FunctionCounter</code>是<code>Counter</code>的特化类型, 它把计数器值增加的动作抽象成JDK1.8的接口类型<code>ToDoubleFunction</code>. 它的使用场景与<code>Counter</code>一致, 下面介绍下其语法:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    MeterRegistry registry = <span class="keyword">new</span> SimpleMeterRegistry();</span><br><span class="line">    AtomicInteger n = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">//这里ToDoubleFunction匿名实现其实可以使用Lambda表达式简化为AtomicInteger::get</span></span><br><span class="line">    FunctionCounter.builder(<span class="string">"functionCounter"</span>, n, <span class="keyword">new</span> ToDoubleFunction&lt;AtomicInteger&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">applyAsDouble</span><span class="params">(AtomicInteger value)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> value.get();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).baseUnit(<span class="string">"function"</span>)</span><br><span class="line">        .description(<span class="string">"functionCounter"</span>)</span><br><span class="line">        .tag(<span class="string">"createOrder"</span>, <span class="string">"CHANNEL-A"</span>)</span><br><span class="line">        .register(registry);</span><br><span class="line">    <span class="comment">//下面模拟三次计数      </span></span><br><span class="line">    n.incrementAndGet();</span><br><span class="line">    n.incrementAndGet();</span><br><span class="line">    n.incrementAndGet();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>FunctionCounter</code>使用的一个明显的好处是，我们不需要感知FunctionCounter实例的存在，实际上我们只需要操作作为FunctionCounter实例构建元素之一的AtomicInteger实例即可，这种接口的设计方式在很多框架里面都可以看到。</p>
+<h3 id="Timer"><a href="#Timer" class="headerlink" title="Timer"></a>Timer</h3><p><code>Timer</code>适用于记录耗时比较短的事件的执行时间, 通过时间发布展示事件的序列和发生频率. 所有的<code>Timer</code>实现至少记录了发生的事件的数量和这些事件的总耗时, 从而生成一个时间序列. <code>Timer</code>的基本单位基于服务端的指标而定, 但是实际上我们不需要过于关注Timer的基本单位，因为Micrometer在存储生成的时间序列的时候会自动选择适当的基本单位。Timer接口提供的常用方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Timer</span> <span class="keyword">extends</span> <span class="title">Meter</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">record</span><span class="params">(<span class="keyword">long</span> var1, TimeUnit var3)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">record</span><span class="params">(Duration duration)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.record(duration.toNanos(), TimeUnit.NANOSECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &lt;T&gt; <span class="function">T <span class="title">record</span><span class="params">(Supplier&lt;T&gt; var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    &lt;T&gt; <span class="function">T <span class="title">recordCallable</span><span class="params">(Callable&lt;T&gt; var1)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">record</span><span class="params">(Runnable var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Runnable <span class="title">wrap</span><span class="params">(Runnable f)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> () -&gt; &#123;</span><br><span class="line">            <span class="keyword">this</span>.record(f);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;T&gt; <span class="function">Callable&lt;T&gt; <span class="title">wrap</span><span class="params">(Callable&lt;T&gt; f)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> () -&gt; &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.recordCallable(f);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="title">count</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">totalTime</span><span class="params">(TimeUnit var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">double</span> <span class="title">mean</span><span class="params">(TimeUnit unit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.count() == <span class="number">0L</span> ? <span class="number">0.0</span>D : <span class="keyword">this</span>.totalTime(unit) / (<span class="keyword">double</span>)<span class="keyword">this</span>.count();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">max</span><span class="params">(TimeUnit var1)</span></span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用下单业务做个例子:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TimerMain</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Random R = <span class="keyword">new</span> Random();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> &#123;</span><br><span class="line">            Metrics.addRegistry(<span class="keyword">new</span> SimpleMeterRegistry());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">            Order order1 = <span class="keyword">new</span> Order();</span><br><span class="line">            order1.setOrderId(<span class="string">"ORDER_ID_1"</span>);</span><br><span class="line">            order1.setAmount(<span class="number">100</span>);</span><br><span class="line">            order1.setChannel(<span class="string">"CHANNEL_A"</span>);</span><br><span class="line">            order1.setCreateTime(LocalDateTime.now());</span><br><span class="line">            Timer timer = Metrics.timer(<span class="string">"timer"</span>, <span class="string">"createOrder"</span>, <span class="string">"cost"</span>);</span><br><span class="line">            timer.record(() -&gt; createOrder(order1));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">createOrder</span><span class="params">(Order order)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                TimeUnit.SECONDS.sleep(R.nextInt(<span class="number">5</span>)); <span class="comment">//模拟方法耗时</span></span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                <span class="comment">//no-op</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在实际生产环境中，可以通过spring-aop把记录方法耗时的逻辑抽象到一个切面中，这样就能减少不必要的冗余的模板代码。上面的例子是通过Mertics构造Timer实例，实际上也可以使用Builder构造：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">MeterRegistry registry = ...</span><br><span class="line">Timer timer = Timer</span><br><span class="line">    .builder(<span class="string">"my.timer"</span>)</span><br><span class="line">    .description(<span class="string">"a description of what this timer does"</span>) <span class="comment">// 可选</span></span><br><span class="line">    .tags(<span class="string">"region"</span>, <span class="string">"test"</span>) <span class="comment">// 可选</span></span><br><span class="line">    .register(registry);</span><br></pre></td></tr></table></figure>
+<p>另外，Timer的使用还可以基于它的内部类Timer.Sample，通过start和stop两个方法记录两者之间的逻辑的执行耗时。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Timer.Sample sample = Timer.start(registry);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这里做业务逻辑</span></span><br><span class="line">Response response = ...</span><br><span class="line"></span><br><span class="line">sample.stop(registry.timer(<span class="string">"my.timer"</span>, <span class="string">"response"</span>, response.status()));</span><br></pre></td></tr></table></figure>
+<h3 id="FunctionTimer"><a href="#FunctionTimer" class="headerlink" title="FunctionTimer"></a>FunctionTimer</h3><p><code>FunctionTimer</code>是<code>Timer</code>的特化类型, 它需要两个函数:一个用于计数, 一个用于统计总耗时. 它的构造器方法入参如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">FunctionTimer</span> <span class="keyword">extends</span> <span class="title">Meter</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Builder&lt;T&gt; <span class="title">builder</span><span class="params">(String name, T obj, ToLongFunction&lt;T&gt; countFunction,</span></span></span><br><span class="line"><span class="function"><span class="params">                                  ToDoubleFunction&lt;T&gt; totalTimeFunction,</span></span></span><br><span class="line"><span class="function"><span class="params">                                  TimeUnit totalTimeFunctionUnit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Builder&lt;&gt;(name, obj, countFunction, totalTimeFunction, totalTimeFunctionUnit);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单的使用方式如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="comment">//这个是为了满足参数,暂时不需要理会</span></span><br><span class="line">    Object holder = <span class="keyword">new</span> Object();</span><br><span class="line">    AtomicLong totalTimeNanos = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</span><br><span class="line">    AtomicLong totalCount = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">// 注意总时间的单位</span></span><br><span class="line">    FunctionTimer.builder(<span class="string">"functionTimer"</span>, holder, p -&gt; totalCount.get(), </span><br><span class="line">                          p -&gt; totalTimeNanos.get(), TimeUnit.NANOSECONDS)</span><br><span class="line">        .register(<span class="keyword">new</span> SimpleMeterRegistry());</span><br><span class="line">    totalTimeNanos.addAndGet(<span class="number">10000000</span>);</span><br><span class="line">    totalCount.incrementAndGet();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="LongTaskTimer"><a href="#LongTaskTimer" class="headerlink" title="LongTaskTimer"></a>LongTaskTimer</h3><p><code>LongTaskTimer</code>也是<code>Timer</code>的一种特化类型, 主要用于记录长时间执行的任务的持续时间. 在Spring中可以简单地使用@Scheduled和@Timed注解，基于spring-aop完成定时调度任务的总耗时记录：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Timed</span>(value = <span class="string">"aws.scrape"</span>, longTask = <span class="keyword">true</span>)</span><br><span class="line"><span class="meta">@Scheduled</span>(fixedDelay = <span class="number">360000</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">scrapeResources</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//这里做相对耗时的业务逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以手动使用<code>LongTaskTimer</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    MeterRegistry meterRegistry = <span class="keyword">new</span> SimpleMeterRegistry();</span><br><span class="line">    LongTaskTimer longTaskTimer = meterRegistry.more().longTaskTimer(<span class="string">"longTaskTimer"</span>);</span><br><span class="line">    longTaskTimer.record(() -&gt; &#123;</span><br><span class="line">        <span class="comment">//这里编写Task的逻辑</span></span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//或者这样</span></span><br><span class="line">    Metrics.more().longTaskTimer(<span class="string">"longTaskTimer"</span>).record(()-&gt; &#123;</span><br><span class="line">        <span class="comment">//这里编写Task的逻辑</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Gauge"><a href="#Gauge" class="headerlink" title="Gauge"></a>Gauge</h3><p><code>Gauge</code>是用来记录可以上下浮动的单数值度量<code>Meter</code>, 测量值用<code>ToDoubleFunction</code>参数的返回值, 如当前的内存使用情况, 队列中的消息数量等. Gauge一般用于监测有自然上界的事件或者任务，而Counter一般使用于无自然上界的事件或者任务的监测，所以像Http请求总量计数应该使用Counter而非Gauge。 <code>MeterRegistry</code>中提供了一些便于构建用于观察数值、函数、集合和映射的Gauge相关的方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = registry.gauge(<span class="string">"listGauge"</span>, Collections.emptyList(), <span class="keyword">new</span> ArrayList&lt;&gt;(), List::size); </span><br><span class="line">List&lt;String&gt; list2 = registry.gaugeCollectionSize(<span class="string">"listSize2"</span>, Tags.empty(), <span class="keyword">new</span> ArrayList&lt;&gt;()); </span><br><span class="line">Map&lt;String, Integer&gt; map = registry.gaugeMapSize(<span class="string">"mapGauge"</span>, Tags.empty(), <span class="keyword">new</span> HashMap&lt;&gt;());</span><br></pre></td></tr></table></figure>
+<p>上面的三个方法通过<code>MeterRegistry</code>构建Gauge并且返回了集合或者映射实例，使用这些集合或者映射实例就能在其size变化过程中记录这个变更值。更重要的优点是，我们不需要感知Gauge接口的存在，只需要像平时一样使用集合或者映射实例就可以了。此外，Gauge还支持<code>java.lang.Number</code>的子类，<code>java.util.concurrent.atomic</code>包中的<code>AtomicInteger</code>和<code>AtomicLong</code>，还有Guava提供的<code>AtomicDouble</code>:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AtomicInteger n = registry.gauge(<span class="string">"numberGauge"</span>, <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>));</span><br><span class="line">n.set(<span class="number">1</span>);</span><br><span class="line">n.set(<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+<p>除了使用MeterRegistry创建Gauge之外，还可以使用建造器流式创建：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//一般我们不需要操作Gauge实例</span></span><br><span class="line">Gauge gauge = Gauge</span><br><span class="line">    .builder(<span class="string">"gauge"</span>, myObj, myObj::gaugeValue)</span><br><span class="line">    .description(<span class="string">"a description of what this gauge does"</span>) <span class="comment">// 可选</span></span><br><span class="line">    .tags(<span class="string">"region"</span>, <span class="string">"test"</span>) <span class="comment">// 可选</span></span><br><span class="line">    .register(registry);</span><br></pre></td></tr></table></figure>
+<p>举个相对实际的例子，假设我们需要对登录后的用户发送一条<a href="https://cloud.tencent.com/product/sms?from=10680" target="_blank" rel="noopener">短信</a>或者推送，做法是消息先投放到一个阻塞队列，再由一个线程消费消息进行其他操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> MeterRegistry REGISTRY = <span class="keyword">new</span> SimpleMeterRegistry();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> BlockingQueue&lt;Message&gt; QUEUE = <span class="keyword">new</span> ArrayBlockingQueue&lt;&gt;(<span class="number">500</span>);</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> BlockingQueue&lt;Message&gt; REAL_QUEUE;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">    REAL_QUEUE = REGISTRY.gauge(<span class="string">"messageGauge"</span>, QUEUE, Collection::size);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    consume();</span><br><span class="line">    Message message = <span class="keyword">new</span> Message();</span><br><span class="line">    message.setUserId(<span class="number">1L</span>);</span><br><span class="line">    message.setContent(<span class="string">"content"</span>);</span><br><span class="line">    REAL_QUEUE.put(message);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">consume</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Message message = REAL_QUEUE.take();</span><br><span class="line">                <span class="comment">//handle message</span></span><br><span class="line">                System.out.println(message);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                <span class="comment">//no-op</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="TimeGauge"><a href="#TimeGauge" class="headerlink" title="TimeGauge"></a>TimeGauge</h3><p><code>TimeGauge</code>是<code>Gauge</code>的特化类型, 相比<code>Gauge</code>, 它的构造器中多了一个<code>TimeUnit</code>类型的参数, 用于指定<code>ToDoubleFunction</code>入参的时间单位. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> SimpleMeterRegistry REGISTRY = <span class="keyword">new</span> SimpleMeterRegistry();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    AtomicInteger count = <span class="keyword">new</span> AtomicInteger();</span><br><span class="line">    TimeGauge.Builder&lt;AtomicInteger&gt; timeGauge = TimeGauge.builder(<span class="string">"timeGauge"</span>, count,</span><br><span class="line">                                                                   TimeUnit.SECONDS, AtomicInteger::get);</span><br><span class="line">    timeGauge.register(R);</span><br><span class="line">    count.addAndGet(<span class="number">10086</span>);</span><br><span class="line">    print();</span><br><span class="line">    count.set(<span class="number">1</span>);</span><br><span class="line">    print();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    Search.in(REGISTRY).meters().forEach(each -&gt; &#123;</span><br><span class="line">        StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        builder.append(<span class="string">"name:"</span>)</span><br><span class="line">            .append(each.getId().getName())</span><br><span class="line">            .append(<span class="string">",tags:"</span>)</span><br><span class="line">            .append(each.getId().getTags())</span><br><span class="line">            .append(<span class="string">",type:"</span>).append(each.getId().getType())</span><br><span class="line">            .append(<span class="string">",value:"</span>).append(each.measure());</span><br><span class="line">        System.out.println(builder.toString());</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>控制台输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">name:timeGauge,tags:[],type:GAUGE,value:[Measurement&#123;statistic=&apos;VALUE&apos;, value=10086.0&#125;]</span><br><span class="line">name:timeGauge,tags:[],type:GAUGE,value:[Measurement&#123;statistic=&apos;VALUE&apos;, value=1.0&#125;]</span><br></pre></td></tr></table></figure>
+<h3 id="DistributionSummary"><a href="#DistributionSummary" class="headerlink" title="DistributionSummary"></a>DistributionSummary</h3><p><code>Summary</code>主要用于跟踪事件的发布, 使用方式与<code>Timer</code>类型, 但是它的记录值并不依赖与时间单位. 常见的场景: 记录请求的有效负载大小. 使用<code>MeterRegistry</code>创建<code>DistributionSummary</code>的方式如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DistributionSummary summary = registry.summary(<span class="string">"response.size"</span>);</span><br></pre></td></tr></table></figure>
+<p>使用构造器流式创建:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DistributionSummary summary = DistributionSummary</span><br><span class="line">    .builder(<span class="string">"response.size"</span>)</span><br><span class="line">    .description(<span class="string">"a description of what this summary does"</span>) <span class="comment">// 可选</span></span><br><span class="line">    .baseUnit(<span class="string">"bytes"</span>) <span class="comment">// 可选</span></span><br><span class="line">    .tags(<span class="string">"region"</span>, <span class="string">"test"</span>) <span class="comment">// 可选</span></span><br><span class="line">    .scale(<span class="number">100</span>) <span class="comment">// 可选</span></span><br><span class="line">    .register(registry);</span><br></pre></td></tr></table></figure>
+<p>使用例子:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> DistributionSummary SUMMARY  = DistributionSummary.builder(<span class="string">"cacheHitPercent"</span>)</span><br><span class="line">    .register(<span class="keyword">new</span> SimpleMeterRegistry());</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> LoadingCache&lt;String, String&gt; CACHE = CacheBuilder.newBuilder()</span><br><span class="line">    .maximumSize(<span class="number">1000</span>)</span><br><span class="line">    .recordStats()</span><br><span class="line">    .expireAfterWrite(<span class="number">60</span>, TimeUnit.SECONDS)</span><br><span class="line">    .build(<span class="keyword">new</span> CacheLoader&lt;String, String&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">load</span><span class="params">(String s)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> selectFromDatabase();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    String key = <span class="string">"dog"</span>;</span><br><span class="line">    String value = CACHE.get(key);</span><br><span class="line">    record();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">record</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    CacheStats stats = CACHE.stats();</span><br><span class="line">    BigDecimal hitCount = <span class="keyword">new</span> BigDecimal(stats.hitCount());</span><br><span class="line">    BigDecimal requestCount = <span class="keyword">new</span> BigDecimal(stats.requestCount());</span><br><span class="line">    SUMMARY.record(hitCount.divide(requestCount, <span class="number">2</span>, BigDecimal.ROUND_HALF_DOWN).doubleValue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="2-SpringBoot应用开发"><a href="#2-SpringBoot应用开发" class="headerlink" title="2. SpringBoot应用开发"></a>2. SpringBoot应用开发</h1><h2 id="2-1-Maven依赖配置"><a href="#2-1-Maven依赖配置" class="headerlink" title="2.1 Maven依赖配置"></a>2.1 Maven依赖配置</h2><p>在<code>pom.xml</code>中增加如下依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.micrometer<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>micrometer-registry-prometheus<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后spring的配置类中, 为所有指标配置默认标签(应用名, 本机IP)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function">MeterRegistryCustomizer&lt;MeterRegistry&gt; <span class="title">configurer</span><span class="params">(@Value(<span class="string">"$&#123;spring.application.name&#125;"</span>)</span> String applicationName) </span>&#123;</span><br><span class="line">    <span class="comment">// 添加全局标签, micrometer 1.1.0 之后可以通过配置文件方式添加</span></span><br><span class="line">    <span class="keyword">return</span> registry -&gt; registry.config().commonTags(<span class="string">"application"</span>, applicationName).commonTags(<span class="string">"ip"</span>, cn.hutool.core.net.NetUtil.getLocalhostStr());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在spring配置文件中将actuator相关端点暴露出去</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">management:</span></span><br><span class="line"><span class="attr">  metrics:</span></span><br><span class="line"><span class="attr">    tags:</span></span><br><span class="line">      <span class="comment"># micrometer 1.1.0之后使用该方式配置全局标签</span></span><br><span class="line"><span class="attr">      application:</span> <span class="string">$&#123;spring.application.name&#125;</span></span><br><span class="line"><span class="attr">  endpoints:</span></span><br><span class="line"><span class="attr">    web:</span></span><br><span class="line"><span class="attr">      exposure:</span></span><br><span class="line"><span class="attr">        include:</span> <span class="string">"*"</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-2-自定义指标开发"><a href="#2-2-自定义指标开发" class="headerlink" title="2.2 自定义指标开发"></a>2.2 自定义指标开发</h2><p>下面在一个接口内演示所有指标的用法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/user"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    MeterRegistry registry;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> Counter counter;</span><br><span class="line">    <span class="keyword">private</span> AtomicInteger gauge;</span><br><span class="line">    <span class="keyword">private</span> DistributionSummary summary;</span><br><span class="line">    <span class="keyword">private</span> LongTaskTimer long_task_timer;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Gauge.builder("lego.thread-pool.pending_task", new AtomicInteger(37), AtomicInteger::get);</span></span><br><span class="line">        Tags tags = Tags.of(<span class="string">"endpoint"</span>, <span class="string">"user"</span>);</span><br><span class="line">        counter = Counter.builder(<span class="string">"counter_user"</span>).tag(<span class="string">"method"</span>, <span class="string">"IndexController.core"</span>).register(registry);</span><br><span class="line">        gauge = registry.gauge(<span class="string">"guage_user"</span>, <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>));</span><br><span class="line">        summary = registry.summary(<span class="string">"summary_user"</span>);</span><br><span class="line">        long_task_timer = registry.more().longTaskTimer(<span class="string">"long_task_timer_user"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@GetMapping</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMetrics</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        counter.increment();</span><br><span class="line">        gauge.getAndSet(RandomUtils.nextInt(<span class="number">0</span>, <span class="number">100000</span>));</span><br><span class="line"></span><br><span class="line">        Timer.Sample sample = Timer.start(registry);</span><br><span class="line">        <span class="comment">// 模拟业务操作</span></span><br><span class="line">        Thread.sleep(RandomUtils.nextInt(<span class="number">10</span>, <span class="number">1000</span>));</span><br><span class="line">        sample.stop(Timer.builder(<span class="string">"timer_user"</span>).description(<span class="string">"一段描述"</span>)</span><br><span class="line">                         .tags(<span class="string">"endpoint"</span>, <span class="string">"user"</span>).publishPercentileHistogram(<span class="keyword">true</span>)</span><br><span class="line">                         .publishPercentiles(<span class="number">0.5</span>, <span class="number">0.75</span>, <span class="number">0.9</span>)</span><br><span class="line">                         .register(registry));</span><br><span class="line"></span><br><span class="line">        summary.record(RandomUtils.nextDouble(<span class="number">0</span>, <span class="number">100000</span>));</span><br><span class="line">        long_task_timer.start();</span><br><span class="line">        long_task_timer.record(() -&gt; RandomUtils.nextInt(<span class="number">0</span>, <span class="number">100000</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>应用启动后, 请求<code>http://localhost:端口/user</code>接口, 模拟业务接口访问, 然后在打开<code>http://localhost:端口/actuator/prometheus</code>就可以看到所有指标了. 除了我们自定义的指标, 还是许多默认的JVM, http请求的指标, 这些指标在<code>Grafana</code>中使用已经配置好的图标模板<a href="https://grafana.com/grafana/dashboards/4701" target="_blank" rel="noopener">JVM (Micrometer)</a> 或者 <a href="https://grafana.com/grafana/dashboards/12464" target="_blank" rel="noopener">Spring Boot Statistics</a>就可以展示了.</p>
+<h1 id="3-Promethues-Grafana配置"><a href="#3-Promethues-Grafana配置" class="headerlink" title="3.Promethues/Grafana配置"></a>3.Promethues/Grafana配置</h1><h2 id="3-1-Prometheus配置"><a href="#3-1-Prometheus配置" class="headerlink" title="3.1 Prometheus配置"></a>3.1 Prometheus配置</h2><p>应用端配置好以后, 还需要配置<code>Promethues</code>去定时从应用拉取数据并保存起来. <code>Promethues</code>安装好以后, 编辑其配置文件(<code>prometheus.yml</code>)</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">scrape_configs:</span></span><br><span class="line">	<span class="comment"># 新增如下行</span></span><br><span class="line"><span class="attr">   - job_name:</span> <span class="string">'springboot-micrometer'</span></span><br><span class="line">   	 <span class="comment"># 请求间隔</span></span><br><span class="line"><span class="attr">     scrape_interval:</span> <span class="number">5</span><span class="string">s</span></span><br><span class="line">     <span class="comment"># 请求路径</span></span><br><span class="line"><span class="attr">     metrics_path:</span> <span class="string">'/actuator/prometheus'</span></span><br><span class="line">     <span class="comment"># 应用服务地址</span></span><br><span class="line"><span class="attr">     static_configs:</span></span><br><span class="line"><span class="attr">     - targets:</span> <span class="string">['172.31.47.13:8880']</span></span><br></pre></td></tr></table></figure>
+<p>然后重启<code>Promethues</code>. 然后打开<code>Promethues</code>的管理页面<code>http://IP:9090/targets</code>, 选择<code>Status</code> &gt; <code>Targets</code>, 查看应用端点状态是否为<code>UP</code>. 点击<code>Graph</code>可以通过<code>PromQL</code>查询指标数据, 如: long_task_timer_user_seconds_duration_sum</p>
+<h2 id="3-2-Grafana图标配置"><a href="#3-2-Grafana图标配置" class="headerlink" title="3.2 Grafana图标配置"></a>3.2 Grafana图标配置</h2><p><code>Promethues</code>中有数据以后, 还需要在<code>Grafana</code>中以图表展示, 方便查看. 首先在<code>Grafana</code>配置好<code>Promethues</code>数据源, 然后可以新建一个<code>Dashboard</code>, 在其中配置不同指标的<code>Panel</code>. 配置语法如下:</p>
+<ul>
+<li><p>Counter</p>
+<ul>
+<li>counter_user_total{instance=”$instance”, application=”$application”}</li>
+<li>rate(counter_user_total{instance=”$instance”, application=”$application”}[1m])</li>
+</ul>
+</li>
+<li><p>Timer</p>
+<ul>
+<li>timer_user_seconds_count{instance=”$instance”, application=”$application”}</li>
+<li>rate(timer_user_seconds_sum{instance=”$instance”, application=”$application”}[1m])/rate(timer_user_seconds_count{instance=”$instance”, application=”$application”}[1m])</li>
+</ul>
+</li>
+<li><p>Gauge</p>
+<ul>
+<li>guage_user{application=”$application”, instance=”$instance”}</li>
+</ul>
+</li>
+<li><p>Summary</p>
+<ul>
+<li><p>irate(http_server_requests_seconds_count{instance=”$instance”, application=”$application”, uri!~”.<em>actuator.</em>“}[3m])</p>
+<blockquote>
+<p>可以在<code>Legend</code>填写标签, 这样可以根据标签值自动新建折线  [] - </p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<p>参考:</p>
+<p><a href="https://www.throwx.cn/2018/11/17/jvm-micrometer-prometheus/" target="_blank" rel="noopener">JVM应用度量框架Micrometer实战</a> <a href="https://www.throwx.cn/2019/04/14/jvm-micrometer-thread-pool-monitor/" target="_blank" rel="noopener">通过micrometer实时监控线程池的各项指标</a></p>
+<p><a href="https://yunlzheng.gitbook.io/prometheus-book/" target="_blank" rel="noopener">prometheus-book</a></p>
+<p><a href="https://micrometer.io/docs/concepts" target="_blank" rel="noopener">Micrometer</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Tonny Yi</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://codertang.com/2021/12/07/springboot-prometheus-grafana/" title="springboot应用基于prometheus监控自定义指标">http://codertang.com/2021/12/07/springboot-prometheus-grafana/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="external nofollow" target="_blank">CC BY-NC 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/springboot/" rel="tag"># springboot</a>
+          
+            <a href="/tags/prometheus/" rel="tag"># prometheus</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/11/11/mysql-default-database/" rel="next" title="mysql-default-database">
+                <i class="fa fa-chevron-left"></i> mysql-default-database
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Tonny Yi">
+            
+              <p class="site-author-name" itemprop="name">Tonny Yi</p>
+              <p class="site-description motion-element" itemprop="description">Coding, Life, Zen</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tonnyyi" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:tonnyemails@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Micrometer"><span class="nav-number">1.</span> <span class="nav-text">1. Micrometer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Micrometer提供的度量类库"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 Micrometer提供的度量类库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Meter"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 Meter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Counter"><span class="nav-number">1.2.1.</span> <span class="nav-text">Counter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FunctionCounter"><span class="nav-number">1.2.2.</span> <span class="nav-text">FunctionCounter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Timer"><span class="nav-number">1.2.3.</span> <span class="nav-text">Timer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FunctionTimer"><span class="nav-number">1.2.4.</span> <span class="nav-text">FunctionTimer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LongTaskTimer"><span class="nav-number">1.2.5.</span> <span class="nav-text">LongTaskTimer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gauge"><span class="nav-number">1.2.6.</span> <span class="nav-text">Gauge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TimeGauge"><span class="nav-number">1.2.7.</span> <span class="nav-text">TimeGauge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DistributionSummary"><span class="nav-number">1.2.8.</span> <span class="nav-text">DistributionSummary</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-SpringBoot应用开发"><span class="nav-number">2.</span> <span class="nav-text">2. SpringBoot应用开发</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Maven依赖配置"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Maven依赖配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-自定义指标开发"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 自定义指标开发</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Promethues-Grafana配置"><span class="nav-number">3.</span> <span class="nav-text">3.Promethues/Grafana配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Prometheus配置"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 Prometheus配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Grafana图标配置"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Grafana图标配置</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tonny Yi</span>
+
+  
+
+  
+</div>
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+</body>
+</html>

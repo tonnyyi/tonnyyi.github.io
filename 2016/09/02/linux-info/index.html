@@ -150,7 +150,7 @@
 <meta property="og:site_name" content="Tonny&#39;s Blog">
 <meta property="og:description" content="物理服务器型号: Dell R720  服务器命令 dmidecode | grep &amp;quot;Product Name&amp;quot;: 查看服务器型号(使用root执行)   123[root@cluster143 mcc]# dmidecode | grep &amp;quot;Product Name&amp;quot;Product Name: PowerEdge R720Product Name: 0">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-02-25T09:25:48.214Z">
+<meta property="og:updated_time" content="2021-08-06T08:40:02.886Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux系统及硬件信息查看">
 <meta name="twitter:description" content="物理服务器型号: Dell R720  服务器命令 dmidecode | grep &amp;quot;Product Name&amp;quot;: 查看服务器型号(使用root执行)   123[root@cluster143 mcc]# dmidecode | grep &amp;quot;Product Name&amp;quot;Product Name: PowerEdge R720Product Name: 0">
@@ -394,7 +394,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-02-25 17:25:48" itemprop="dateModified" datetime="2021-02-25T17:25:48+08:00">2021-02-25</time>
+                <time title="修改时间：2021-08-06 16:40:02" itemprop="dateModified" datetime="2021-08-06T16:40:02+08:00">2021-08-06</time>
               
             
           </span>
@@ -458,9 +458,9 @@
 <h3 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h3><h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><ul>
 <li><p><code>dmidecode | grep &quot;Product Name&quot;</code>: 查看服务器型号(使用root执行)</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@cluster143 mcc]# dmidecode | grep &quot;Product Name&quot;</span><br><span class="line">Product Name: PowerEdge R720</span><br><span class="line">Product Name: 068CDY</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 </li>
 </ul>
-<a id="more"></a>
 <p><code>hostnamectl</code>是systemd的一部分, 可用于查询和更改系统主机名和相关设置</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ hostnamectl</span><br><span class="line">   Static hostname: localhost.localdomain</span><br><span class="line">         Icon name: computer-server</span><br><span class="line">           Chassis: server</span><br><span class="line">        Machine ID: 688adf6374604cd19edf34943d350fc1</span><br><span class="line">           Boot ID: 7b21be9fca42471ab3405cf111a9fb08</span><br><span class="line">  Operating System: Kylin Linux Advanced Server V10 (Azalea)</span><br><span class="line">       CPE OS Name: cpe:/o:kylin:enterprise_linux:V10:GA:server</span><br><span class="line">            Kernel: Linux 4.19.90-11.ky10.aarch64</span><br><span class="line">      Architecture: arm64</span><br><span class="line"></span><br><span class="line">$ hostnamectl</span><br><span class="line">   Static hostname: jzcpx-ocr</span><br><span class="line">Transient hostname: jzcpx-no.01.novalocal</span><br><span class="line">         Icon name: computer-server</span><br><span class="line">           Chassis: server</span><br><span class="line">        Machine ID: 374becb2f4034c0a92ed8a6dcfcf3d76</span><br><span class="line">           Boot ID: 380d45e18482430cad8ce0b8fc264290</span><br><span class="line">  Operating System: CentOS Linux 7 (Core)</span><br><span class="line">       CPE OS Name: cpe:/o:centos:centos:7</span><br><span class="line">            Kernel: Linux 3.10.0-514.el7.x86_64</span><br><span class="line">      Architecture: x86-64</span><br></pre></td></tr></table></figure>
 <h3 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h3><h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><ul>
@@ -527,7 +527,7 @@
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]# df -h</span><br><span class="line">文件系统                 容量  已用  可用 已用% 挂载点</span><br><span class="line">/dev/mapper/centos-root  832G  250G  583G   31% /</span><br><span class="line">devtmpfs                  32G     0   32G    0% /dev</span><br><span class="line">tmpfs                     32G   80K   32G    1% /dev/shm</span><br><span class="line">tmpfs                     32G  3.1G   29G   10% /run</span><br><span class="line">tmpfs                     32G     0   32G    0% /sys/fs/cgroup</span><br><span class="line">/dev/sda1                997M  126M  872M   13% /boot</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><code>du -sh &lt;目录名&gt;</code>: 查看指定命令的大小</p>
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    [root@localhost mcc]<span class="comment"># du -sh /tmp/</span></span><br><span class="line">    2.3G	/tmp/</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 查看目录下文件/文件夹占用空间</span></span><br><span class="line">$ du -sh /home/*</span><br><span class="line">    12K	/home/centos</span><br><span class="line">    9.1M	/home/elastic</span><br><span class="line">    1.3G	/home/git</span><br><span class="line">    114M	/home/iflytek</span><br></pre></td></tr></table></figure>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mcc]<span class="comment"># du -sh /tmp/</span></span><br><span class="line">2.3G	/tmp/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看目录下文件/文件夹占用空间</span></span><br><span class="line">$ du -sh /home/*</span><br><span class="line">12K	/home/centos</span><br><span class="line">9.1M	/home/elastic</span><br><span class="line">1.3G	/home/git</span><br><span class="line">114M	/home/iflytek</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <pre><code>​    
@@ -554,6 +554,71 @@
 </li>
 </ul>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 硬件</span></span><br><span class="line">dmidecode |grep -A16 <span class="string">"System Information$"</span>      <span class="comment"># 查看主板型号</span></span><br><span class="line">dmidecode |grep -A16 <span class="string">"Memory Device$"</span>           <span class="comment"># 查看内存型号</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 系统</span></span><br><span class="line">hostname               <span class="comment"># 查看计算机名</span></span><br><span class="line">lspci -tv              <span class="comment"># 列出所有PCI设备</span></span><br><span class="line">lsusb -tv              <span class="comment"># 列出所有USB设备</span></span><br><span class="line">lsmod                  <span class="comment"># 列出加载的内核模块</span></span><br><span class="line">env                    <span class="comment"># 查看环境变量</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务</span></span><br><span class="line">chkconfig --list       <span class="comment"># 列出所有系统服务</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 用户</span></span><br><span class="line">w                      <span class="comment"># 查看活动用户</span></span><br><span class="line">id &lt;用户名&gt;             <span class="comment"># 查看指定用户信息</span></span><br><span class="line">last                   <span class="comment"># 查看用户登录日志</span></span><br><span class="line">cut -d: -f1 /etc/passwd   <span class="comment"># 查看系统所有用户</span></span><br><span class="line">cut -d: -f1 /etc/group    <span class="comment"># 查看系统所有组</span></span><br><span class="line">crontab -l             <span class="comment"># 查看当前用户的计划任务</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 进程</span></span><br><span class="line">ps -ef                 <span class="comment"># 查看所有进程</span></span><br><span class="line">top                    <span class="comment"># 实时显示进程状态</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 网络</span></span><br><span class="line">route -n               <span class="comment"># 查看路由表</span></span><br><span class="line">iptables -L            <span class="comment"># 查看防火墙设置</span></span><br><span class="line">netstat -lntp          <span class="comment"># 查看所有监听端口</span></span><br><span class="line">netstat -antp          <span class="comment"># 查看所有已经建立的连接</span></span><br><span class="line">netstat -s             <span class="comment"># 查看网络统计信息</span></span><br></pre></td></tr></table></figure>
+<h3 id="TCP连接数限制"><a href="#TCP连接数限制" class="headerlink" title="TCP连接数限制"></a>TCP连接数限制</h3><ol>
+<li><p>可用端口范围 </p>
+<p>创建TCP连接时, 需要占用本机的一个端口号作为源端口, 本机可用端口号范围查询方式:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ cat /proc/sys/net/ipv4/ip_local_port_range</span><br><span class="line">32768	60999</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改方式</span></span><br><span class="line"><span class="comment"># 1. 临时</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"15000 64000"</span> &gt; /proc/sys/net/ipv4/ip_local_port_range</span><br><span class="line"><span class="comment"># 2. 永久</span></span><br><span class="line">vim /etc/sysctl.conf </span><br><span class="line"><span class="comment"># 添加一行  net.ipv4.ip_local_port_range = 32768 59000</span></span><br><span class="line">sysctl -p /etc/sysctl.conf 	<span class="comment">#生效</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>同一源端口可以对多个不同的(目标IP+端口)建立TCP连接, 所以一台主机最多建立65536个TCP连接的说法不正确</p>
+</blockquote>
+</li>
+<li><p>文件描述符</p>
+<ul>
+<li><strong>系统级</strong> <code>cat /proc/sys/fs/file-max</code> 所有进程打开的文件描述符总和, Centos7默认是794168</li>
+<li><strong>用户级</strong> <code>cat /etc/security/limits.conf</code> 和 <code>ulimit -n</code> 每个用户创建的进程打开的文件描述符总和</li>
+<li><strong>进程级</strong> <code>cat /proc/sys/fs/nr_open</code> 单个进程可用的最大文件描述符数量</li>
+</ul>
+<h4 id="查看文件句柄使用统计"><a href="#查看文件句柄使用统计" class="headerlink" title="查看文件句柄使用统计"></a>查看文件句柄使用统计</h4> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 系统级</span></span><br><span class="line">$ cat /proc/sys/fs/file-nr</span><br><span class="line">4950	0	26114240</span><br><span class="line">已分配 已分配未使用 最大数量</span><br><span class="line">   </span><br><span class="line"><span class="comment"># 进程级 看Max open files行</span></span><br><span class="line">$ cat /proc/进程ID/limits</span><br><span class="line">Limit                     Soft Limit           Hard Limit           Units</span><br><span class="line">Max cpu time              unlimited            unlimited            seconds</span><br><span class="line">Max file size             unlimited            unlimited            bytes</span><br><span class="line">Max data size             unlimited            unlimited            bytes</span><br><span class="line">Max stack size            8388608              unlimited            bytes</span><br><span class="line">Max core file size        0                    unlimited            bytes</span><br><span class="line">Max resident <span class="built_in">set</span>          unlimited            unlimited            bytes</span><br><span class="line">Max processes             1028915              1028915              processes</span><br><span class="line">Max open files            5000                 5000                 files</span><br><span class="line">Max locked memory         65536                65536                bytes</span><br><span class="line">Max address space         unlimited            unlimited            bytes</span><br><span class="line">Max file locks            unlimited            unlimited            locks</span><br><span class="line">Max pending signals       1028915              1028915              signals</span><br><span class="line">Max msgqueue size         819200               819200               bytes</span><br><span class="line">Max nice priority         0                    0</span><br><span class="line">Max realtime priority     0                    0</span><br><span class="line">Max realtime timeout      unlimited            unlimited            us</span><br><span class="line">   </span><br><span class="line"><span class="comment"># 实际进程已使用描述符数量 </span></span><br><span class="line">$ ll /proc/进程ID/fd | wc -l </span><br><span class="line">115</span><br></pre></td></tr></table></figure>
+<h4 id="修改方式"><a href="#修改方式" class="headerlink" title="修改方式"></a>修改方式</h4> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 系统级</span></span><br><span class="line"><span class="comment"># 1. 临时</span></span><br><span class="line">sysctl -w fs.file-max=26114247</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"26114247"</span> &gt; /proc/sys/fs/file-max</span><br><span class="line"><span class="comment"># 2. 永久</span></span><br><span class="line">vim /etc/sysctl.conf</span><br><span class="line"><span class="comment"># 添加如下一行</span></span><br><span class="line">fs.file-max=26114247</span><br><span class="line"><span class="comment"># 生效</span></span><br><span class="line">sysctl -p</span><br><span class="line">   </span><br><span class="line"><span class="comment"># 用户级</span></span><br><span class="line"><span class="comment"># 1. 临时 </span></span><br><span class="line"><span class="built_in">ulimit</span> -HSn 102400</span><br><span class="line"><span class="comment"># 2. 永久 重新登录即生效</span></span><br><span class="line">vim /etc/security/limits.conf</span><br><span class="line"><span class="comment"># 添加如下两行</span></span><br><span class="line">* hard nofile 102400</span><br><span class="line">* soft nofile 102400</span><br><span class="line">   </span><br><span class="line"><span class="comment"># 进程级</span></span><br><span class="line"><span class="comment"># 1. 临时</span></span><br><span class="line">sysctl -w fs.nr_open=1048576</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line"><span class="built_in">echo</span> 1000000 &gt; /proc/sys/fs/nr_open</span><br><span class="line"><span class="comment"># 2. 永久</span></span><br><span class="line">vim /etc/sysctl.conf</span><br><span class="line"><span class="comment"># 添加如下一行</span></span><br><span class="line">fs.nr_open=1048576</span><br><span class="line"><span class="comment"># 生效</span></span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li><p><code>file-max</code> 限制不了 <code>limits.conf</code></p>
+</li>
+<li><p><code>ulimit -n</code> 是设置当前shell以及当前shell启动的进程能打开的最大文件数量, 默认1024, 但<code>limits.conf</code>优先级更高</p>
+</li>
+<li><p>如果每个线程处理一个TCP连接, 当线程数太多时, 服务器可能由于忙于上下文切换而导致崩溃(这就是C10K问题), 此时可以用<strong>多路IO复用</strong>, 一个线程管理多个TCP连接</p>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p>内存溢出</p>
+<p>每个TCP连接都会用到缓冲区, 都是需要占用一定的内存</p>
+</li>
+<li><p>CPU资源</p>
+</li>
+</ol>
+<h3 id="设备唯一性"><a href="#设备唯一性" class="headerlink" title="设备唯一性"></a>设备唯一性</h3><ul>
+<li><p><code>/etc/machine-id</code>文件</p>
+<p>系统安装或首次启动后生成并一致保持不变</p>
+<blockquote>
+<p><strong>docker容器中该文件与宿主机内容一致</strong></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat /etc/machine-id</span><br><span class="line">036aad1b88ec4e80906d5d27ed9cef1d</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>/sys/class/dmi/id/product_uuid</code>文件</p>
+<blockquote>
+<p><strong>docker容器中该文件与宿主机内容一致</strong></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat /sys/class/dmi/id/product_uuid</span><br><span class="line">036aad1b-88ec-4e80-906d-5d27ed9cef1d</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>/etc/fstab</code>文件</p>
+<blockquote>
+<p><strong>docker容器中没有该文件</strong></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ cat /etc/fstab</span><br><span class="line"></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># /etc/fstab</span></span><br><span class="line"><span class="comment"># Created by anaconda on Wed Mar 17 09:09:33 2021</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Accessible filesystems, by reference, are maintained under '/dev/disk'</span></span><br><span class="line"><span class="comment"># See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">/dev/mapper/klas-root   /                       xfs     defaults        0 0</span><br><span class="line">UUID=018c9363-2d14-4daf-ba6a-d12b294cfd82 /boot                   ext4    defaults        1 2</span><br><span class="line">UUID=7497-92C5          /boot/efi               vfat    <span class="built_in">umask</span>=0077,shortname=winnt 0 0</span><br><span class="line">/dev/mapper/klas-home   /home                   xfs     defaults        0 0</span><br><span class="line">/dev/mapper/klas-swap   swap                    swap    defaults        0 0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看boot分区的UUID</span></span><br><span class="line">$ grep UUID /etc/fstab | grep -v /boot/ | awk <span class="string">'&#123;print $1&#125;'</span></span><br><span class="line">UUID=018c9363-2d14-4daf-ba6a-d12b294cfd82</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>/sys/class/dmi/id/board_serial</code>文件</p>
+<p>该文件内容为主板序列号, 虚拟机内没有该文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat /sys/class/dmi/id/board_serial</span><br><span class="line">MBJ705S21125A90</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>hostid</code>命令</p>
+<p>无法确保全局唯一性, 且可以通过命令行配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hostid</span><br><span class="line">1facab67</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>根据根目录<code>/</code>挂载的磁盘id</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sudo /sbin/blkid | grep <span class="string">"<span class="variable">$(df -h / | sed -n 2p | cut -d" " -f1)</span>:"</span> | grep -o <span class="string">"UUID=\"[^\"]*\" "</span> | sed <span class="string">"s/UUID=\"//;s/\"//"</span></span><br><span class="line">ef4de747-8828-4e4e-97db-05d47a5e1e60</span><br><span class="line">c6e4c0f0-576e-46f0-953a-da00dfa060fb</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 <hr>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
 <li><a href="http://blog.csdn.net/dba_waterbin/article/details/8644626" target="_blank" rel="noopener">Linux下区分物理CPU、逻辑CPU和CPU核数</a></li>
@@ -697,7 +762,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">40</span>
+                    <span class="site-state-item-count">49</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -798,7 +863,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">39</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -933,7 +1004,23 @@
                     
                       
                     
-                    <span class="site-state-item-count">51</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">59</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -989,7 +1076,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器"><span class="nav-number">1.</span> <span class="nav-text">服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令"><span class="nav-number">2.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU"><span class="nav-number">3.</span> <span class="nav-text">CPU</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概念"><span class="nav-number">3.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-1"><span class="nav-number">3.2.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存"><span class="nav-number">4.</span> <span class="nav-text">内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-2"><span class="nav-number">4.1.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘"><span class="nav-number">5.</span> <span class="nav-text">磁盘</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-3"><span class="nav-number">5.1.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网卡"><span class="nav-number">6.</span> <span class="nav-text">网卡</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-4"><span class="nav-number">6.1.</span> <span class="nav-text">命令</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统"><span class="nav-number"></span> <span class="nav-text">操作系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number"></span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">1.</span> <span class="nav-text">参考</span></a></li></ol></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器"><span class="nav-number">1.</span> <span class="nav-text">服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令"><span class="nav-number">2.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU"><span class="nav-number">3.</span> <span class="nav-text">CPU</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概念"><span class="nav-number">3.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-1"><span class="nav-number">3.2.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存"><span class="nav-number">4.</span> <span class="nav-text">内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-2"><span class="nav-number">4.1.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘"><span class="nav-number">5.</span> <span class="nav-text">磁盘</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-3"><span class="nav-number">5.1.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网卡"><span class="nav-number">6.</span> <span class="nav-text">网卡</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-4"><span class="nav-number">6.1.</span> <span class="nav-text">命令</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统"><span class="nav-number"></span> <span class="nav-text">操作系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number"></span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP连接数限制"><span class="nav-number">1.</span> <span class="nav-text">TCP连接数限制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看文件句柄使用统计"><span class="nav-number">1.1.</span> <span class="nav-text">查看文件句柄使用统计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改方式"><span class="nav-number">1.2.</span> <span class="nav-text">修改方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设备唯一性"><span class="nav-number">2.</span> <span class="nav-text">设备唯一性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></li></div>
             
 
           </div>
