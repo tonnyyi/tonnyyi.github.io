@@ -1330,7 +1330,7 @@ stackoverflow
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-02-25 17:25:48" itemprop="dateModified" datetime="2021-02-25T17:25:48+08:00">2021-02-25</time>
+                <time title="修改时间：2021-12-09 17:03:37" itemprop="dateModified" datetime="2021-12-09T17:03:37+08:00">2021-12-09</time>
               
             
           </span>
@@ -1390,18 +1390,13 @@ stackoverflow
       
         
           
-          nginx路由匹配规则常见的路由匹配符号有:
+          请求代理模式proxy_pass中只有IP和端口, 称为不带URI, 如:proxy_pass http://1270.0.0.1:8080, 另外一种是端口号之后包含其他路径的, 如: proxy_pass http://127.0.0.1:8080/(哪怕只带了一个/) 或 proxy_pass http://127.0.0.1:8080/test
 
-＝：精确匹配
-^~：精确前缀匹配
-~：区分大小写的正则匹配;  ~*：不区分大小写的正则匹配
-/uri：普通前缀匹配
-/：通用匹配
+对于不带URI的方式, nginx会保留location中的路径部分, 如: 
+1234location /api1/ &#123;    proxy_pass http://127.0.0.1:8080;&#125;http://127.0.0.1/api1/xxx  -&gt;  http://127.0.0.1:8080/api1/xxx
 
-123456789101112131415161718192021222324location = / &#123;   echo "规则A";&#125;location = /login &#123;   echo "规则B";&#125;location ^~ /static/ &#123;   echo "规则C";&#125;location ^~ /static/files &#123;    echo "规则X";&#125;location ~ \.(gif|jpg|png|js|css)$ &#123;   echo "规则D";&#125;location ~* \.png$ &#123;   echo "规则E";&#125;location /img &#123;    echo "规则Y";&#125;location / &#123;   echo "规则F";&#125;
-
-
-
+对于带URI的方式, nginx会对URL进行替换
+1234location /api2/ &#123;    proxy_pass http://127.0.0.1:8080/;&#125;http://127.0.0.1/api2/xxx  -&gt;  http://127.0.0.1
           ...
           <!--noindex-->
           <div class="post-button text-center">
