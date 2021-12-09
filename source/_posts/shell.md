@@ -1400,5 +1400,19 @@ shuf -i 0-100 -n 10 -i random_number.txt
 shuf foo.txt
 ```
 
+#### 进程休眠sleep
 
+```shell
+sleep 0.5
+
+# 休眠3秒
+sleep 3
+sleep 3s
+
+# 休眠3分钟
+sleep 3m
+
+# 休眠3小时
+sleep 3h
+```
 

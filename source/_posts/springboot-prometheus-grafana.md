@@ -515,6 +515,7 @@ public class UserController {
     private AtomicInteger gauge;
     private DistributionSummary summary;
     private LongTaskTimer long_task_timer;
+    private DistributionSummary summarySimple;
 
     @PostConstruct
     private void init() {
@@ -522,12 +523,16 @@ public class UserController {
         Tags tags = Tags.of("endpoint", "user");
         counter = Counter.builder("counter_user").tag("method", "IndexController.core").register(registry);
         gauge = registry.gauge("guage_user", new AtomicInteger(0));
-        summary = registry.summary("summary_user");
+        summarySimple = registry.summary("summary_user");
+        
+        // 客户端计算百分位publishPercentiles 发布直方图publishPercentileHistogram(指标较多, 谨慎开启)
+        summary = DistributionSummary.builder("summary_quantile").scale(100).publishPercentiles(0.5, 0.8, 0.95)
+                                     .publishPercentileHistogram().register(registry);
         long_task_timer = registry.more().longTaskTimer("long_task_timer_user");
     }
-    
+
     @GetMapping
-    public void testMetrics() {
+    public void testMetrics() throws InterruptedException {
         counter.increment();
         gauge.getAndSet(RandomUtils.nextInt(0, 100000));
 
@@ -539,9 +544,11 @@ public class UserController {
                          .publishPercentiles(0.5, 0.75, 0.9)
                          .register(registry));
 
-        summary.record(RandomUtils.nextDouble(0, 100000));
+
+        summarySimple.record(RandomUtils.nextDouble(10, 1000));
+        summary.record(RandomUtils.nextDouble(10, 1000));
         long_task_timer.start();
-        long_task_timer.record(() -> RandomUtils.nextInt(0, 100000));
+        long_task_timer.record(() -> RandomUtils.nextInt(10, 10000));
     }
 }    
 ```
@@ -593,9 +600,161 @@ scrape_configs:
 
     > 可以在`Legend`填写标签, 这样可以根据标签值自动新建折线 {{method}} [{{status}}] - {{uri}}
 
+## 3.3 Promethues 查询语法PromQL
+
+#### 3.3.1 操作符
+
+- 数学运算
+
+  `PromQL`支持的数学运算符: `+`(加) `-`(减) `*`(乘) `/`(除) `%`(取余) `^`(幂运算)
+
+  ```
+  node_memory_free_bytes_total / (1024 * 1024)
+  ```
+
+- 布尔运算
+
+  支持的布尔运算符: `==`(相等) `!=`(不等) `>`(大于) `<`(小于) `>=`(大于等于) `<=`(小于等于)
+  
+  ```
+  (node_memory_bytes_total - node_memory_free_bytes_total) / node_memory_bytes_total > 0.95
+  ```
+  
+- bool运算符
+
+  通过bool运算符对布尔运算结果进行修改
+  
+  ```
+  # 如果大于1000返回1(true) 否则返回0(false)
+  http_requests_total > bool 1000
+  ```
+  
+- 集合运算符
+
+  支持的集合运算符: `and`(且) `or`(或) `unless`(排除)
+  
+  ***vector1 and vector2*** 会产生一个由vector1的元素组成的新的向量。该向量包含vector1中完全匹配vector2中的元素组成。
+  
+  ***vector1 or vector2*** 会产生一个新的向量，该向量包含vector1中所有的样本数据，以及vector2中没有与vector1匹配到的样本数据。
+  
+  ***vector1 unless vector2*** 会产生一个新的向量，新向量中的元素由vector1中没有与vector2匹配的元素组成。
+  
+- 操作符优先级
+
+  ```
+  100 * (1 - avg (irate(node_cpu{mode='idle'}[5m])) by(job) )
+  ```
+  
+  - ^
+  - *, /, %
+  - +, -
+  - ==, !=, <=, <, >=, >
+  - and, unless
+  - or
 
 
+#### 3.3.2 集合函数
 
+- sum(求和)
+
+  ```
+  # 假设系统的日志counter指标如下
+  logback_events_total{application="untitled",ip="172.17.0.1",level="info",} 12.0
+  logback_events_total{application="untitled",ip="172.17.0.1",level="debug",} 707.0
+  logback_events_total{application="untitled",ip="172.17.0.1",level="trace",} 0.0
+  logback_events_total{application="untitled",ip="172.17.0.1",level="warn",} 106.0
+  logback_events_total{application="untitled",ip="172.17.0.1",level="error",} 101.0
+  
+  # 计算各个level日志的总量
+  sum(logback_events_total)
+  ```
+
+- min(最小值)
+
+- max(最大值)
+
+- avg(平均值)
+
+- stddev(标准差)
+
+- stdvar(标准方差)
+
+- count(计数)
+
+- count_values(相同数值分组计数)
+
+- bottomk (最小的n条数据)
+- topk (最大的n条数据)
+  
+
+#### 3.3.3 内置函数
+
+- increase
+
+  取时间范围内的最后一个值减去第一个值, 得到增长量
+
+  ```
+  # 计算5分钟内的增长量
+  increase(http_requests_total{job="api-server"}[5m])
+  
+  # 计算5分钟内的每秒增长率
+  increase(http_requests_total{job="api-server"}[5m])/300
+  ```
+
+- rate
+
+  计算每秒的增长率
+
+  ```
+  # 计算5分钟内的每秒增长率
+  rate(http_requests_total{job="api-server"}[5m])
+  
+  # 等同于
+  increase(http_requests_total{job="api-server"}[5m])/300
+  ```
+
+- irate
+
+  使用`increase`或者1函数计算平均增长率时, 会有"长尾问题", 无法反应时间窗口内的数据突变. 比如某一时刻数据突增, 但是平摊到时间窗口后增长率并不突出. 为了解决该问题, 可以使用`irate`函数, 它通过时间窗口内的最后两个数据的差值来计算正常率, 所以`irate`反应的是数据的瞬时增长率. 
+
+  由于`irate`灵敏度更高, 所以在需要分享长期趋势或在告警规则中, 这种灵敏度反而会造成干扰, 因此此时更推荐使用`rate`函数.
+
+  ```
+  # 5m内的数据增长率 
+  irate(http_requests_total{job="api-server"}[5m])
+  ```
+
+- predict_linear 预测
+
+  基于简单线性回归, 对时间范围内的数据进行统计, 预测某段时间后的数值. **只适用于Gauge类型数据**
+
+  ```
+  # 基于5分钟的数据, 预测对300秒后数值
+  predict_linear(guage_user[5m], 300)
+  ```
+  
+- histogram_quantile 分位数
+
+  统计不同百分比
+
+  ```
+  # TYPE timer_user_seconds histogram
+  timer_user_seconds{application="untitled",endpoint="user",ip="172.17.0.1",quantile="0.5",} 0.484442112
+  timer_user_seconds{application="untitled",endpoint="user",ip="172.17.0.1",quantile="0.75",} 0.70254592
+  timer_user_seconds{application="untitled",endpoint="user",ip="172.17.0.1",quantile="0.9",} 0.903872512
+  timer_user_seconds_bucket{application="untitled",endpoint="user",ip="172.17.0.1",le="0.001",} 0.0
+  timer_user_seconds_bucket{application="untitled",endpoint="user",ip="172.17.0.1",le="0.001048576",} 0.0
+  timer_user_seconds_bucket{application="untitled",endpoint="user",ip="172.17.0.1",le="0.001398101",} 0.0
+  timer_user_seconds_bucket{application="untitled",endpoint="user",ip="172.17.0.1",le="0.001747626",} 0.0
+  timer_user_seconds_bucket{application="untitled",endpoint="user",ip="172.17.0.1",le="0.002097151",} 0.0
+  timer_user_seconds_bucket{application="untitled",endpoint="user",ip="172.17.0.1",le="0.002446676",} 0.0
+  ...
+  
+  # 在过去1小时内的P95（95%的请求耗时都小于等于这个值）
+  histogram_quantile(0.95, rate(timer_user_seconds_bucket[1h]))
+  ```
+
+  
 
 参考:
 
@@ -604,3 +763,5 @@ scrape_configs:
 [prometheus-book](https://yunlzheng.gitbook.io/prometheus-book/)
 
 [Micrometer](https://micrometer.io/docs/concepts)
+
+[Promethues内置函数](https://prometheus.io/docs/prometheus/latest/querying/functions/)
