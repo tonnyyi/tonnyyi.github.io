@@ -150,7 +150,7 @@
 <meta property="og:site_name" content="Tonny&#39;s Blog">
 <meta property="og:description" content="请求代理模式proxy_pass中只有IP和端口, 称为不带URI, 如:proxy_pass http://1270.0.0.1:8080, 另外一种是端口号之后包含其他路径的, 如: proxy_pass http://127.0.0.1:8080/(哪怕只带了一个/) 或 proxy_pass http://127.0.0.1:8080/test  对于不带URI的方式, nginx会保留l">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-12-09T09:03:37.287Z">
+<meta property="og:updated_time" content="2021-12-09T09:07:35.260Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nginx config">
 <meta name="twitter:description" content="请求代理模式proxy_pass中只有IP和端口, 称为不带URI, 如:proxy_pass http://1270.0.0.1:8080, 另外一种是端口号之后包含其他路径的, 如: proxy_pass http://127.0.0.1:8080/(哪怕只带了一个/) 或 proxy_pass http://127.0.0.1:8080/test  对于不带URI的方式, nginx会保留l">
@@ -394,7 +394,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-12-09 17:03:37" itemprop="dateModified" datetime="2021-12-09T17:03:37+08:00">2021-12-09</time>
+                <time title="修改时间：2021-12-09 17:07:35" itemprop="dateModified" datetime="2021-12-09T17:07:35+08:00">2021-12-09</time>
               
             
           </span>
@@ -465,9 +465,9 @@
 <p><code>http://127.0.0.1/api3/</code>被替换成了<code>http://127.0.0.1:8080/test</code>, 再加上剩余的<code>xxx</code>, 就变成了<code>http://127.0.0.1:8080/testxxx</code></p>
 </li>
 </ul>
-<h3 id="规则总结"><a href="#规则总结" class="headerlink" title="规则总结"></a>规则总结</h3><p>nginx代理8080端口, 转发到8989端口, 客户端请求地址: <a href="http://localhost:8080/api/user" target="_blank" rel="noopener">http://localhost:8080/api/user</a>, 转发后的URL地址如下:</p>
+<h3 id="规则总结"><a href="#规则总结" class="headerlink" title="规则总结"></a>规则总结</h3><p>nginx代理8080端口, 转发到8989端口, 客户端请求地址: <a href="http://localhost:8080/api/user" target="_blank" rel="noopener">http://localhost:8080/api/user</a>, nginx配置格式如下:</p>
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span>       <span class="number">8080</span>;</span><br><span class="line">    <span class="attribute">access_log</span>  logs/host.access.log  main;</span><br><span class="line"></span><br><span class="line">	<span class="attribute">location</span> /api &#123;</span><br><span class="line">    	<span class="attribute">proxy_pass</span> http://localhost:8989/service/;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>不同配置搭配, 转发结果如下:</p>
+<p><code>location</code>和<code>proxy_pass</code>不同配置搭配, 转发结果如下:</p>
 <table>
 <thead>
 <tr>
