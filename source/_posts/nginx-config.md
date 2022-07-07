@@ -173,6 +173,22 @@ location /a/ {
 }
 ```
 
+## 文件服务器配置
+
+```nginx
+server {
+  listen 80; 
+  server_name 10.1.2.3; # 自己PC的ip或者服务器的域名 
+  charset utf-8; # 避免中文乱码 
+  root /home/xx/share; # 存放文件的目录 
+  location / { 
+    autoindex on; # 索引 
+    autoindex_exact_size on; # 显示文件大小 
+    autoindex_localtime on; # 显示文件时间 
+  }
+}
+```
+
 
 
 ### 典型配置
@@ -298,10 +314,10 @@ http {
         gzip_comp_level 6;
         gzip_types      text/plain text/css text/xml application/json application/javascript application/rss+xml application/atom+xml image/svg+xml;
 
-        # cross-origin
+        # cross-origin跨域配置
         add_header Access-Control-Allow-Origin $http_origin;
         add_header Access-Control-Allow-Methods *;
-		# 如果不需要跨域传递cookie, 可以删除下面两行, 并把上面的$http_origin 改为*
+				# 如果不需要跨域传递cookie, 可以删除下面两行, 并把上面的$http_origin 改为*
         add_header Access-Control-Allow-Credentials true;       
         add_header Access-Control-Max-Age 3600;
         add_header Access-Control-Allow-Headers 'DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization';
@@ -333,6 +349,240 @@ http {
         }
     }
 }
+```
+
+
+
+
+
+## 编译安装
+
+> 参考: [CentOS 7 下安装 Nginx](https://www.cnblogs.com/eaglezb/p/6073661.html)
+
+### 1. 安装依赖库
+
+```bash
+# 安装gcc环境
+yum install gcc-c++
+
+# nginx 的 http 模块使用 pcre 来解析正则表达式
+yum install -y pcre pcre-devel
+
+# nginx 使用 zlib 对 http 包的内容进行 gzip
+yum install -y zlib zlib-devel
+
+# nginx 支持 https 协议需要 openssl
+yum install -y openssl openssl-devel
+```
+
+#### 依赖以及间接依赖
+
+- pcre-8.32-17.el7.x86_64.rpm
+- pcre-devel-8.32-17.el7.x86_64.rpm
+- zlib-1.2.7-20.el7_9.x86_64.rpm
+- zlib-devel-1.2.7-20.el7_9.x86_64.rpm
+- openssl openssl-devel
+
+```
+===============================================================================
+ Package              架构       版本                 源                    大小
+===============================================================================
+正在安装:
+ openssl-devel        x86_64   1:1.0.2k-25.el7_9    iflytekdc-updates    1.5 M
+正在更新:
+ openssl              x86_64   1:1.0.2k-25.el7_9    iflytekdc-updates    494 k
+为依赖而安装:
+ keyutils-libs-devel  x86_64   1.5.8-3.el7          c7.6                  37 k
+ krb5-devel           x86_64   1.15.1-54.el7_9      iflytekdc-updates    273 k
+ libcom_err-devel     x86_64   1.42.9-19.el7        iflytekdc-os          32 k
+ libkadm5             x86_64   1.15.1-54.el7_9      iflytekdc-updates    179 k
+ libselinux-devel     x86_64   2.5-15.el7           iflytekdc-os         187 k
+ libsepol-devel       x86_64   2.5-10.el7           c7.6                  77 k
+ libverto-devel       x86_64   0.2.5-4.el7          c7.6                  12 k
+为依赖而更新:
+ e2fsprogs            x86_64   1.42.9-19.el7        iflytekdc-os         701 k
+ e2fsprogs-libs       x86_64   1.42.9-19.el7        iflytekdc-os         168 k
+ krb5-libs            x86_64   1.15.1-54.el7_9      iflytekdc-updates    810 k
+ libcom_err           x86_64   1.42.9-19.el7        iflytekdc-os          42 k
+ libselinux           x86_64   2.5-15.el7           iflytekdc-os         162 k
+ libselinux-python    x86_64   2.5-15.el7           iflytekdc-os         236 k
+ libselinux-utils     x86_64   2.5-15.el7           iflytekdc-os         151 k
+ libss                x86_64   1.42.9-19.el7        iflytekdc-os          47 k
+ openssl-libs         x86_64   1:1.0.2k-25.el7_9    iflytekdc-updates    1.2 M
+
+事务概要
+=====================================================================================================================================================
+安装  1 软件包 (+7 依赖软件包)
+升级  1 软件包 (+9 依赖软件包)
+
+总下载量：6.2 M
+Downloading packages:
+Delta RPMs disabled because /usr/bin/applydeltarpm not installed.
+(1/18): keyutils-libs-devel-1.5.8-3.el7.x86_64.rpm                    |  37 kB  00:00:00     
+(2/18): krb5-devel-1.15.1-54.el7_9.x86_64.rpm                         | 273 kB  00:00:00     
+(3/18): e2fsprogs-libs-1.42.9-19.el7.x86_64.rpm                       | 168 kB  00:00:00     
+(4/18): e2fsprogs-1.42.9-19.el7.x86_64.rpm                            | 701 kB  00:00:00     
+(5/18): krb5-libs-1.15.1-54.el7_9.x86_64.rpm                          | 810 kB  00:00:00     
+(6/18): libcom_err-1.42.9-19.el7.x86_64.rpm                           |  42 kB  00:00:00     
+(7/18): libcom_err-devel-1.42.9-19.el7.x86_64.rpm                     |  32 kB  00:00:00     
+(8/18): libselinux-2.5-15.el7.x86_64.rpm                              | 162 kB  00:00:00     
+(9/18): libkadm5-1.15.1-54.el7_9.x86_64.rpm                           | 179 kB  00:00:00     
+(10/18): libselinux-python-2.5-15.el7.x86_64.rpm                      | 236 kB  00:00:00     
+(11/18): libselinux-devel-2.5-15.el7.x86_64.rpm                       | 187 kB  00:00:00     
+(12/18): libselinux-utils-2.5-15.el7.x86_64.rpm                       | 151 kB  00:00:00     
+(13/18): libss-1.42.9-19.el7.x86_64.rpm                               |  47 kB  00:00:00     
+(14/18): libsepol-devel-2.5-10.el7.x86_64.rpm                         |  77 kB  00:00:00     
+(15/18): libverto-devel-0.2.5-4.el7.x86_64.rpm                        |  12 kB  00:00:00     
+(16/18): openssl-1.0.2k-25.el7_9.x86_64.rpm                           | 494 kB  00:00:00     
+(17/18): openssl-devel-1.0.2k-25.el7_9.x86_64.rpm                     | 1.5 MB  00:00:00     
+(18/18): openssl-libs-1.0.2k-25.el7_9.x86_64.rpm                      | 1.2 MB  00:00:00     
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+总计                                                             18 MB/s | 6.2 MB  00:00:00     
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  正在更新    : libcom_err-1.42.9-19.el7.x86_64                      1/28 
+  正在更新    : libselinux-2.5-15.el7.x86_64                         2/28 
+  正在更新    : 1:openssl-libs-1.0.2k-25.el7_9.x86_64                3/28 
+  正在更新    : krb5-libs-1.15.1-54.el7_9.x86_64                     4/28 
+  正在安装    : libkadm5-1.15.1-54.el7_9.x86_64                      5/28 
+  正在更新    : e2fsprogs-libs-1.42.9-19.el7.x86_64                  6/28 
+  正在更新    : libss-1.42.9-19.el7.x86_64                           7/28 
+  正在安装    : libcom_err-devel-1.42.9-19.el7.x86_64                8/28 
+  正在安装    : libsepol-devel-2.5-10.el7.x86_64                     9/28 
+  正在安装    : libselinux-devel-2.5-15.el7.x86_64                  10/28 
+  正在安装    : libverto-devel-0.2.5-4.el7.x86_64                   11/28 
+  正在安装    : keyutils-libs-devel-1.5.8-3.el7.x86_64              12/28 
+  正在安装    : krb5-devel-1.15.1-54.el7_9.x86_64                   13/28 
+  正在安装    : 1:openssl-devel-1.0.2k-25.el7_9.x86_64              14/28 
+  正在更新    : e2fsprogs-1.42.9-19.el7.x86_64                      15/28 
+  正在更新    : 1:openssl-1.0.2k-25.el7_9.x86_64                    16/28 
+  正在更新    : libselinux-utils-2.5-15.el7.x86_64                  17/28 
+  正在更新    : libselinux-python-2.5-15.el7.x86_64                 18/28 
+  清理        : e2fsprogs-1.42.9-13.el7.x86_64                      19/28 
+  清理        : 1:openssl-1.0.2k-16.el7.x86_64                      20/28 
+  清理        : krb5-libs-1.15.1-34.el7.x86_64                      21/28 
+  清理        : 1:openssl-libs-1.0.2k-16.el7.x86_64                 22/28 
+  清理        : e2fsprogs-libs-1.42.9-13.el7.x86_64                 23/28 
+  清理        : libss-1.42.9-13.el7.x86_64                          24/28 
+  清理        : libselinux-python-2.5-14.1.el7.x86_64               25/28 
+  清理        : libselinux-utils-2.5-14.1.el7.x86_64                26/28 
+  清理        : libselinux-2.5-14.1.el7.x86_64                      27/28 
+  清理        : libcom_err-1.42.9-13.el7.x86_64                     28/28 
+  验证中      : libselinux-devel-2.5-15.el7.x86_64                    1/28 
+  验证中      : keyutils-libs-devel-1.5.8-3.el7.x86_64                2/28 
+  验证中      : libselinux-2.5-15.el7.x86_64                          3/28 
+  验证中      : 1:openssl-1.0.2k-25.el7_9.x86_64                      4/28 
+  验证中      : libcom_err-1.42.9-19.el7.x86_64                       5/28 
+  验证中      : e2fsprogs-1.42.9-19.el7.x86_64                        6/28 
+  验证中      : krb5-devel-1.15.1-54.el7_9.x86_64                     7/28 
+  验证中      : libverto-devel-0.2.5-4.el7.x86_64                     8/28 
+  验证中      : libselinux-utils-2.5-15.el7.x86_64                    9/28 
+  验证中      : libkadm5-1.15.1-54.el7_9.x86_64                      10/28 
+  验证中      : e2fsprogs-libs-1.42.9-19.el7.x86_64                  11/28 
+  验证中      : 1:openssl-libs-1.0.2k-25.el7_9.x86_64                12/28 
+  验证中      : libselinux-python-2.5-15.el7.x86_64                  13/28 
+  验证中      : 1:openssl-devel-1.0.2k-25.el7_9.x86_64               14/28 
+  验证中      : libsepol-devel-2.5-10.el7.x86_64                     15/28 
+  验证中      : libss-1.42.9-19.el7.x86_64                           16/28 
+  验证中      : krb5-libs-1.15.1-54.el7_9.x86_64                     17/28 
+  验证中      : libcom_err-devel-1.42.9-19.el7.x86_64                18/28 
+  验证中      : 1:openssl-libs-1.0.2k-16.el7.x86_64                  19/28 
+  验证中      : 1:openssl-1.0.2k-16.el7.x86_64                       20/28 
+  验证中      : libss-1.42.9-13.el7.x86_64                           21/28 
+  验证中      : libselinux-python-2.5-14.1.el7.x86_64                22/28 
+  验证中      : e2fsprogs-libs-1.42.9-13.el7.x86_64                  23/28 
+  验证中      : krb5-libs-1.15.1-34.el7.x86_64                       24/28 
+  验证中      : libselinux-utils-2.5-14.1.el7.x86_64                 25/28 
+  验证中      : libcom_err-1.42.9-13.el7.x86_64                      26/28 
+  验证中      : libselinux-2.5-14.1.el7.x86_64                       27/28 
+  验证中      : e2fsprogs-1.42.9-13.el7.x86_64                       28/28 
+
+已安装:
+  openssl-devel.x86_64 1:1.0.2k-25.el7_9                                                                                                             
+
+作为依赖被安装:
+  keyutils-libs-devel.x86_64 0:1.5.8-3.el7           krb5-devel.x86_64 0:1.15.1-54.el7_9            libcom_err-devel.x86_64 0:1.42.9-19.el7          
+  libkadm5.x86_64 0:1.15.1-54.el7_9                  libselinux-devel.x86_64 0:2.5-15.el7           libsepol-devel.x86_64 0:2.5-10.el7               
+  libverto-devel.x86_64 0:0.2.5-4.el7               
+
+更新完毕:
+  openssl.x86_64 1:1.0.2k-25.el7_9                                                                                                                   
+
+作为依赖被升级:
+  e2fsprogs.x86_64 0:1.42.9-19.el7      e2fsprogs-libs.x86_64 0:1.42.9-19.el7 krb5-libs.x86_64 0:1.15.1-54.el7_9   libcom_err.x86_64 0:1.42.9-19.el7
+  libselinux.x86_64 0:2.5-15.el7        libselinux-python.x86_64 0:2.5-15.el7 libselinux-utils.x86_64 0:2.5-15.el7 libss.x86_64 0:1.42.9-19.el7     
+  openssl-libs.x86_64 1:1.0.2k-25.el7_9
+```
+
+
+
+### 2. 下载源码编译安装
+
+```bash
+wget -c http://nginx.org/download/nginx-1.22.0.tar.gz
+
+tar -xvf nginx-1.22.0.tar.gz
+
+cd nginx-1.22.0
+
+# 使用默认配置(推荐)
+./configure
+
+# 使用自定义配置, 将临时文件目录指定为/var/temp/nginx，需要在/var下创建temp及nginx目录
+./configure \
+--prefix=/usr/local/nginx \
+--conf-path=/usr/local/nginx/conf/nginx.conf \
+--pid-path=/usr/local/nginx/conf/nginx.pid \
+--lock-path=/var/lock/nginx.lock \
+--error-log-path=/var/log/nginx/error.log \
+--http-log-path=/var/log/nginx/access.log \
+--with-http_gzip_static_module \
+--http-client-body-temp-path=/var/temp/nginx/client \
+--http-proxy-temp-path=/var/temp/nginx/proxy \
+--http-fastcgi-temp-path=/var/temp/nginx/fastcgi \
+--http-uwsgi-temp-path=/var/temp/nginx/uwsgi \
+--http-scgi-temp-path=/var/temp/nginx/scgi
+
+# 编译安装
+make 
+make install
+
+# 查找安装路径
+whereis nginx
+```
+
+### 3. 管理
+
+```bash
+cd /usr/local/nginx/sbin/
+
+# 启动
+./nginx 
+
+# 强制杀掉进程
+./nginx -s stop
+
+# 待nginx进程处理任务完毕进行停止
+./nginx -s quit
+
+# 测试配置文件是否有语法错误
+./nginx -t
+
+# 重新加载配置文件
+./nginx -s reload
+```
+
+### 4. 开机启动
+
+```bash
+vim /etc/rc.local
+# 添加如下一行
+/usr/local/nginx/sbin/nginx
+
+# 设置执行权限
+chmod 755 rc.local
 ```
 
 

@@ -673,7 +673,17 @@ scrape_configs:
 
 - max(最大值)
 
-- avg(平均值)
+- avg(平均值) avg_over_time(一段时间内的平均值)
+
+  ```
+  # 计算某个点的平均值  等同于  guage_user{application="$application", instance="$instance"}
+  avg(guage_user{application="$application", instance="$instance"})
+  
+  # 计算1分钟内的平均值 
+  avg_over_time(guage_user{application="$application", instance="$instance"}[1m])
+  ```
+
+  
 
 - stddev(标准差)
 
@@ -684,8 +694,9 @@ scrape_configs:
 - count_values(相同数值分组计数)
 
 - bottomk (最小的n条数据)
+
 - topk (最大的n条数据)
-  
+
 
 #### 3.3.3 内置函数
 
@@ -694,11 +705,17 @@ scrape_configs:
   取时间范围内的最后一个值减去第一个值, 得到增长量
 
   ```
-  # 计算5分钟内的增长量
-  increase(http_requests_total{job="api-server"}[5m])
+  # 每分钟的请求数(过去一分钟内的增长量) 如果tag多个值时会返回多条数据
+  increase(prometheus_http_requests_total{job="api-server"}[1m])
   
   # 计算5分钟内的每秒增长率
   increase(http_requests_total{job="api-server"}[5m])/300
+  
+  # 5分钟的请求总数
+  sum(increase(prometheus_http_requests_total[5m]))
+  
+  # 按code统计5分钟的请求总数 配置到Grafana时Legend填上{{code}}, 就可以按code展示多条曲线
+  sum(increase(prometheus_http_requests_total[5m])) by (code)
   ```
 
 - rate
@@ -715,7 +732,7 @@ scrape_configs:
 
 - irate
 
-  使用`increase`或者1函数计算平均增长率时, 会有"长尾问题", 无法反应时间窗口内的数据突变. 比如某一时刻数据突增, 但是平摊到时间窗口后增长率并不突出. 为了解决该问题, 可以使用`irate`函数, 它通过时间窗口内的最后两个数据的差值来计算正常率, 所以`irate`反应的是数据的瞬时增长率. 
+  使用`increase`或者1函数计算平均增长率时, 会有"长尾问题", 无法反应时间窗口内的数据突变. 比如某一时刻数据突增, 但是平摊到时间窗口后增长率并不突出. 为了解决该问题, 可以使用`irate`函数, 它通过时间窗口内的最后两个数据的差值来计算增长率, 所以`irate`反应的是数据的瞬时增长率. 
 
   由于`irate`灵敏度更高, 所以在需要分享长期趋势或在告警规则中, 这种灵敏度反而会造成干扰, 因此此时更推荐使用`rate`函数.
 
@@ -726,7 +743,7 @@ scrape_configs:
 
 - predict_linear 预测
 
-  基于简单线性回归, 对时间范围内的数据进行统计, 预测某段时间后的数值. **只适用于Gauge类型数据**
+  基于简单线性回归, 对时间范围内的数据进行统计, 预测某段时间后的数值. **只适用于Gauge类型数据**, 数据有一定的局部单调性时才比较准, 不要忽上忽下剧烈变化.
 
   ```
   # 基于5分钟的数据, 预测对300秒后数值

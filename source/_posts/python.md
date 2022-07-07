@@ -7,8 +7,8 @@ categories:
 date: 2018-04-20 09:55:25
 ---
 
-## 基础
-### 数据类型
+## 1. 基础
+### 1.1 数据类型
 6种标准数据类型:<!-- more -->
 - **Boolean**: True, False. 任何对象都可以当做boolean型来验证, 默认一个对象被当做true, 除非它的class定义了一个返回False的`__bool__`方法 或者 一个返回0的`__len__`方法. 满足下列条件的, 对象会被当做false:
     - 对象为`None` 或 `False`
@@ -40,117 +40,160 @@ date: 2018-04-20 09:55:25
     delimiter.join(names)   # Tom_Sam
     ```
 - **List**: 列表
-```python
-names = ["Tom", "John", "Alice", "Bob"]
-print(len(names))
-print(names.append("Sam"))
-names.sort()
-del names[0]
-for i in names:
-    print(i)
-    
-list(range(1, 10))
-# 列表生成式
-print [x * x for x in range(1, 11) if x % 2 == 0]       
-print [m + n for m in 'ABC' for n in 'XYZ']     #两层循环
-
-a, b, c = [1, 3, 9]     # 变量个数 必须 与元素个数一致
-print a, b, c
-a, b, c = (3, 6, 9)
-print a, b, c
-```
-- **Tuple**: 元组, 与列表相似, 但元组是不可变的
-```python
-names = ("Tom", "Mike", "Tony")
-
-age = 22
-name = "Tom"
-# 最常用的是打印
-print("%s is %s years old" % (name, age))
-```
+  ```python
+  names = ["Tom", "John", "Alice", "Bob"]
+  print(len(names))
+  print(names.append("Sam"))
+  names.sort()
+  del names[0]
+  for i in names:
+      print(i)
+  
+  list(range(1, 10))
+  # 列表生成式
+  print [x * x for x in range(1, 11) if x % 2 == 0]       
+  print [m + n for m in 'ABC' for n in 'XYZ']     #两层循环
+  
+  a, b, c = [1, 3, 9]     # 变量个数 必须 与元素个数一致
+  print a, b, c
+  a, b, c = (3, 6, 9)
+  print a, b, c
+  ```
+  - **Tuple**: 元组, 与列表相似, 但元组是不可变的
+  ```python
+  names = ("Tom", "Mike", "Tony")
+  
+  age = 22
+  name = "Tom"
+  # 最常用的是打印
+  print("%s is %s years old" % (name, age))
+  ```
 - **Sets**: 集合
+  ```python
+  s = set([1, 1, 2, 2, 3, 3]) #重复元素被自动过滤
+  s.add(4)
+  s.remove(1)
+  
+  s1 = set([1, 2, 3])
+  s2 = set([2, 3, 4])
+  s1 & s2     # 取交集
+  s1 | s2     # 取并集
+  ```
+  - **Dictionary**: 字典
+  ```python
+  addr = {
+      "Tony": "tony@qq.com",
+      "john": "john@baidu.com",
+      "sam": "sam@163.com"
+  }
+  print(addr["john"]) # 当没有john属性时会抛异常
+  print(len(addr))
+  # 遍历
+  for name, mail in addr.items():
+      print("%s's mail is %s" % (name, mail))
+  
+  # 增加属性
+  addr["Tom"] = "tom@xx.com"
+  
+  # 键 值
+  addr.keys()
+  addr.values()
+  
+  del addr["sam"]
+  pop addr["Tom"]
+  addr.clear()
+  del addr
+  
+  # 判断是否包含属性
+  if "Tonny" not in addr:
+      print("no Tonny")
+  
+  # 推荐该方式获取属性值
+  print(addr.get("Tonny", "unknown"))
+  ```
+
+  其中
+  - **不可变数据**: Number, String, Tuple, Sets
+  - **可变数据**: List, Dictionay
+
+  互相转换
+  ```python
+  int("23")
+  long("0xFE", 16)
+  print float("3.14")
+  ord("a") # 字符转成整数值
+  oct(12) #转成8进制, 字符串格式
+  hex(12) #转成16进制, 字符串格式
+  str(122)    
+  chr(97) # 转成字符, 'a'
+  chr(0x597d) # 转成unicode字符, '好'
+  unichr(0x597d) # 转成unicode字符, '好'
+  
+  atuple = (123, 'xyz', 'zara', 'abc')
+  print list(atuple)   # 创建列表
+  print tuple([1,2,3,4])  # 创建元组
+  print set('runoob')     # 转换为可变集合
+  print frozenset('runoob')   # 转换为不可变集合
+  print dict(a='a', b='b', t='t')     # 创建一个字典
+  ```
+
+  序列切片(list/tuple/string)
+  ```python
+  shopList = ["apple", "mango", "carrot", "banana"]
+  shopList[0]
+  shopList[-1]
+  shopList[1:3]
+  shopList[2:]
+  shopList[:3]
+  newList = shop[:]   # 复制新的序列
+  shop[:4:2]  # 前4个元素, 每2个取一个
+  "HelloWorld"[::2]   # 'Hlool'
+  ```
+
+#### 1.1.1 常用API
+
+##### 字符串
+
 ```python
-s = set([1, 1, 2, 2, 3, 3]) #重复元素被自动过滤
-s.add(4)
-s.remove(1)
+# 拼接
+3 * 'un' + 'ium'		# 'unununium'
+# 相邻的多个字符串会自动合并, 这在拆分长字符串时特别实用
+'Py'   'thon'		# 'Python'
 
-s1 = set([1, 2, 3])
-s2 = set([2, 3, 4])
-s1 & s2     # 取交集
-s1 | s2     # 取并集
-```
-- **Dictionary**: 字典
-```python
-addr = {
-    "Tony": "tony@qq.com",
-    "john": "john@baidu.com",
-    "sam": "sam@163.com"
-}
-print(addr["john"]) # 当没有john属性时会抛异常
-print(len(addr))
-# 遍历
-for name, mail in addr.items():
-    print("%s's mail is %s" % (name, mail))
-    
-# 增加属性
-addr["Tom"] = "tom@xx.com"
+# 索引 正负数都支持
+word = 'Python'
+word[0]		# 'P'
+word[-1]	# 'n'
 
-# 键 值
-addr.keys()
-addr.values()
+# 切片
+word[0:2]		# 'Py'
+word[:2]		# 'Py'
+word[-2:]		# 'on'
 
-del addr["sam"]
-pop addr["Tom"]
-addr.clear()
-del addr
+# 
+'Python'.endswith('on')		# True
+'Python'.find('th', 0, 5)	# 0-5范围内查找, 找不到返回-1
+'Python'.find('th', 0, 5)	# 0-5范围内查找, 找不到报ValueError错误
 
-# 判断是否包含属性
-if "Tonny" not in addr:
-    print("no Tonny")
-    
-# 推荐该方式获取属性值
-print(addr.get("Tonny", "unknown"))
+'Python'.lower()	# 转小写
+'Python'.lstrip()	# 左边空白字符
+'www.example.com'.lstrip('cmowz.')	# 'example.com'
+'TestHook'.removeprefix('Test')		# 'Hook'
+'MiscTests'.removesuffix('Tests')	# 'Misc'
+'Python'.replace('Py', 'py')	# 'python'
+'1,2,3'.split(',')		# ['1', '2', '3']
+
+# 格式化
+'Python'.isalpha()	# 判断字符串是否都是字母且至少有一个字符
+'Python'.isdecimal()	# 判断字符串是否都是十进制字符且至少有一个字符
+'Python'.islower()	# 判断全部为小写
+"The sum of 1 + 2 is {0}".format(1+2)
 ```
 
-其中
-- **不可变数据**: Number, String, Tuple, Sets
-- **可变数据**: List, Dictionay
 
-互相转换
-```python
-int("23")
-long("0xFE", 16)
-print float("3.14")
-ord("a") # 字符转成整数值
-oct(12) #转成8进制, 字符串格式
-hex(12) #转成16进制, 字符串格式
-str(122)    
-chr(97) # 转成字符, 'a'
-chr(0x597d) # 转成unicode字符, '好'
-unichr(0x597d) # 转成unicode字符, '好'
 
-atuple = (123, 'xyz', 'zara', 'abc')
-print list(atuple)   # 创建列表
-print tuple([1,2,3,4])  # 创建元组
-print set('runoob')     # 转换为可变集合
-print frozenset('runoob')   # 转换为不可变集合
-print dict(a='a', b='b', t='t')     # 创建一个字典
-```
+### 1.2 操作符
 
-序列切片(list/tuple/string)
-```python
-shopList = ["apple", "mango", "carrot", "banana"]
-shopList[0]
-shopList[-1]
-shopList[1:3]
-shopList[2:]
-shopList[:3]
-newList = shop[:]   # 复制新的序列
-shop[:4:2]  # 前4个元素, 每2个取一个
-"HelloWorld"[::2]   # 'Hlool'
-```
-
-### 操作符
 #### and, or, not
  `x or y`, `x and y`, `not x`, `not`是低优先级操作父符, 所以: `not a == b` 等于 `not (a == b)`
 #### 比较 
@@ -159,7 +202,7 @@ shop[:4:2]  # 前4个元素, 每2个取一个
 #### 运算
 `+`, `-`, `*`, `/`(得到完整结果), `//`取商, `%`取余, `<<`, `>>`, `&`, `|`, `^`异或, `~`翻转
 
-### 语法
+### 1.3 语法
 #### 标识符
 数字, 字母, 下划线, 首字符不能是数字. 大小写敏感
 
@@ -261,7 +304,7 @@ with open("testfile") as f: #自动关闭
     f.read()
 ```
 
-### 函数
+### 1.4 函数
 #### 定义
 ```python
 def max(a, b):
@@ -333,7 +376,7 @@ def add_end(l=None):
     l.append("END")
     return l
 ```
-#### `*args`(可变参数), `**xargs`(关键字参数) 和 `*`(命名关键字参数)
+#### `*args`(不定长度参数), `**xargs`(不定长度键值对参数) 和 `*`(命名关键字参数)
 ```python
 def sum(*args):
     # 函数内接到的args是一个元组
@@ -453,7 +496,7 @@ sorted(['bob', 'about', 'Zoo', 'Credit'], key=str.lower, reverse=True) #倒序
 sorted([('Bob', 75), ('Adam', 92), ('Bart', 66)], key=lambda x:x[0].lower())
 ```
 
-### 模块
+### 1.5 模块
 ```python
 from sys import argv as arg     # 引用其他模块
 
@@ -463,9 +506,9 @@ else:
     print("当前模块是被其他模块引用的")
 ```
 
-### 对象
+### 1.6 对象
 
-### 其他
+### 1.7 其他
 #### lambda
 
 #### 函数式
@@ -517,7 +560,146 @@ for t in triangles():
         break
 ```
 
-## 核心
+#### 装饰器
+
+可以对原有函数进行扩展, 适合日志, 权限校验等切面场景
+
+```python
+def hi(name):
+  return 'Hi~~ ' + name
+
+hi('Tom')
+
+# 现在想在函数执行前打印日志
+def log_func(func, name):
+  logging.info("%s is running" % func.__name__)
+  return func(name)
+  
+log_func(hi, name)
+```
+
+但是这会破坏原有代码逻辑, 所以调用hi的地方都需要改成log_func(hi, name),  此时就可以使用装饰器
+
+```python
+def log_func(func):
+  def wrapper(*args, **kwargs):
+	  print("%s is running" % func.__name__)
+  	return func(*args, **kwargs)
+  return wrapper
+
+@log_func
+def hi(name):
+  return 'Hi~~ ' + name
+```
+
+> 从装饰器中也可看到*args和**kwargs的用法
+
+有时我们需要根据参数决定是否对原函数进行装饰, 比如: 根据日志级别觉得是否打印日志, 此时就需要装饰器带参数
+
+```python
+def log_func(level):
+  def decorator(func):
+    def wrapper(*args, **kwargs):
+      if level == 'info':
+        print("%s is running" % func.__name__)
+      return func(*args, **kwargs)
+    return wrapper
+  return decorator
+
+@log_func(level="info")
+def hi(name):
+  return 'Hi~~ ' + name
+
+# 上面的装饰器等效于
+hi = log_func(level='info')(hi)
+```
+
+但是上面的装饰器还有点问题, Python 具有强大的 **自省能力**,  即对象在运行时了解自身属性的能力. 比如, 函数知道自己的名字. 但是进过装饰器包装后, 函数名称就变成了内部函数的名称, 这就产生错乱
+
+```python
+@log_func(level="info")
+def hi(name):
+  return 'Hi~~ ' + name
+
+print(hi.__name__)	# 返回 wrapper 而非 hi
+```
+
+好在python提供了内置的解决方案:
+
+```python
+import functools
+
+def log_func(level):
+  def decorator(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+      if level == 'info':
+        print("%s is running" % func.__name__)
+      return func(*args, **kwargs)
+    return wrapper
+  return decorator
+
+@log_func(level="info")
+def hi(name):
+  return 'Hi~~ ' + name
+```
+
+至此可以总结出一个标准的装饰器模板了
+
+```python
+import functools
+
+def myfunc(level):
+  def decorator(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+      # 前置增强
+      result = func(*args, **kwargs)
+      # 后置增强
+      return result
+    return wrapper
+  return decorator
+
+@log_func(level="info")
+def hi(name):
+  return 'Hi~~ ' + name
+```
+
+另外装饰器还是天然的闭包, 基于此可以做些其他事情
+
+```python
+import functools
+
+def counter(func):
+    count = 0
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        nonlocal count
+        count += 1
+        print(count)
+        return func(*args, **kwargs)
+    return wrapper
+
+@counter
+def whatever():
+    pass
+
+whatever()
+whatever()
+whatever()
+
+# 输出:
+# 1
+# 2
+# 3
+```
+
+
+
+
+
+## 2. 核心模块
+
 通过`dir()`函数列出模块定义的标识符, 包括函数, 类 和 变量
 ```python
 import sys
@@ -1064,6 +1246,188 @@ with tempfile.TemporaryFile() as temp:
 ### Net
 
 ### 时间/日期
+
+#### 1. time
+
+该模块通过系统底层获取时间戳, 用法较为低阶, 适合做精确计时. 
+
+##### 核心对象
+
+`time_struct`是一个转换 `epoch` 以来经过秒数得到的结构化的时间对象, 可以通过下标或属性名称获取对象的年月日时分秒等属性
+
+```python
+# 本地时间
+>>> l = time.localtime()
+>>> l
+time.struct_time(tm_year=2022, tm_mon=4, tm_mday=30, tm_hour=9, tm_min=20, tm_sec=44, tm_wday=5, tm_yday=120, tm_isdst=0)
+>>> l.tm_year
+2022
+
+# UTC时间
+>>> time.gmtime()
+time.struct_time(tm_year=2022, tm_mon=4, tm_mday=30, tm_hour=1, tm_min=22, tm_sec=24, tm_wday=5, tm_yday=120, tm_isdst=0)
+```
+
+##### 常用方法
+
+1. 计时
+
+   - `time.time()`以浮点数的形式戳返回自 `epoch` 以来经过的时间秒数。常见用法是通过计算两次调用之间的间隔来得出程序执行时间。
+
+     ```python
+     >>> time.time()
+     1651282750.0247092
+     ```
+
+   - `time.sleep(sec)`暂停线程, 单位为秒, 实际暂停时间可能会超过给定的秒数
+
+   - `time.perf_counter()`适合计算较短时间的间隔, 结果较为准确, 可以替代`time.time()`
+
+     ```python
+     >>> start = time.perf_counter()
+     >>> end = time.perf_counter()
+     >>> end - start
+     9.072479375000057
+     ```
+
+2. `struct_time`和时间戳之间转换
+
+   ```python
+   >>> now = time.time()
+   >>> time.gmtime(now)
+   time.struct_time(tm_year=2022, tm_mon=4, tm_mday=30, tm_hour=1, tm_min=43, tm_sec=47, tm_wday=5, tm_yday=120, tm_isdst=0)
+   >>> time.gmtime()
+   time.struct_time(tm_year=2022, tm_mon=4, tm_mday=30, tm_hour=1, tm_min=44, tm_sec=2, tm_wday=5, tm_yday=120, tm_isdst=0)
+   
+   # 将struct_time转换为秒
+   >>> time.mktime(time.localtime())
+   1651283084.0
+   ```
+
+3. `struct_time`和字符串之间转换
+
+   ```python
+   # 字符串解析
+   >>> time.strptime("2022-04-30 09:30:00", "%Y-%m-%d %H:%M:%S")
+   time.struct_time(tm_year=2022, tm_mon=4, tm_mday=30, tm_hour=9, tm_min=30, tm_sec=0, tm_wday=5, tm_yday=120, tm_isdst=-1)
+   # 字符串格式化
+   >>> time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+   '2022-04-30 09:36:26'
+   ```
+
+
+
+#### 2. datetime
+
+##### 2.1 date
+
+```python
+# 1. 实例化
+>>> datetime.date(2022, 4, 30)
+datetime.date(2022, 4, 30)
+# 从时间戳实例化
+>>> datetime.date.fromtimestamp(time.time())
+datetime.date(2022, 4, 30)
+# 实质是以当前时间戳作为参数调用 date.fromtimestamp()
+>>> datetime.date.today()
+datetime.date(2022, 4, 30)
+# 从字符串解析而来
+>>> datetime.date.fromisoformat('2022-04-30')
+datetime.date(2022, 4, 30)
+
+# 2. 支持的操作
+# 支持与另一date对象进行 == ≤ < ≥ > 等比较操作
+# 支持与timedelta对象进行加减操作, 结果依然是date对象
+# 支持与另一date对象加减, 得到timedelta对象
+# 支持哈希
+
+>>> today = datetime.date.today()
+# 属性: year, month, day
+>>> today.day
+30
+# 格式化
+>>> today.strftime('%Y-%d-%d')
+'2022-30-30'
+# 将date转成成time.struct_time对象
+>>> today.timetuple()
+time.struct_time(tm_year=2022, tm_mon=4, tm_mday=30, tm_hour=0, tm_min=0, tm_sec=0, tm_wday=5, tm_yday=120, tm_isdst=-1)
+# 属性更新, 返回新的date对象
+>>> today.replace(day=29)
+datetime.date(2022, 4, 29)
+# 返回周几, 周一为0
+>>> today.weekday()
+5
+```
+
+##### 2.2 time
+
+```python
+# 1. 实例化
+>>> datetime.time(9,30,55)
+datetime.time(9, 30, 55)
+# 字符串解析, 所有属性必须是两位数字
+>>> datetime.time.fromisoformat('09:30:55')
+datetime.time(9, 30, 55)
+
+# 2. 支持的操作
+# 与另一time对象进行 == ≤ < ≥ > 等比较操作
+# 支持哈希
+# 不支持与另一time或timedelta进行加减操作, 如果想计算两个time之间间隔, 可以使用combine方法
+# 	将它们处理成日期相同的datetime对象再计算
+>>> datetime.datetime.combine(datetime.date.today(), t2) - datetime.datetime.combine(datetime.date.today(), t1)
+datetime.timedelta(0)
+
+# 字符串解析
+>>> t = datetime.time.fromisoformat('09:30:55')
+>>> t.strftime('%Hh %Mm %Ss')
+'09h 30m 55s'
+# 格式化
+>>> t.isoformat()
+'09:30:55'
+# 属性更新
+>>> t.replace(second=45)
+datetime.time(9, 30, 45)
+```
+
+##### 2.5 datetime
+
+```python
+# 1. 实例化
+# 日期部分必填
+>>> datetime.datetime(2018, 12, 10)
+datetime.datetime(2018, 12, 10, 0, 0)
+# 当前时间
+>>> datetime.datetime.now()
+datetime.datetime(2022, 4, 30, 10, 25, 14, 143754)
+>>> datetime.datetime.utcnow()
+datetime.datetime(2022, 4, 30, 2, 25, 19, 46643)
+# 从时间戳转换
+>>> datetime.datetime.fromtimestamp(time.time())
+datetime.datetime(2022, 4, 30, 10, 26, 9, 910933)
+>>> datetime.datetime.utcfromtimestamp(time.time())
+datetime.datetime(2022, 4, 30, 2, 26, 29, 329208)
+# 字符串解析
+>>> datetime.datetime.fromisoformat('2022-04-30 09:30:55')
+datetime.datetime(2022, 4, 30, 9, 30, 55)
+# 组合date 和 time
+>>> datetime.datetime.combine(datetime.date.today(), datetime.time(9, 30))
+datetime.datetime(2022, 4, 30, 9, 30)
+
+# 2. 支持的操作
+# 与另一datetime进行 == ≤ < ≥ > 等比较操作
+# 与timedelta相加减
+# 与另一datetime相减得到timedelta对象
+# 支持哈希
+
+# 转成时间戳
+>>> now = datetime.datetime.now()
+>>> now.timestamp()
+1651285953.26833
+
+```
+
+
+
 ```python
 from datetime import datetime
 

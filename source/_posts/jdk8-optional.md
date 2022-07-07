@@ -144,7 +144,7 @@ String username = Optional.ofNullable(dto)
     ```
 
 3. `stream()` 方法把`Optional`实例转换为 `Stream` 对象, 从而可以使用大量的`Stream`接口
-    
+   
     ```java
     List<String> emails = Optional.ofNullable(user)
       .stream()

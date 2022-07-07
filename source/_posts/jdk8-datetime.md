@@ -521,8 +521,14 @@ long timestamp = localDateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
 
 ```java
 long timestamp = System.currentTimeMillis();
+// 转LocalDate
 LocalDate localDate = Instant.ofEpochMilli(timestamp).atZone(ZoneOffset.ofHours(8)).toLocalDate();
+// 转LocalDateTime
 LocalDateTime localDateTime = Instant.ofEpochMilli(timestamp).atZone(ZoneOffset.ofHours(8)).toLocalDateTime();
+// 
+LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(paramVO.getStartTime()), ZoneOffset.ofHours(8));
+// 
+LocalDateTime localDateTime = LocalDateTime.ofEpochSecond(timestamp / 1000, 0, ZoneOffset.ofHours(8));
 ```
 
 
@@ -597,6 +603,91 @@ Clock clock = Clock.system(ZoneId.of("+8"));
 其`range()`方法返回对应的范围, 如:`DAY_OF_YEAR`的范围是1 ~ 365/366
 
 
+
+## 转换
+
+#### LocalDateTime
+
+```java
+// --> LocalDate
+localDateTime.toLocalDate();
+
+// --> LocalTime
+localDateTime.toLocalTime();
+
+// --> Date
+// --> ZonedDateTime/OffsetDateTime --> Instant --> Date
+Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+Date.from(offsetDateTime.toInstant());
+
+// --> 时间戳
+// --> ZonedDateTime/OffsetDateTime --> Instant --> 时间戳
+localDateTime.atZone(zoneId).zonedDateTime.toInstant().toEpochMilli();
+```
+
+#### LocalDate
+
+```java
+// --> LocalDateTime
+LocalDateTime atStartOfDay()
+LocalDateTime atTime(LocalTime time)
+LocalDateTime atTime(int hour, int minutes)
+LocalDateTime atTime(int hour, int minutes, int seconds)
+LocalDateTime atTime(int hour, int minute, int second, int nanoOfSecond)
+
+// --> Date
+---> localDateTime --> ZonedDateTime/OffsetDateTime --> Instant --> Date
+
+// --> 时间戳
+---> localDateTime --> ZonedDateTime/OffsetDateTime --> Instant --> 时间戳
+```
+
+#### LocalTime
+
+```java
+// --> LocalDateTime
+localTime.atDate(LocalDate.now());
+LocalDateTime.of(localDate, localTime);
+
+// --> Date
+---> localDateTime --> ZonedDateTime/OffsetDateTime --> Instant --> Date
+
+// --> 时间戳
+---> localDateTime --> ZonedDateTime/OffsetDateTime --> Instant --> 时间戳
+```
+
+#### Date
+
+```java
+// --> LocalDateTime
+Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+// --> LocalDate
+Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+
+// --> LocalTime
+LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalTime();
+
+// --> 时间戳
+date.getTime();
+```
+
+#### 时间戳
+
+```java
+// --> LocalDateTime
+// --> Instant --> LocalDateTime
+LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault());  
+
+// --> LocalDate
+--> LocalDateTime --> Instant --> LocalDateTime
+
+// --> LocalTime
+--> LocalDateTime --> Instant --> LocalDateTime
+
+// --> Date
+new Date(timestamp);
+```
 
 ## 其他历法
 

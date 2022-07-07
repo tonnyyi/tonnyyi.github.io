@@ -441,9 +441,21 @@ $ ./test.sh 1 2 3
     echo $var
     ```
     * expr后的表达式符号间需用空格隔开
+
     * expr支持的操作符有： |、&、< >=、<、+、-、*、/、%
+
     * expr支持的操作符中在使用时需用\进行转义的有：|、&、< >=、<、*
+
     * expr同样只支持整数运算
+
+    * 此外expr还可以用于提取字符串
+
+      ```bash
+      filename="`expr "test.doc" : '\(.*\).doc$'`"
+      echo $filename  //test
+      ```
+
+      
 
 5. `bc`
     bc是linux下的一个简单计算器，支持浮点数计算，在命令行下输入bc即进入计算器程序，而我们想在程序中直接进行浮点数计算时，利用一个简单的管道即可解决问题。
@@ -617,9 +629,9 @@ fi
 
 | 表达式 | 含义 |
 | :-: | --- |
+| `-d file` | 文件是否存在且为目录(directory) |
 | `-e file` | 文件是否存在(exist) |
 | `-f file` | 文件是否存在且为普通文件(file) |
-| `-d file` | 文件是否存在且为目录(directory) |
 | `-b file` | 文件是否存在且为块设备block device |
 | `-c file` | 文件是否存在且为字符设备character device |
 | `-S file` | 文件是否存在且为套接字文件Socket |
@@ -1117,6 +1129,17 @@ case ${option} in
     exit 1  
     ;;  
 esac  
+
+# 判断脚本是通过绝对路径还是相对路径执行, 并获取脚本全路径
+case $0 in
+    /*)
+        SCRIPT="$0"
+        ;;
+    *)
+        PWD=`pwd`
+        SCRIPT="$PWD/$0"
+        ;;
+esac
 ```
 注意:
 - `*)`相当于其他语言中的`default`

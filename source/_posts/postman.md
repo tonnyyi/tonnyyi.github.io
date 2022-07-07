@@ -43,7 +43,7 @@ date: 2020-10-21 17:29:13
 
 定义响应示例名称
 
-<img src="https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20201022171918.png" alt="image-20201022171917208" style="zoom:50%;" />
+<img src="https://s2.loli.net/2022/03/02/LtWQIUV3CRXdPAH.png" alt="image-20201022171917208" style="zoom:50%;" />
 
 点击右上角查看响应示例
 
@@ -1075,23 +1075,23 @@ expect({a: 1}).to.not.have.property('b');
 
 
 
-##### 使用外部库
+#### 使用外部库
 
 使用`require`方法能够使用postman内置库, 包括:
 
-- [ajv](https://www.npmjs.com/package/ajv)
-- [atob](https://www.npmjs.com/package/atob)
-- [btoa](https://www.npmjs.com/package/btoa)
-- [chai](http://chaijs.com/)
-- [cheerio](https://cheerio.js.org/)
-- [crypto-js](https://www.npmjs.com/package/crypto-js)
+- [ajv](https://www.npmjs.com/package/ajv)  JSON校验
+- [atob](https://www.npmjs.com/package/atob) 将Base64字符串转成数据
+- [btoa](https://www.npmjs.com/package/btoa)  将数据转成Base64字符串
+- [chai](http://chaijs.com/)  单元测试框架
+- [cheerio](https://cheerio.js.org/)  类似jQuery
+- [crypto-js](https://www.npmjs.com/package/crypto-js)  加解密/哈希库
 - [csv-parse/lib/sync](http://csv.adaltas.com/parse)
-- [lodash](https://lodash.com/)
-- [moment](http://momentjs.com/docs/)
-- [postman-collection](http://www.postmanlabs.com/postman-collection/)
-- [tv4](https://github.com/geraintluff/tv4)
-- [uuid](https://www.npmjs.com/package/uuid)
-- [xml2js](https://www.npmjs.com/package/xml2js)
+- [lodash](https://lodash.com/)  工具类库
+- [moment](http://momentjs.com/docs/) 日期处理类库
+- [postman-collection](http://www.postmanlabs.com/postman-collection/)  自定义集合类
+- [tv4](https://github.com/geraintluff/tv4)   数据验证
+- [uuid](https://www.npmjs.com/package/uuid)  UUID生成
+- [xml2js](https://www.npmjs.com/package/xml2js)  处理XML
 
 除此之外, 一些NodeJS的模块可以使用:
 

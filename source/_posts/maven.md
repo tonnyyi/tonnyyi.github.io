@@ -305,8 +305,8 @@ mvn dependency:tree     # 使用目标前缀执行插件目标
 1. 下载远程插件仓库的`maven-metadata.xml`文件, 重命名为`maven-metadata-${repoId}.xml`, 放到${groupId}路径下
 2. 将该路径下的`maven-metadata-local.xml`文件(如果有的话)和`maven-metadata-${repoId}.xml`文件合并
 3. 从合并后的内容中尝试解析出前缀对应的插件, 如果没找到则回到第一步, 查找下一个插件组.
-  `~/.m2/repository/org/apache/maven/plugins/maven-metadata-<仓库ID>.xml` 和 `/~/.m2/repository/org/codehaus/mojo/maven-metadata-<仓库ID>.xml`
-  配合`setting.xml`中`pluginGroups`配置
+    `~/.m2/repository/org/apache/maven/plugins/maven-metadata-<仓库ID>.xml` 和 `/~/.m2/repository/org/codehaus/mojo/maven-metadata-<仓库ID>.xml`
+    配合`setting.xml`中`pluginGroups`配置
 
 > pluginGroups内的配置其用处就是在命令行使用某个插件但未指定groupId时搜索对应的插件
 
@@ -707,3 +707,99 @@ maven3默认使用jdk1.5编译
 
 </project>
 ```
+
+
+
+## 常用插件
+
+### 依赖分析插件dependency
+
+#### 1. 列出所有jar包
+
+`mvn dependency:list -Dverbose` , -Dverbose参数会把被忽略的jar, 即相同jar不同版本都列出来
+
+```
+[INFO] --- maven-dependency-plugin:2.8:list (default-cli) @ license-generator ---
+[INFO]
+[INFO] The following files have been resolved:
+[INFO]    org.slf4j:slf4j-api:jar:1.7.25:compile
+[INFO]    ch.qos.logback:logback-classic:jar:1.2.3:compile
+[INFO]    org.springframework:spring-beans:jar:4.3.9.RELEASE:compile
+[INFO]    com.iflytek.jcy:license:jar:2.1:compile
+[INFO]    org.springframework:spring-context:jar:4.3.9.RELEASE:compile
+[INFO]    org.springframework:spring-core:jar:4.3.9.RELEASE:compile
+[INFO]    ch.qos.logback:logback-core:jar:1.2.3:compile
+[INFO]    org.projectlombok:lombok:jar:1.16.16:compile
+[INFO]    cn.hutool:hutool-all:jar:5.7.20:compile
+[INFO]
+```
+
+#### 2. 列出依赖树
+
+`mvn dependency:tree` , 输出结果是个树, 更加直观, 同样支持`-Dverbose`参数
+
+```
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ license-generator ---
+[INFO] com.iflytek.jcy:license-generator:jar:2.1
+[INFO] +- org.springframework:spring-context:jar:4.3.9.RELEASE:compile
+[INFO] |  +- org.springframework:spring-beans:jar:4.3.9.RELEASE:compile
+[INFO] |  \- org.springframework:spring-core:jar:4.3.9.RELEASE:compile
+[INFO] +- ch.qos.logback:logback-classic:jar:1.2.3:compile
+[INFO] |  +- ch.qos.logback:logback-core:jar:1.2.3:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:1.7.25:compile
+[INFO] \- com.iflytek.jcy:license:jar:2.1:compile
+[INFO]    +- org.projectlombok:lombok:jar:1.16.16:compile
+[INFO]    \- cn.hutool:hutool-all:jar:5.7.20:compile
+```
+
+有几个重要参数:
+
+- `includes` 只列出指定的jar
+  - 格式: `-Dincludes=[groupId]:[artifactId]:[type]:[version]`
+  - 示例:  `-Dincludes=:spring-core`，`-Dincludes=:::4.3.9.RELEASE`，`-Dincludes=org.springframework`
+- `excludes` 排除指定的jar, 参数格式与`includes`一致
+
+#### 3. 分析依赖
+
+`mvn dependency:analyze-only`, 分享整个项目, 并找出如下情况:
+
+- 声明并且使用了的依赖
+- 没有声明但使用了的依赖
+- 声明了但没有使用的依赖
+
+```
+[INFO] --- maven-dependency-plugin:2.8:analyze-only (default-cli) @ license-generator ---
+Unable to process: com.iflytek.jcy.support.license.LicenseRunner
+[WARNING] Used undeclared dependencies found:
+[WARNING]    org.springframework:spring-core:jar:4.3.9.RELEASE:compile
+[WARNING]    cn.hutool:hutool-all:jar:5.7.20:compile
+[WARNING] Unused declared dependencies found:
+[WARNING]    org.springframework:spring-context:jar:4.3.9.RELEASE:compile
+[WARNING]    ch.qos.logback:logback-classic:jar:1.2.3:compile
+```
+
+#### 4. 查找重复声明的依赖
+
+`mvn dependency:analyze-duplicate`, 分析`<dependencies>` 和 `<dependencyManagement>` 中重复声明的依赖
+
+#### 5. 列出所有的远程仓库
+
+`mvn dependency:list-repositories` 
+
+```
+[INFO] --- maven-dependency-plugin:2.8:list-repositories (default-cli) @ license-generator ---
+[INFO] Repositories Used by this build:
+[INFO]       id: aliyunRep
+      url: http://maven.aliyun.com/nexus/content/groups/public/
+   layout: default
+snapshots: [enabled => false, update => daily]
+ releases: [enabled => true, update => daily]
+```
+
+#### 6. 清理本地仓库
+
+`mvn dependency:purge-local-repository`, 该命令首先会解析项目依赖, 然后从本地仓库中删除这些依赖, 重新从远程仓库拉取
+
+- `-DactTransitively=false` 仅对直接依赖操作
+- `-Dincludes=` 指定操作某些依赖, `-Dexcludes` 指定排除某些依赖, 多个依赖以逗号分割, 如`-Dincludes=org.slf4j:slf4j-api,org.slf4j:log4j-over-slf4j`
+- `-DmanualInclude` 清理不在本项目的依赖
