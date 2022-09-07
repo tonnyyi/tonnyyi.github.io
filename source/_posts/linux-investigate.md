@@ -15,6 +15,44 @@ date: 2021-08-23 16:53:44
 - sar -q 1 3     CPU负载
 - lscpu     查看CPU物理颗数/核数/逻辑数
 
+```sh
+#!/bin/bash
+# 每个1s, 统计cpu运行队列内的进程, 从而判断CPU负载高的原因
+# R 代表运行中的进程，D 是不可中断的睡眠进程 它们之和就是CPU负载数值
+LANG=C
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+interval=1
+length=86400
+for i in $(seq 1 $(expr ${length} / ${interval}));do
+	date
+	LANG=C ps -eTo stat,pid,tid,ppid,comm --no-header | sed -e 's/^ \*//' | perl -nE 'chomp;say if (m!^\S*[RD]+\S*!)'
+	date
+	cat /proc/loadavg
+	echo -e "\n"
+	sleep ${interval}
+done
+```
+
+```sh
+#!/bin/bash
+# CPU使用率高的线程
+LANG=C 
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+interval=1
+length=86400
+for i in $(seq 1 $(expr ${length} / ${interval}));do
+	date
+	LANG=C ps -eT -o%cpu,pid,tid,ppid,comm | grep -v CPU | sort -n -r | head -20 
+	date
+	LANG=C cat /proc/loadavg
+	{ LANG=C ps -eT -o%cpu,pid,tid,ppid,comm | sed -e 's/^ *//' | tr -s ' ' | grep -v CPU | 	sort -n -r | cut -d ' ' -f 1 | xargs -I{} echo -n "{} + " && echo '0'; } | bc -l
+	sleep ${interval}
+done
+fuser -k $0
+```
+
+
+
 ### CPU使用率
 负载高但使用率低, 说明IO较多
 - top
@@ -33,8 +71,8 @@ date: 2021-08-23 16:53:44
 - df -lh    查看磁盘挂载点可用空间
 - lsblk   查看磁盘, 分区容量和挂载点
 - du -sh PATH/*  查看各文件/目录占用磁盘大小
-- iostat -x -k -d 1 3    io读写数据量统计
-- iotop -P     需要安装, 查看进程io情况
+- iostat -x -k -d 1 3    磁盘io读写数据量统计
+- iotop -oP     需要安装, 查看进程io情况
 - sar -b 1 3    IO请求数及读写块数
 - sar -d 1 3    块设备使用情况
 
@@ -52,7 +90,7 @@ date: 2021-08-23 16:53:44
 
 **丢包数**
 
- `netstat -i` 间歇地看RX-DRP RX-OVR
+ `netstat -i` 间歇地看RX-DRP() RX-OVR(RingBuffer满了)
 
 ##### 全队列数
 
@@ -198,6 +236,42 @@ netstat -s | grep 'SYNs to LISTEN'
   -----------------------------------------------------------
   ```
 
+  
+  
+  ### 排查RingBuffer导致丢包
+  
+  ```bash
+  # 1. 网卡工作状态 排查物理层面问题
+  # 查看网卡带宽及工作模式
+  [root@172 server]# ethtool eno3|egrep  'Speed|Duplex'
+          Speed: 1000Mb/s
+          Duplex: Full
+  [root@172 server]# ethtool -S eno3 | grep crc
+       rx_crc_errors: 2
+       port.rx_crc_errors: 2      
+       
+  # 2. 查看overruns是否在增大(查看100次 每次间隔1s)
+  [root@172 server]# for i in `seq 1 100`; do ifconfig eno3 | grep RX | grep overruns; sleep 1; done
+          RX errors 2  dropped 201518  overruns 0  frame 30]
+  # 如果增大, 说明RingBuffer小了, 可以调大试试
+  # 查看网卡RingBuffer设置  最大允许4096, 实际设置为512
+  [root@172 server]# ethtool -g eno3
+  Ring parameters for eno3:
+  Pre-set maximums:
+  RX:             4096
+  RX Mini:        0
+  RX Jumbo:       0
+  TX:             4096
+  Current hardware settings:
+  RX:             512
+  RX Mini:        0
+  RX Jumbo:       0
+  TX:             512
+  
+  # 3. 修改大小
+  ethtool -G eno3 rx 2048 tx 2048
+  ```
+  
   
 
 ## 进程

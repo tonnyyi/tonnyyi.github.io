@@ -376,7 +376,8 @@ echo aa.,a 1 b#$bb 2 c*/cc 3 ddd 4 | tr -d -c '0-9 \n'
 [:upper:]：大写字母
 [:xdigit:]：十六进制字符  
 
-tr '[:lower:]' '[:upper:]'
+# 大小写转换
+tr '[:lower:]' '[:upper:]' < filename
 ```
 
 ### 2.7 sed 基于正则的流处理器
@@ -680,6 +681,33 @@ Tom     2122    48      82      81
 Mike    2537    87      102     105
 Bob     2415    40      62      72
 ```
+
+##### 2.9 split文件拆分
+
+选项
+
+```
+-b：值为每一输出档案的大小，单位为 byte。
+-C：每一输出档中，单行的最大 byte 数。
+-d：使用数字作为后缀。
+-l：值为每一输出档的行数大小。
+-a：指定后缀长度(默认为2)。
+```
+
+示例
+
+```bash
+# 文件拆分成10K大小
+split -b 10k date.file		# xaa  xab  xac
+# 调整文件后缀
+split -b 10k -d -a 3 date.file # x000  x001  x002  x003
+split -b 10k date.file -d -a 3 split_file	#split_file000  split_file001  split_file002
+
+# 按行拆分
+split -l 10 date.file
+```
+
+
 
 
 
@@ -1832,46 +1860,76 @@ wget -r -A pdf www.xx.com   # 只下载pdf文件
 wget --user=username --password=password https://example.com   # auth验证
 ```
 
-### 4.18 curl
+### 4.18 cURL网络请求
+
+#### 基础
 
 ```bash
-# POST JSON
+# get
+curl https://www.baidu.com
+# GET 等同www.xx.com/search?a=aa&b=bb
+curl -d 'a=aa' -d 'b=bb' www.xx.com/search
+
+# post 加-d后会自动加上Content-Type : application/x-www-form-urlencoded, 且请求转为 POST
+curl -d 'name=bob' www.xx.com/form
+```
+
+#### GET
+
+```bash
+# -G用来构造查询字符串 实际请求https://localhost:2000/search?q=kitties&count=20
+# 如果省略-G则发送post请求
+curl -G -d 'q=kitties' -d 'count=20' https://localhost:2000/search
+
+
+```
+
+#### POST
+
+```bash
+# application/x-www-form-urlencoded
+curl -X POST http://localhost:2000/api/basic -d 'name=张三' 
+
+# application/json
 curl -X "POST" "http://127.0.0.1:8080/login" \
 -H 'Content-Type: application/json' \
--d '{  "startTime": 1647242398231,  "endTime": 1648624808000}' \
+-d '{"username": "admin", "password": "123456"}'
 
-# 文件上传
+# multipart/form-data
+$ curl -F raw=@raw.data -F name=张三 http://localhost:2000/api/multipart
+
+# --data-urlencode等同于-d, 但会自动进行URL编码
+curl -X POST http://localhost:2000/api --date-urlencode "a=aa b"
+```
+
+#### 文件上传
+
+```bash
+# 文件内容作为请求体
+curl -X POST http://localhost:2000/api/json -H "Content-Type: application/json" -d @data.json  
+
+# 文件上传 -F上传二进制文件 会自动加上请求头Content-Type: multipart/form-data
 curl -X POST 'http://127.0.0.1:9092/upload' \
--F 'files=@"/Users/tonnyyi/Downloads/demo/test/jm123456.pdf"' \
--F 'id="123"'
+-F 'files=@"/demo/test/photo.png"'
+# 指定文件类型 否则默认MIME类型是application/octet-stream
+curl -X POST 'http://127.0.0.1:9092/upload' \
+-F 'files=@"/demo/test/photo.png";type=image/png'
+# 指定文件名
+curl -X POST 'http://127.0.0.1:9092/upload' \
+-F 'files=@"/demo/test/photo.png";filename=test.png'
 
-# GET www.xx.com/search?a=aa&b=bb
-curl -G -d 'a=aa' -d 'b=bb' www.xx.com/search
-# URL 编码
-curl -G --data-urlencode 's=kk a' www.xx.com
-
-# POST 
-# 加 -d 后会自动加上请求头 Content-Type : application/x-www-form-urlencoded, 且请求转为 POST
-curl -d '@data.txt' www.xx.com      # 读取文件内容作为请求体发送 
-curl -d 'name=bob' www.xx.com/form  # post提交表单
-curl -X POST --data "key=value" www.xx.com  # post发送参数
-curl -X POST --date-urlencode "a=aa" www.xx.com        # 自动将发送的数据进行URL 编码
-curl -d '{"a":"aa"}' -H 'Content-Type: application/json' www.xx.com   # 发送json请求
 # 上传文件和其他参数 --form会导致请求类型为 multipart/form-data
 curl -X POST '172.31.46.2:7777' \
 --form 'file=@"/tmp/opencv-test/000136.jpg"' \
 --form 'flags="2"' \
 --form 'borderMode="1"'
+```
 
-#上传
-# -F 用来上传二进制文件, 会自动加上请求头Content-Type: multipart/form-data
-curl -F 'file=@photo.png' www.xx.com
-# 指定MIME类型, 默认是application/octet-stream
-curl -F 'file=@photo.png;type=image/png' www.xx.com
-curl -F 'file=@photo.png;filename=test.png' www.xx.com
-# 下载
-curl -O www.xx.com            # 以服务器上的名称保存
-curl -o file www.xx.com       # 下载链接内容到指定文件
+#### 文件下载
+
+```bash
+curl -O www.xx.com/foo/bar.html     # 将 URL 的最后部分当作文件名
+curl -o test.txt www.xx.com         # 将服务器响应保持到指定文件
 curl -O www.xx.com/pic[1-5].jpg     # 循环下载(pic1.jpg...pic5.jpg)
 curl -o #1_#2.jpg ww.xxcom/{user,goods}/pic[1-5].jpg    # 循环下载并重命名
 curl -# -O www.xx.com/pic.jpg       # 显示下载进度条
@@ -1881,7 +1939,22 @@ curl -r 0-100 -o pic_part1.jpg www.xx.com/pic.jpg
 curl -r 100-200 -o pic_part2.jpg www.xx.com/pic.jpg
 curl -r 200- -o pic_part3.jpg www.xx.com/pic.jpg
 cat pic_part* > pic.jpg
+```
 
+#### Cookie
+
+```bash
+# -b 参数用来发送Cookie
+curl -b 'a=aa,b=bb' http://localhost:2000/api
+curl -b cookies.txt http://localhost:2000/api
+
+# -c 将服务器cookie写入文件
+curl -c cookies.txt http://localhost:2000/api
+```
+
+#### 其他
+
+```bash
 # 发送HEAD请求
 curl -I www.xx.com
 curl --head www.xx.com
@@ -1893,10 +1966,6 @@ curl -H 'My-Header: 123' -X PUT www.xx.com      # 增加请求头, 指定方法,
 curl -k https://www.xx.com
 
 # cookie
-curl --cookie "name=xxx" www.xx.com     # 设置cookie
-curl -b cookie.txt www.xx.com       # 带上cookie访问
-curl -b 'a=aa,b=bb' www.xx.com   
-curl -c cookie.txt www.xx.com       # 将服务器设置的cookie信息保存到文件
 curl -D header.txt www.xx.com       # 保存响应头到文件
 curl -A "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.0)" http://www.linux.com
 
@@ -3256,65 +3325,72 @@ Keys:  Help   Display mode   Restart statistics   Order of fields   quit
 
 ## 常用命令
 
-1. 删除0字节文件
+##### 删除0字节文件
 
-   ```bash
-   find -type f -size 0 -exec rm -rf {} \;
-   ```
+```bash
+find -type f -size 0 -exec rm -rf {} \;
+```
 
-2. 按内存由大到小查看进程
+#### 按内存由大到小查看进程
 
-   ```bash
-   ps -e -o "%C : %p : %z : %a" | sort -k5 -nr
-   
-   %CPU :   PID :    VSZ : COMMAND
-    0.0 : 16795 : 649536 : /usr/libexec/evolution-calendar-factory
-    0.0 : 16634 : 649152 : /usr/libexec/goa-daemon
-    ...
-   ```
+```bash
+ps -e -o "%C : %p : %z : %a" | sort -k5 -nr
 
-3. 按CPU利用率由大到小查看进程
+%CPU :   PID :    VSZ : COMMAND
+ 0.0 : 16795 : 649536 : /usr/libexec/evolution-calendar-factory
+ 0.0 : 16634 : 649152 : /usr/libexec/goa-daemon
+ ...
+```
 
-   ```bash
-   ps -e -o "%C : %p : %z : %a" | sort -nr
-   ```
+##### 按CPU利用率由大到小查看进程
 
-4. 打印文件里的URL
+```bash
+ps -e -o "%C : %p : %z : %a" | sort -nr
+```
 
-   ```bash
-   grep -a -r jpg logs/* | strings | grep "http:" | awk -F'http:' '{print "http:"$2;}'
-   ```
+##### 打印文件里的URL
 
-5. 查看TCP各状态连接数
+```bash
+grep -a -r jpg logs/* | strings | grep "http:" | awk -F'http:' '{print "http:"$2;}'
+```
 
-   ```bash
-   netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
-   
-   CLOSE_WAIT 2
-   ESTABLISHED 316
-   TIME_WAIT 103
-   ```
+##### 查看TCP各状态连接数
 
-6. CPU负载
+```bash
+netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
 
-   ```bash
-   cat /proc/loadavg
-   
-   0.61 0.65 0.74 3/5648 21817
-   ```
+CLOSE_WAIT 2
+ESTABLISHED 316
+TIME_WAIT 103
+```
 
-7. 列出当前登录用户
+##### 查看CPU负载
 
-   ```bash
-   who
-   
-   root     pts/0        2021-12-07 09:27 (10.1.117.21)
-   root     pts/1        2021-12-07 15:57 (10.1.117.21)
-   root     pts/2        2021-12-09 13:52 (10.1.194.228
-   ...
-   ```
+```bash
+cat /proc/loadavg
 
-   
+0.61 0.65 0.74 3/5648 21817
+```
+
+##### 列出当前登录用户
+
+```bash
+who
+
+root     pts/0        2021-12-07 09:27 (10.1.117.21)
+root     pts/1        2021-12-07 15:57 (10.1.117.21)
+root     pts/2        2021-12-09 13:52 (10.1.194.228
+...
+```
+
+##### 生成随机字符串
+
+```bash
+# 原理是生成uuid, 然后使用字符替换掉数字和-, 最后截取一段
+uuidgen | tr "0-9-" "a-z" | cut -c 1-10
+```
+
+
 
 
 

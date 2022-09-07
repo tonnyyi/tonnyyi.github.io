@@ -23,3 +23,36 @@ date: 2020-12-10 10:25:32
 
 ![图片](https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/20210806164159)
 
+
+
+# linux 网络
+
+![图片](https://tonnyblog.oss-cn-beijing.aliyuncs.com/img/640.png)
+
+#### RingBuffer监控与调优
+
+```bash
+# 查看网卡RingBuffer设置  最大允许4096, 实际设置为512
+[root@172 server]# ethtool -g eno3
+Ring parameters for eno3:
+Pre-set maximums:
+RX:             4096
+RX Mini:        0
+RX Jumbo:       0
+TX:             4096
+Current hardware settings:
+RX:             512
+RX Mini:        0
+RX Jumbo:       0
+TX:             512
+
+# 查看由于RingBuffer装不下导致的丢包(tx_fifo_errors字段可能没有) 突然的大流量 或  应用层未及时处理
+# 可以查看ifconfig的overruns指标增长
+[root@172 server]# ethtool -S eno3
+NIC statistics:
+......
+rx_fifo_errors: 0
+tx_fifo_errors: 0
+
+```
+
